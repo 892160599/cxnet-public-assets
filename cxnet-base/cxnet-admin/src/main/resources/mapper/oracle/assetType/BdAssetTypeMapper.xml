@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.assetType.mapper.BdAssetTypeMapper">
+
+    <!-- 资产类别 结果集 -->
+    <resultMap type="com.cxnet.baseData.assetType.domain.BdAssetType" id="AssetTypeResult">
+        <result property="assetId" column="asset_id"/>
+        <result property="assetCode" column="asset_code"/>
+        <result property="assetName" column="asset_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="isLowest" column="is_lowest"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="unitId" column="UNIT_ID"/>
+        <result property="unitCode" column="UNIT_CODE"/>
+        <result property="unitName" column="UNIT_NAME"/>
+        <result property="assetType" column="ASSET_TYPE"/>
+        <result property="assetCodegb" column="ASSET_CODEGB"/>
+        <result property="assetNamegb" column="ASSET_NAMEGB"/>
+        <result property="assetUselife" column="ASSET_USELIFE"/>
+        <result property="assetNetsalvage" column="ASSET_NETSALVAGE"/>
+        <result property="measurement" column="MEASUREMENT"/>
+        <result property="assetPattern" column="ASSET_PATTERN"/>
+        <result property="depreciationMethod" column="DEPRECIATION_METHOD"/>
+        <result property="remark" column="REMARK"/>
+        <result property="classification" column="CLASSIFICATION"/>
+    </resultMap>
+
+    <!-- 查询资产类别 通用sql -->
+    <sql id="selectAssetTypeVo">
+        select t0.asset_id,
+               t0.asset_code,
+               t0.asset_name,
+               t0.parent_id,
+               t0.parent_code,
+               t0.is_lowest,
+               t0.status,
+               t0.del_flag,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.unit_id,
+               t0.unit_code,
+               t0.unit_name,
+               t0.DEPRECIATION_METHOD,
+               t0.ASSET_USELIFE,
+               t0.MEASUREMENT,
+               t0.ASSET_TYPE,
+               t0.CLASSIFICATION
+        from bd_asset_type t0
+    </sql>
+
+
+    <!-- 查询资产类别 集合 -->
+    <select id="selectAssetTypeList" parameterType="com.cxnet.baseData.assetType.domain.BdAssetType"
+            resultMap="AssetTypeResult">
+        <include refid="selectAssetTypeVo"/>
+        <where>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="assetId != null  and assetId != ''">and t0.asset_id = #{assetId}</if>
+            <if test="assetCode != null  and assetCode != ''">and t0.asset_code = #{assetCode}</if>
+            <if test="assetName != null  and assetName != ''">and t0.asset_name like concat(concat('%', #{assetName}),
+                '%')
+            </if>
+            <if test="parentId != null ">and t0.parent_id = #{parentId}</if>
+            <if test="parentCode != null  and parentCode != ''">and t0.parent_code = #{parentCode}</if>
+            <if test="isLowest != null  and isLowest != ''">and t0.is_lowest = #{isLowest}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_flag = #{delFlag}</if>
+        </where>
+        order by t0.asset_id
+    </select>
+
+    <!-- 查询资产类别集合tree  -->
+    <select id="selectAssetTypeListTree" resultType="com.cxnet.common.utils.tree.Zone">
+        select asset_id id,asset_code code,asset_name name,nvl(parent_id,'0') pid,PARENT_CODE pcode from BD_ASSET_TYPE
+        <where>
+            <if test="unitCode != null  and unitCode != ''">and unit_code = #{unitCode}</if>
+            <if test="unitName != null  and unitName != ''">and unit_name = #{unitName}</if>
+            <if test="unitId != null  and unitId != ''">and unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+        order by asset_code
+    </select>
+
+    <!-- 查询资产类别 ById -->
+    <select id="selectAssetTypeById" parameterType="String" resultMap="AssetTypeResult">
+        select t0.asset_id,
+               t0.asset_code,
+               t0.asset_type,
+               t0.asset_name,
+               t0.parent_id,
+               t0.parent_code,
+               t0.is_lowest,
+               t0.status,
+               t0.del_flag,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               p.asset_name as parent_name
+        from bd_asset_type t0
+                 left join bd_asset_type p on p.asset_id = t0.parent_id
+        where t0.asset_id = #{assetId}
+    </select>
+
+    <!--根据ids查询-->
+    <select id="selectBdAssetType" resultMap="AssetTypeResult">
+        <include refid="selectAssetTypeVo"/>
+        where t0.unit_id = '*'
+        and t0.asset_code in
+        <if test="array != null and array.length > 0">
+            <trim suffixOverrides=" OR t0.asset_code IN()">
+                <foreach collection="array" item="item" index="index" open="(" close=")">
+                    <if test="index != 0">
+                        <choose>
+                            <when test="index % 1000 == 999">) OR t0.asset_code IN (</when>
+                            <otherwise>,</otherwise>
+                        </choose>
+                    </if>
+                    #{item}
+                </foreach>
+            </trim>
+        </if>
+    </select>
+
+    <!--校验编码是否存在-->
+    <select id="checkAssetCode" resultType="java.lang.Integer">
+        select count(1) from bd_ASSET_TYPE
+        where asset_code = #{assetCode} and del_flag = '0'
+        <if test="assetId != null ">and asset_id != #{assetId}</if>
+    </select>
+
+    <!--校验编码是否存在-->
+    <select id="updateAssetUnid" resultType="java.lang.Integer">
+        select count(1) from bd_ASSET_TYPE
+        where asset_code = #{assetCode} and del_flag = '0' and unit_id=#{unitId}
+        <if test="assetId != null ">and asset_id != #{assetId}</if>
+    </select>
+
+    <!--查询资产类别子表-->
+    <select id="selectAssetTypeListById" resultMap="AssetTypeResult">
+        select t1.asset_id,
+               t1.asset_code,
+               t1.asset_name,
+               t1.parent_id,
+               t1.parent_code,
+               t1.is_lowest,
+               t1.status,
+               t1.del_flag,
+               t1.create_by,
+               t1.create_time,
+               t1.update_by,
+               t1.update_time
+        from bd_item_asset t0
+                 left join bd_asset_type t1
+                           on t0.ASSET_ID = t1.ASSET_ID
+        where t0.ITEM_CODE = #{itemCode}
+    </select>
+
+    <!--根据code查询-->
+    <select id="selectAssetTypeByCode" resultMap="AssetTypeResult">
+        <include refid="selectAssetTypeVo"/>
+        where t0.del_flag = '0' and t0.asset_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--查询所有上级集合-->
+    <select id="selectBdAssetTypeList" resultMap="AssetTypeResult">
+        <include refid="selectAssetTypeVo"/>
+        start with t0.asset_code = #{expecoCode} and t0.UNIT_ID = '*'
+        connect by prior t0.parent_id = t0.asset_id
+        order by t0.asset_code
+    </select>
+
+    <delete id="deleteBdAssetType">
+        delete bd_asset_type
+        where
+        <if test="unitId != null and unitId != ''">
+            unit_id=#{unitId}
+        </if>
+    </delete>
+
+    <!--根据id查询是否有子节点-->
+    <select id="existChildren" resultType="int">
+        select count(1) from bd_asset_type t1
+        where t1.del_flag = '0' and t1.parent_code in (
+        select asset_code from bd_asset_type t0
+        where t0.del_flag = '0' and t0.asset_id in
+        <foreach item="item" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <!-- 插入资产类别 -->
+    <insert id="insertAssetType" parameterType="com.cxnet.baseData.assetType.domain.BdAssetType">
+        <selectKey keyProperty="assetId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into bd_asset_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="assetId != null ">asset_id,</if>
+            <if test="assetCode != null  and assetCode != ''">asset_code,</if>
+            <if test="assetName != null  and assetName != ''">asset_name,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code,</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="unitId != null  and unitId != ''">unit_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="assetId != null ">#{assetId},</if>
+            <if test="assetCode != null  and assetCode != ''">#{assetCode},</if>
+            <if test="assetName != null  and assetName != ''">#{assetName},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
+            <if test="isLowest != null  and isLowest != ''">#{isLowest},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="unitId != null  and unitId != ''">#{unitId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改资产类别 -->
+    <update id="updateAssetType" parameterType="com.cxnet.baseData.assetType.domain.BdAssetType">
+        update bd_asset_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetCode != null  and assetCode != ''">asset_code = #{assetCode},</if>
+            <if test="assetName != null  and assetName != ''">asset_name = #{assetName},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code = #{parentCode},</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest = #{isLowest},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="unitId != null  and unitId != ''">unit_id = #{unitId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where asset_id = #{assetId}
+    </update>
+
+    <!-- 删除资产类别 ById -->
+    <delete id="deleteAssetTypeById" parameterType="String">
+        update bd_asset_type
+        set del_flag = '2'
+        where asset_id = #{assetId}
+    </delete>
+
+    <!-- 批量删除资产类别 ByIds -->
+    <delete id="deleteAssetTypeByIds" parameterType="String">
+        update bd_asset_type set del_flag = '2' where asset_id in
+        <foreach item="assetId" collection="array" open="(" separator="," close=")">
+            #{assetId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入资产类别 -->
+    <insert id="insertBatchAssetType" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into bd_asset_type
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                asset_id,
+                <if test="item.unitId != null  and item.unitId != ''">unit_id,</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code,</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name,</if>
+                <if test="item.assetCode != null  and item.assetCode != ''">asset_code,</if>
+                <if test="item.assetName != null  and item.assetName != ''">asset_name,</if>
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code,</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.unitId != null  and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">#{item.unitCode},</if>
+                <if test="item.unitName != null  and item.unitName != ''">#{item.unitName},</if>
+                <if test="item.assetCode != null  and item.assetCode != ''">#{item.assetCode},</if>
+                <if test="item.assetName != null  and item.assetName != ''">#{item.assetName},</if>
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">#{item.parentCode},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">#{item.isLowest},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改资产类别 -->
+    <update id="updateBatchAssetType" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_asset_type
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.assetCode != null  and item.assetCode != ''">asset_code = #{item.assetCode},</if>
+                <if test="item.assetName != null  and item.assetName != ''">asset_name = #{item.assetName},</if>
+                <if test="item.parentId != null ">parent_id = #{item.parentId},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code = #{item.parentCode},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest = #{item.isLowest},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+            </trim>
+            <where>
+                asset_id = #{item.assetId}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

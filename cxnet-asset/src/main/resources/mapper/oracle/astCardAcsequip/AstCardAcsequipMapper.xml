@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.astcardacsequip.mapper.AstCardAcsequipMapper">
+
+    <resultMap type="com.cxnet.asset.astcardacsequip.domain.AstCardAcsequip" id="AstCardAcsequipMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="astId" column="AST_ID" jdbcType="VARCHAR"/>
+        <result property="ordSeq" column="ORD_SEQ" jdbcType="INTEGER"/>
+        <result property="equipCode" column="EQUIP_CODE" jdbcType="VARCHAR"/>
+        <result property="equipName" column="EQUIP_NAME" jdbcType="VARCHAR"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="cost" column="COST" jdbcType="INTEGER"/>
+        <result property="unit" column="UNIT" jdbcType="VARCHAR"/>
+        <result property="spec" column="SPEC" jdbcType="VARCHAR"/>
+        <result property="manufacturedDate" column="MANUFACTURED_DATE" jdbcType="TIMESTAMP"/>
+        <result property="manufacturedCode" column="MANUFACTURED_CODE" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="extend6" column="EXTEND6" jdbcType="VARCHAR"/>
+        <result property="extend7" column="EXTEND7" jdbcType="VARCHAR"/>
+        <result property="extend8" column="EXTEND8" jdbcType="VARCHAR"/>
+        <result property="extend9" column="EXTEND9" jdbcType="VARCHAR"/>
+        <result property="extend10" column="EXTEND10" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstCardAcsequipVo">
+        select t0.ID,
+               t0.AST_ID,
+               t0.ORD_SEQ,
+               t0.EQUIP_CODE,
+               t0.EQUIP_NAME,
+               t0.QTY,
+               t0.COST,
+               t0.UNIT,
+               t0.SPEC,
+               t0.MANUFACTURED_DATE,
+               t0.MANUFACTURED_CODE,
+               t0.REMARK,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.EXTEND6,
+               t0.EXTEND7,
+               t0.EXTEND8,
+               t0.EXTEND9,
+               t0.EXTEND10
+        from AST_CARD_ACSEQUIP t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstCardAcsequipMap">
+        <include refid="AstCardAcsequipVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="astId != null and astId != ''">and t0.AST_ID = #{astId}</if>
+            <if test="ordSeq != null">and t0.ORD_SEQ = #{ordSeq}</if>
+            <if test="equipCode != null and equipCode != ''">and t0.EQUIP_CODE = #{equipCode}</if>
+            <if test="equipName != null and equipName != ''">and t0.EQUIP_NAME = #{equipName}</if>
+            <if test="qty != null">and t0.QTY = #{qty}</if>
+            <if test="cost != null">and t0.COST = #{cost}</if>
+            <if test="unit != null and unit != ''">and t0.UNIT = #{unit}</if>
+            <if test="spec != null and spec != ''">and t0.SPEC = #{spec}</if>
+            <if test="manufacturedDate != null">and t0.MANUFACTURED_DATE = #{manufacturedDate}</if>
+            <if test="manufacturedCode != null">and t0.MANUFACTURED_CODE = #{manufacturedCode}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="extend6 != null and extend6 != ''">and t0.EXTEND6 = #{extend6}</if>
+            <if test="extend7 != null and extend7 != ''">and t0.EXTEND7 = #{extend7}</if>
+            <if test="extend8 != null and extend8 != ''">and t0.EXTEND8 = #{extend8}</if>
+            <if test="extend9 != null and extend9 != ''">and t0.EXTEND9 = #{extend9}</if>
+            <if test="extend10 != null and extend10 != ''">and t0.EXTEND10 = #{extend10}</if>
+        </where>
+    </select>
+</mapper>

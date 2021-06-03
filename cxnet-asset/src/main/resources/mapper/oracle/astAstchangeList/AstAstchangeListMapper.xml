@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.astchange.mapper.AstAstchangeListMapper">
+
+    <resultMap type="com.cxnet.asset.astchange.domain.AstAstchangeList" id="AstAstchangeListMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="billId" column="BILL_ID" jdbcType="VARCHAR"/>
+        <result property="astId" column="AST_ID" jdbcType="VARCHAR"/>
+        <result property="astCode" column="AST_CODE" jdbcType="VARCHAR"/>
+        <result property="assetName" column="ASSET_NAME" jdbcType="VARCHAR"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="acquisitionDate" column="ACQUISITION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="brand" column="BRAND" jdbcType="VARCHAR"/>
+        <result property="spec" column="SPEC" jdbcType="VARCHAR"/>
+        <result property="costBefore" column="COST_BEFORE" jdbcType="OTHER"/>
+        <result property="costAfter" column="COST_AFTER" jdbcType="OTHER"/>
+        <result property="depBeforeTotal" column="DEP_BEFORE_TOTAL" jdbcType="OTHER"/>
+        <result property="depAfterTotal" column="DEP_AFTER_TOTAL" jdbcType="OTHER"/>
+        <result property="addBeforeDate" column="ADD_BEFORE_DATE" jdbcType="TIMESTAMP"/>
+        <result property="addAfterDate" column="ADD_AFTER_DATE" jdbcType="TIMESTAMP"/>
+        <result property="depBeforeMethod" column="DEP_BEFORE_METHOD" jdbcType="VARCHAR"/>
+        <result property="depAfterMethod" column="DEP_AFTER_METHOD" jdbcType="VARCHAR"/>
+        <result property="useBeforeLife" column="USE_BEFORE_LIFE" jdbcType="INTEGER"/>
+        <result property="useAfterLife" column="USE_AFTER_LIFE" jdbcType="INTEGER"/>
+        <result property="categoryBeforeCode" column="CATEGORY_BEFORE_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryBeforeName" column="CATEGORY_BEFORE_NAME" jdbcType="VARCHAR"/>
+        <result property="categoryAfterCode" column="CATEGORY_AFTER_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryAfterName" column="CATEGORY_AFTER_NAME" jdbcType="VARCHAR"/>
+        <result property="placeBeforeCode" column="PLACE_BEFORE_CODE" jdbcType="VARCHAR"/>
+        <result property="placeBeforeName" column="PLACE_BEFORE_NAME" jdbcType="VARCHAR"/>
+        <result property="placeAfterCode" column="PLACE_AFTER_CODE" jdbcType="VARCHAR"/>
+        <result property="placeAfterName" column="PLACE_AFTER_NAME" jdbcType="VARCHAR"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="extend6" column="EXTEND6" jdbcType="VARCHAR"/>
+        <result property="categoryBeforeId" column="CATEGORY_BEFORE_ID" jdbcType="VARCHAR"/>
+        <result property="categoryAfterId" column="CATEGORY_AFTER_ID" jdbcType="VARCHAR"/>
+        <result property="placeBeforeId" column="PLACE_BEFORE_ID" jdbcType="VARCHAR"/>
+        <result property="placeAfterId" column="PLACE_AFTER_ID" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstAstchangeListVo">
+        select t0.ID,
+               t0.BILL_ID,
+               t0.AST_ID,
+               t0.AST_CODE,
+               t0.ASSET_NAME,
+               t0.QTY,
+               t0.ACQUISITION_DATE,
+               t0.BRAND,
+               t0.SPEC,
+               t0.COST_BEFORE,
+               t0.COST_AFTER,
+               t0.DEP_BEFORE_TOTAL,
+               t0.DEP_AFTER_TOTAL,
+               t0.ADD_BEFORE_DATE,
+               t0.ADD_AFTER_DATE,
+               t0.DEP_BEFORE_METHOD,
+               t0.DEP_AFTER_METHOD,
+               t0.USE_BEFORE_LIFE,
+               t0.USE_AFTER_LIFE,
+               t0.CATEGORY_BEFORE_CODE,
+               t0.CATEGORY_BEFORE_NAME,
+               t0.CATEGORY_AFTER_CODE,
+               t0.CATEGORY_AFTER_NAME,
+               t0.PLACE_BEFORE_CODE,
+               t0.PLACE_BEFORE_NAME,
+               t0.PLACE_AFTER_CODE,
+               t0.PLACE_AFTER_NAME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.EXTEND6,
+               t0.CATEGORY_BEFORE_ID,
+               t0.CATEGORY_AFTER_ID,
+               t0.PLACE_BEFORE_ID,
+               t0.PLACE_AFTER_ID
+        from AST_ASTCHANGE_LIST t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstAstchangeListMap">
+        <include refid="AstAstchangeListVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="billId != null and billId != ''">and t0.BILL_ID = #{billId}</if>
+            <if test="astId != null and astId != ''">and t0.AST_ID = #{astId}</if>
+            <if test="astCode != null and astCode != ''">and t0.AST_CODE = #{astCode}</if>
+            <if test="assetName != null and assetName != ''">and t0.ASSET_NAME = #{assetName}</if>
+            <if test="qty != null">and t0.QTY = #{qty}</if>
+            <if test="acquisitionDate != null">and t0.ACQUISITION_DATE = #{acquisitionDate}</if>
+            <if test="brand != null and brand != ''">and t0.BRAND = #{brand}</if>
+            <if test="spec != null and spec != ''">and t0.SPEC = #{spec}</if>
+            <if test="costBefore != null">and t0.COST_BEFORE = #{costBefore}</if>
+            <if test="costAfter != null">and t0.COST_AFTER = #{costAfter}</if>
+            <if test="depBeforeTotal != null">and t0.DEP_BEFORE_TOTAL = #{depBeforeTotal}</if>
+            <if test="depAfterTotal != null">and t0.DEP_AFTER_TOTAL = #{depAfterTotal}</if>
+            <if test="addBeforeDate != null">and t0.ADD_BEFORE_DATE = #{addBeforeDate}</if>
+            <if test="addAfterDate != null">and t0.ADD_AFTER_DATE = #{addAfterDate}</if>
+            <if test="depBeforeMethod != null and depBeforeMethod != ''">and t0.DEP_BEFORE_METHOD = #{depBeforeMethod}
+            </if>
+            <if test="depAfterMethod != null and depAfterMethod != ''">and t0.DEP_AFTER_METHOD = #{depAfterMethod}</if>
+            <if test="useBeforeLife != null">and t0.USE_BEFORE_LIFE = #{useBeforeLife}</if>
+            <if test="useAfterLife != null">and t0.USE_AFTER_LIFE = #{useAfterLife}</if>
+            <if test="categoryBeforeCode != null and categoryBeforeCode != ''">and t0.CATEGORY_BEFORE_CODE =
+                #{categoryBeforeCode}
+            </if>
+            <if test="categoryBeforeName != null and categoryBeforeName != ''">and t0.CATEGORY_BEFORE_NAME =
+                #{categoryBeforeName}
+            </if>
+            <if test="categoryAfterCode != null and categoryAfterCode != ''">and t0.CATEGORY_AFTER_CODE =
+                #{categoryAfterCode}
+            </if>
+            <if test="categoryAfterName != null and categoryAfterName != ''">and t0.CATEGORY_AFTER_NAME =
+                #{categoryAfterName}
+            </if>
+            <if test="placeBeforeCode != null and placeBeforeCode != ''">and t0.PLACE_BEFORE_CODE = #{placeBeforeCode}
+            </if>
+            <if test="placeBeforeName != null and placeBeforeName != ''">and t0.PLACE_BEFORE_NAME = #{placeBeforeName}
+            </if>
+            <if test="placeAfterCode != null and placeAfterCode != ''">and t0.PLACE_AFTER_CODE = #{placeAfterCode}</if>
+            <if test="placeAfterName != null and placeAfterName != ''">and t0.PLACE_AFTER_NAME = #{placeAfterName}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="extend6 != null and extend6 != ''">and t0.EXTEND6 = #{extend6}</if>
+            <if test="categoryBeforeId != null and categoryBeforeId != ''">and t0.CATEGORY_BEFORE_ID =
+                #{categoryBeforeId}
+            </if>
+            <if test="categoryAfterId != null and categoryAfterId != ''">and t0.CATEGORY_AFTER_ID = #{categoryAfterId}
+            </if>
+            <if test="placeBeforeId != null and placeBeforeId != ''">and t0.PLACE_BEFORE_ID = #{placeBeforeId}</if>
+            <if test="placeAfterId != null and placeAfterId != ''">and t0.PLACE_AFTER_ID = #{placeAfterId}</if>
+        </where>
+    </select>
+
+    <select id="getThisMoAstchange" resultType="com.cxnet.asset.astchange.domain.AstAstchangeList">
+        SELECT a.*
+        FROM (SELECT ROW_NUMBER() OVER(PARTITION BY AST_ID ORDER BY verification_date) rn,
+        t0.*
+        FROM (
+        select t1.*,t0.verification_date from AST_ASTCHANGE_BILL t0
+        left join AST_ASTCHANGE_LIST t1
+        on t0.id = t1.BILL_ID
+        where to_char(t0.verification_date,'yyyy-mm') = #{date}
+        <if test="astCardIds != null and astCardIds.size > 0">
+            AND t1.AST_ID IN
+            <trim suffixOverrides=" OR t1.AST_ID IN()">
+                <foreach collection="astCardIds" item="item" index="index" open="(" close=")">
+                    <if test="index != 0">
+                        <choose>
+                            <when test="index % 1000 == 999">) OR t1.AST_ID IN (</when>
+                            <otherwise>,</otherwise>
+                        </choose>
+                    </if>
+                    #{item}
+                </foreach>
+            </trim>
+        </if>
+        ) t0) a where a.rn=1
+    </select>
+</mapper>

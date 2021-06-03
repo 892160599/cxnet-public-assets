@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.framework.quartz.mapper.ScheduleJobMapper">
+    <resultMap id="BaseResultMap" type="com.cxnet.framework.quartz.domain.ScheduleJobBean">
+        <id column="job_id" property="jobId"/>
+        <result column="bean_name" property="beanName"/>
+        <result column="params" property="params"/>
+        <result column="cron_expression" property="cronExpression"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_name" property="createName"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="job_name" property="jobName"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        job_id
+        , bean_name, params, cron_expression, status, remark, create_time
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.cxnet.framework.quartz.domain.ScheduleJobExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from schedule_job
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        update schedule_job
+        set DEL_FLAG = '1',
+            STATUS   = '1'
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobExample">
+        delete from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobBean">
+        insert into schedule_job (job_id, bean_name, params,
+                                  cron_expression, status, remark,
+                                  create_time)
+        values (SCHEDULE_JOB_SEQ.nextval, #{beanName}, #{params},
+                #{cronExpression}, #{status}, #{remark},
+                #{createTime})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobBean">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="jobId">
+            SELECT SCHEDULE_JOB_SEQ.CURRVAL as jobId from DUAL
+        </selectKey>
+        insert into schedule_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            job_id,
+            <if test="beanName != null">
+                bean_name,
+            </if>
+            <if test="params != null">
+                params,
+            </if>
+            <if test="cronExpression != null">
+                cron_expression,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="jobName != null">
+                job_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            SCHEDULE_JOB_SEQ.nextval,
+            <if test="beanName != null">
+                #{beanName},
+            </if>
+            <if test="params != null">
+                #{params},
+            </if>
+            <if test="cronExpression != null">
+                #{cronExpression},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createBy != null">
+                #{createBy},
+            </if>
+            <if test="createName != null">
+                #{createName},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="jobName != null">
+                #{jobName},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobExample"
+            resultType="java.lang.Integer">
+        select count(*) from schedule_job
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update schedule_job
+        <set>
+            <if test="record.jobId != null">
+                job_id = #{record.jobId,jdbcType=BIGINT},
+            </if>
+            <if test="record.beanName != null">
+                bean_name = #{record.beanName},
+            </if>
+            <if test="record.params != null">
+                params = #{record.params},
+            </if>
+            <if test="record.cronExpression != null">
+                cron_expression = #{record.cronExpression},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update schedule_job
+        set job_id = #{record.jobId,jdbcType=BIGINT},
+        bean_name = #{record.beanName},
+        params = #{record.params},
+        cron_expression = #{record.cronExpression},
+        status = #{record.status},
+        remark = #{record.remark},
+        create_time = #{record.createTime}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobBean">
+        update schedule_job
+        <set>
+            <if test="beanName != null">
+                bean_name = #{beanName},
+            </if>
+            <if test="params != null">
+                params = #{params},
+            </if>
+            <if test="cronExpression != null">
+                cron_expression = #{cronExpression},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="jobName != null">
+                job_name = #{jobName},
+            </if>
+        </set>
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobBean">
+        update schedule_job
+        set bean_name       = #{beanName},
+            params          = #{params},
+            cron_expression = #{cronExpression},
+            status          = #{status},
+            remark          = #{remark},
+            create_time     = #{createTime}
+        where job_id = #{jobId,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectAll" parameterType="com.cxnet.framework.quartz.domain.ScheduleJobBean" resultMap="BaseResultMap">
+        select
+        t.job_id,
+        t.bean_name,
+        t.params,
+        t.cron_expression,
+        t.status,
+        t.remark,
+        t.create_time,
+        t.create_by,
+        t.create_name,
+        t.update_by,
+        t.update_time,
+        t.job_name FROM schedule_job t
+        <where>
+            and t.DEL_FLAG = '0'
+            <if test="jobId != null and jobId != ''">and t.job_id = #{jobId,jdbcType=BIGINT}</if>
+            <if test="beanName != null and beanName != ''">and t.bean_name = #{beanName}</if>
+            <if test="params != null and params != ''">and t.params = #{params}</if>
+            <if test="cronExpression != null and cronExpression != ''">and t.cron_expression = #{cronExpression}</if>
+            <if test="status != null">and t.status = #{status}</if>
+            <if test="remark != null and remark != ''">and t.remark = #{remark}</if>
+            <if test="createTime != null and createTime != ''">and t.create_time = #{createTime}</if>
+            <if test="jobName != null and jobName != ''">and t.job_name like '%'||#{jobName}||'%'</if>
+            <if test="searchValue != null and searchValue != ''">
+                and (
+                t.remark like '%'||#{searchValue}||'%' or
+                t.params like '%'||#{searchValue}||'%' or
+                t.cron_expression like '%'||#{searchValue}||'%' or
+                t.bean_name like '%'||#{searchValue}||'%' or
+                t.job_name like '%'||#{searchValue}||'%'
+                )
+            </if>
+            <if test="jobIds != null and jobIds.size > 0">
+                AND t.job_id IN
+                <foreach collection="jobIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by t.job_id
+    </select>
+
+    <select id="selectByJobId" parameterType="long" resultMap="BaseResultMap">
+        select t.job_id,
+               t.bean_name,
+               t.params,
+               t.cron_expression,
+               t.status,
+               t.remark,
+               t.create_time,
+               t.create_by,
+               t.create_name,
+               t.update_by,
+               t.update_time,
+               t.job_name
+        FROM schedule_job t
+        where t.job_id = #{jobId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

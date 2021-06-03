@@ -1,0 +1,200 @@
+# 项目相关配置
+cxnet:
+  # 名称
+  name: ICS
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2020
+  # 实例演示开关
+  demoEnabled: true
+  # 文件路径 示例（ Windows配置D:/cxnet/uploadPath，Linux配置 /home/cxnet/uploadPath）
+#  profile: ${user.dir}/uploadPath
+  profile: D:\uploadPath
+  # Python路径
+  pythonPath: C:\Users\Chanyin\AppData\Local\Programs\Python\Python37\python.exe
+  # pythonPath: /usr/bin/python3
+  # 获取ip地址开关
+  addressEnabled: true
+  # 定时任务时间配置
+  scheduled:
+    # webSocket
+    webSocketTaskCron: 0/2 * * * * ?
+    # 同步数据
+    syncDataTaskCron: 0 0/2 * * * ?
+
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8084
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+
+# 日志配置
+logging:
+  level:
+    com.cxnet: debug
+    org.springframework: info
+
+# Spring配置
+spring:
+  cache:
+    ehcache:
+      config: classpath:ehcache/ehcache-config.xml
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  profiles: 
+    active: druid
+  # 文件上传
+  servlet:
+     multipart:
+       # 单个文件大小
+       max-file-size:  10MB
+       # 设置总上传的文件大小
+       max-request-size:  20MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: false
+  # redis 配置
+  redis:
+    # 地址
+    host: 192.168.1.111
+    # 端口，默认为6379
+    port: 6379
+    # 密码
+    requirePass: 123456
+    # 连接超时时间
+    timeout: 5000
+    # 订阅通道
+    dataChannel: GLOBAL_DATA_CHANNEL
+    database: 6
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+
+# token配置
+token:
+    # 令牌自定义标识
+    header: Authorization
+    # 令牌秘钥
+    secret: abcdefghijklmnopqrstuvwxyz
+    # 令牌有效期（默认30分钟）
+    expireTime: 300000
+  
+# MyBatis配置
+#mybatis:
+#    # 搜索指定包别名
+#    typeAliasesPackage: com.cxnet.**.domain
+#    # 配置mapper的扫描，找到所有的mapper.xml映射文件
+#    mapperLocations: classpath*:mapper/oracle/**/*Mapper.xml
+#    # 加载全局的配置文件
+#    configLocation: classpath:mybatis/mybatis-config.xml
+
+# MyBatisPlus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/oracle/**/*Mapper.xml
+  #实体扫描
+  typeAliasesPackage: com.cxnet.**.domain
+  #逻辑删除配置
+  global-config:
+    db-config:
+      # 全局逻辑删除的实体字段名
+      logic-delete-field: flag_del
+      # 逻辑已删除值(默认为 1)
+      logic-delete-value: 2
+      # 逻辑未删除值(默认为 0)
+      logic-not-delete-value: 0
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+
+# PageHelper分页插件
+pagehelper: 
+  helperDialect: oracle
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+# 防止XSS攻击
+xss: 
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /system/notice/*
+  # 匹配链接
+  urlPatterns: /system/*,/monitor/*,/tool/*
+
+# ureport报表
+ureport:
+  disableDBMetaProvider: true
+  fileStoreDir: /data/ureportfiles
+finereport:
+  fileStoreDir: /WebReport/ReportServer?reportlet=
+  defaultFile: GettingStarted.cpt
+  envpath:
+
+# 代码生成
+gen:
+  # 作者
+  author: cxnet
+  # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
+  packageName: com.cxnet.project.assets
+  # 自动去除表前缀，默认是true
+  autoRemovePre: true
+  # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
+  tablePrefix: sys_
+
+#camunda 配置
+camunda:
+  bpm:
+    admin-user:
+      id: admin
+      password: admin
+      firstName: admin
+    filter:
+      create: All tasks
+    job-execution:
+      enabled: true
+    metrics:
+      enabled: false
+      db-reporter-activate: false
+    database:
+#      schema-update:  false
+      jdbc-batch-processing: false
+
+minio:
+  #MinIO服务所在地址
+  endpoint: http://192.168.1.114:9000 
+  #存储桶名称
+  bucketName: cxnet 
+  #访问的key
+  accessKey: minioadmin 
+  #访问的秘钥
+  secretKey: minioadmin
+push:
+  appId: pSV61XYXtZ6sZZMWlb2GS9
+  appKey: MJVPKNebuk8ZO2GY4QELv1
+  masterSecret: 0mOZ2cSE1p7tEAgXMGOZV6
+ocr:
+  address: http://njcx.tpddns.cn:61084
+  #address: http://njcx.tpddns.cn:60189
+

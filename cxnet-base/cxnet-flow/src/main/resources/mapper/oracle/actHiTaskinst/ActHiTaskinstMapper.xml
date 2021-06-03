@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.flow.mapper.ActHiTaskinstMapper">
+
+    <resultMap type="com.cxnet.flow.domain.ActHiTaskinst" id="ActHiTaskinstMap">
+        <result property="id_" column="ID_" jdbcType="VARCHAR"/>
+        <result property="taskDefKey_" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+        <result property="procDefKey_" column="PROC_DEF_KEY_" jdbcType="VARCHAR"/>
+        <result property="procDefId_" column="PROC_DEF_ID_" jdbcType="VARCHAR"/>
+        <result property="rootProcInstId_" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="procInstId_" column="PROC_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="executionId_" column="EXECUTION_ID_" jdbcType="VARCHAR"/>
+        <result property="caseDefKey_" column="CASE_DEF_KEY_" jdbcType="VARCHAR"/>
+        <result property="caseDefId_" column="CASE_DEF_ID_" jdbcType="VARCHAR"/>
+        <result property="caseInstId_" column="CASE_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="caseExecutionId_" column="CASE_EXECUTION_ID_" jdbcType="VARCHAR"/>
+        <result property="actInstId_" column="ACT_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="parentTaskId_" column="PARENT_TASK_ID_" jdbcType="VARCHAR"/>
+        <result property="name_" column="NAME_" jdbcType="VARCHAR"/>
+        <result property="description_" column="DESCRIPTION_" jdbcType="VARCHAR"/>
+        <result property="owner_" column="OWNER_" jdbcType="VARCHAR"/>
+        <result property="assignee_" column="ASSIGNEE_" jdbcType="VARCHAR"/>
+        <result property="startTime_" column="START_TIME_" jdbcType="TIMESTAMP"/>
+        <result property="endTime_" column="END_TIME_" jdbcType="TIMESTAMP"/>
+        <result property="duration_" column="DURATION_" jdbcType="INTEGER"/>
+        <result property="deleteReason_" column="DELETE_REASON_" jdbcType="VARCHAR"/>
+        <result property="priority_" column="PRIORITY_" jdbcType="INTEGER"/>
+        <result property="dueDate_" column="DUE_DATE_" jdbcType="TIMESTAMP"/>
+        <result property="followUpDate_" column="FOLLOW_UP_DATE_" jdbcType="TIMESTAMP"/>
+        <result property="tenantId_" column="TENANT_ID_" jdbcType="VARCHAR"/>
+        <result property="removalTime_" column="REMOVAL_TIME_" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="ActHiTaskinstVo">
+        select t0.ID_,
+               t0.TASK_DEF_KEY_,
+               t0.PROC_DEF_KEY_,
+               t0.PROC_DEF_ID_,
+               t0.ROOT_PROC_INST_ID_,
+               t0.PROC_INST_ID_,
+               t0.EXECUTION_ID_,
+               t0.CASE_DEF_KEY_,
+               t0.CASE_DEF_ID_,
+               t0.CASE_INST_ID_,
+               t0.CASE_EXECUTION_ID_,
+               t0.ACT_INST_ID_,
+               t0.PARENT_TASK_ID_,
+               t0.NAME_,
+               t0.DESCRIPTION_,
+               t0.OWNER_,
+               t0.ASSIGNEE_,
+               t0.START_TIME_,
+               t0.END_TIME_,
+               t0.DURATION_,
+               t0.DELETE_REASON_,
+               t0.PRIORITY_,
+               t0.DUE_DATE_,
+               t0.FOLLOW_UP_DATE_,
+               t0.TENANT_ID_,
+               t0.REMOVAL_TIME_
+        from ACT_HI_TASKINST t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="ActHiTaskinstMap">
+        <include refid="ActHiTaskinstVo"></include>
+        <where>
+            <if test="id_ != null and id_ != ''">and t0.ID_ = #{id_}</if>
+            <if test="taskDefKey_ != null and taskDefKey_ != ''">and t0.TASK_DEF_KEY_ = #{taskDefKey_}</if>
+            <if test="procDefKey_ != null and procDefKey_ != ''">and t0.PROC_DEF_KEY_ = #{procDefKey_}</if>
+            <if test="procDefId_ != null and procDefId_ != ''">and t0.PROC_DEF_ID_ = #{procDefId_}</if>
+            <if test="rootProcInstId_ != null and rootProcInstId_ != ''">and t0.ROOT_PROC_INST_ID_ =
+                #{rootProcInstId_}
+            </if>
+            <if test="procInstId_ != null and procInstId_ != ''">and t0.PROC_INST_ID_ = #{procInstId_}</if>
+            <if test="executionId_ != null and executionId_ != ''">and t0.EXECUTION_ID_ = #{executionId_}</if>
+            <if test="caseDefKey_ != null and caseDefKey_ != ''">and t0.CASE_DEF_KEY_ = #{caseDefKey_}</if>
+            <if test="caseDefId_ != null and caseDefId_ != ''">and t0.CASE_DEF_ID_ = #{caseDefId_}</if>
+            <if test="caseInstId_ != null and caseInstId_ != ''">and t0.CASE_INST_ID_ = #{caseInstId_}</if>
+            <if test="caseExecutionId_ != null and caseExecutionId_ != ''">and t0.CASE_EXECUTION_ID_ =
+                #{caseExecutionId_}
+            </if>
+            <if test="actInstId_ != null and actInstId_ != ''">and t0.ACT_INST_ID_ = #{actInstId_}</if>
+            <if test="parentTaskId_ != null and parentTaskId_ != ''">and t0.PARENT_TASK_ID_ = #{parentTaskId_}</if>
+            <if test="name_ != null and name_ != ''">and t0.NAME_ = #{name_}</if>
+            <if test="description_ != null and description_ != ''">and t0.DESCRIPTION_ = #{description_}</if>
+            <if test="owner_ != null and owner_ != ''">and t0.OWNER_ = #{owner_}</if>
+            <if test="assignee_ != null and assignee_ != ''">and t0.ASSIGNEE_ = #{assignee_}</if>
+            <if test="startTime_ != null">and t0.START_TIME_ = #{startTime_}</if>
+            <if test="endTime_ != null">and t0.END_TIME_ = #{endTime_}</if>
+            <if test="duration_ != null">and t0.DURATION_ = #{duration_}</if>
+            <if test="deleteReason_ != null and deleteReason_ != ''">and t0.DELETE_REASON_ = #{deleteReason_}</if>
+            <if test="priority_ != null">and t0.PRIORITY_ = #{priority_}</if>
+            <if test="dueDate_ != null">and t0.DUE_DATE_ = #{dueDate_}</if>
+            <if test="followUpDate_ != null">and t0.FOLLOW_UP_DATE_ = #{followUpDate_}</if>
+            <if test="tenantId_ != null and tenantId_ != ''">and t0.TENANT_ID_ = #{tenantId_}</if>
+            <if test="removalTime_ != null">and t0.REMOVAL_TIME_ = #{removalTime_}</if>
+        </where>
+    </select>
+
+    <select id="selectListByPid" parameterType="string" resultMap="ActHiTaskinstMap">
+        <include refid="ActHiTaskinstVo"></include>
+        where t0.ROOT_PROC_INST_ID_ = #{processinstid}
+        order by START_TIME_ DESC
+    </select>
+
+    <update id="updateHiById" parameterType="com.cxnet.flow.domain.ActHiTaskinst">
+        update ACT_HI_TASKINST
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="description_ != null and description_ != ''">DESCRIPTION_ = #{description_},</if>
+            <if test="startTime_ != null">START_TIME_ = #{startTime_},</if>
+            <if test="endTime_ != null">END_TIME_ = #{endTime_},</if>
+        </trim>
+        where ID_ = #{id_}
+    </update>
+
+</mapper>

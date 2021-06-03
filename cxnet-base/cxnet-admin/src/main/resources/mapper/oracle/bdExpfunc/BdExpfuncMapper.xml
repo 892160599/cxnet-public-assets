@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.expfunc.bdExpfunc.mapper.BdExpfuncMapper">
+
+    <!-- 支出功能分类 结果集 -->
+    <resultMap type="com.cxnet.baseData.expfunc.bdExpfunc.domain.BdExpfunc" id="BdExpfuncResult">
+        <result property="funcId" column="func_id"/>
+        <result property="year" column="year"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="unitId" column="unit_id"/>
+        <result property="funcCode" column="func_code"/>
+        <result property="funcName" column="func_name"/>
+        <result property="subjectNature" column="subject_nature"/>
+        <result property="isLowest" column="is_lowest"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询支出功能分类 通用sql -->
+    <sql id="selectBdExpfuncVo">
+        select t0.func_id,
+               t0.year,
+               t0.unit_id,
+               d1.dept_code UNIT_CODE,
+               d1.dept_name UNIT_NAME,
+               t0.func_code,
+               t0.func_name,
+               t0.subject_nature,
+               t0.is_lowest,
+               t0.del_flag,
+               t0.parent_code,
+               t0.parent_id,
+               t0.status,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time
+        from bd_expfunc t0
+                 left join SYS_DEPT d1
+                           on t0.unit_id = d1.dept_id
+
+    </sql>
+
+    <!-- 查询支出功能分类 集合 -->
+    <select id="selectBdExpfuncList" parameterType="com.cxnet.baseData.expfunc.bdExpfunc.domain.BdExpfunc"
+            resultMap="BdExpfuncResult">
+        <include refid="selectBdExpfuncVo"/>
+        <where>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="funcCode != null  and funcCode != ''">and t0.func_code = #{funcCode}</if>
+            <if test="funcName != null  and funcName != ''">and t0.func_name like concat(concat('%', #{funcName}),
+                '%')
+            </if>
+            <if test="subjectNature != null  and subjectNature != ''">and t0.subject_nature = #{subjectNature}</if>
+            <if test="isLowest != null  and isLowest != ''">and t0.is_lowest = #{isLowest}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_flag = #{delFlag}</if>
+            <if test="parentCode != null  and parentCode != ''">and t0.parent_code = #{parentCode}</if>
+            <if test="parentId != null ">and t0.parent_id = #{parentId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+        </where>
+        order by t0.func_code
+    </select>
+
+    <!-- 查询支出功能分类 ById -->
+    <select id="selectBdExpfuncById" parameterType="String" resultMap="BdExpfuncResult">
+        <include refid="selectBdExpfuncVo"/>
+        where func_id = #{funcId}
+    </select>
+
+    <!-- 查询支出功能分类tree -->
+    <select id="selectBdExpfuncTree" parameterType="com.cxnet.baseData.expfunc.bdExpfunc.domain.BdExpfunc"
+            resultType="com.cxnet.common.utils.tree.Zone">
+        select t0.func_id id,t0.func_code code,t0.func_name name,t0.parent_id pid,t0.parent_code pCode
+        from bd_expfunc t0
+        <where>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_flag = #{delFlag}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+        </where>
+        order by t0.func_code
+    </select>
+
+    <!--根据ids查询-->
+    <select id="selectBdExpfuncByIds" resultMap="BdExpfuncResult" parameterType="String">
+        <include refid="selectBdExpfuncVo"/>
+        <where>
+            <if test="array != null and array.length > 0">
+                and t0.unit_id = '*'
+                and t0.year='2020'
+                and t0.UNIT_CODE='*'
+                and t0.UNIT_NAME='*'
+                AND t0.func_code IN
+                <trim suffixOverrides=" OR t0.func_code IN()">
+                    <foreach collection="array" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR t0.func_code IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有上级集合-->
+    <select id="selectBdExpfuncUpList" resultMap="BdExpfuncResult">
+        <include refid="selectBdExpfuncVo"/>
+        start with t0.func_code = #{funcCode} and t0.year = #{year} and t0.unit_id = '*'
+        connect by prior t0.parent_id = t0.func_id
+        order by t0.func_code
+    </select>
+
+
+    <select id="existBdExpfunc" resultType="java.lang.Integer">
+        select 1 from bd_expfunc t0
+        <where>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="funcCode != null  and funcCode != ''">and t0.func_code = #{funcCode}</if>
+            <if test="isLowest != null  and isLowest != ''">and t0.is_lowest = #{isLowest}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_flag = #{delFlag}</if>
+            <if test="parentCode != null  and parentCode != ''">and t0.parent_code = #{parentCode}</if>
+            <if test="parentId != null ">and t0.parent_id = #{parentId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+        </where>
+    </select>
+
+    <!--查询下级是否存在-->
+    <select id="existChildren" resultType="java.lang.Integer">
+        select count(1)
+        from bd_expfunc t0
+        where t0.unit_id = #{unitId}
+          and t0.year = #{year}
+          and t0.PARENT_CODE = #{funcCode}
+          and t0.del_flag = '0'
+    </select>
+
+    <select id="checkCode" parameterType="com.cxnet.baseData.expfunc.bdExpfunc.domain.BdExpfunc"
+            resultType="java.lang.Integer">
+        select count(1) from bd_expfunc
+        where year = #{year} and unit_code = #{unitCode} and func_code = #{funcCode} and del_flag = '0'
+        <if test="funcId != null ">and func_id != #{funcId}</if>
+    </select>
+
+
+    <select id="selectBdExpfuncByCodes" resultMap="BdExpfuncResult">
+        <include refid="selectBdExpfuncVo"/>
+        where t0.del_flag = '0' and t0.year = #{year} and unit_code = #{unitCode} and t0.func_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteBdExpfuncByYear">
+        delete bd_expfunc
+        where year = #{year}
+        <if test="unitId != null and unitId != ''">
+            and unit_id =#{unitId}
+        </if>
+    </delete>
+
+    <!-- 插入支出功能分类 -->
+    <insert id="insertBdExpfunc" parameterType="com.cxnet.baseData.expfunc.bdExpfunc.domain.BdExpfunc">
+        <selectKey keyProperty="funcId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into bd_expfunc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="funcId != null ">func_id,</if>
+            <if test="year != null ">year,</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code,</if>
+            <if test="unitId != null  and unitId != ''">unit_id,</if>
+            <if test="unitName != null  and unitName != ''">unit_name,</if>
+            <if test="funcCode != null  and funcCode != ''">func_code,</if>
+            <if test="funcName != null  and funcName != ''">func_name,</if>
+            <if test="subjectNature != null  and subjectNature != ''">subject_nature,</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="funcId != null  and funcId != ''">#{funcId},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="unitCode != null  and unitCode != ''">#{unitCode},</if>
+            <if test="unitId != null  and unitId != ''">#{unitId},</if>
+            <if test="unitName != null  and unitName != ''">#{unitName},</if>
+            <if test="funcCode != null  and funcCode != ''">#{funcCode},</if>
+            <if test="funcName != null  and funcName != ''">#{funcName},</if>
+            <if test="subjectNature != null  and subjectNature != ''">#{subjectNature},</if>
+            <if test="isLowest != null  and isLowest != ''">#{isLowest},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改支出功能分类 -->
+    <update id="updateBdExpfunc" parameterType="com.cxnet.baseData.expfunc.bdExpfunc.domain.BdExpfunc">
+        update bd_expfunc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null ">year = #{year},</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code = #{unitCode},</if>
+            <if test="unitId != null  and unitId != ''">unit_id = #{unitId},</if>
+            <if test="unitName != null  and unitName != ''">unit_name = #{unitName},</if>
+            <if test="funcCode != null  and funcCode != ''">func_code = #{funcCode},</if>
+            <if test="funcName != null  and funcName != ''">func_name = #{funcName},</if>
+            <if test="subjectNature != null  and subjectNature != ''">subject_nature = #{subjectNature},</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest = #{isLowest},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code = #{parentCode},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where func_id = #{funcId}
+    </update>
+
+    <!-- 删除支出功能分类 ById -->
+    <delete id="deleteBdExpfuncById" parameterType="String">
+        update bd_expfunc
+        set del_flag = '2'
+        where func_id = #{funcId}
+    </delete>
+
+    <!-- 批量删除支出功能分类 ByIds -->
+    <delete id="deleteExpfuncByIds" parameterType="String">
+        update bd_expfunc set del_flag = '2' where func_id in
+        <foreach item="funcId" collection="array" open="(" separator="," close=")">
+            #{funcId}
+        </foreach>
+    </delete>
+    <!-- 批量停用支出功能分类 -->
+    <update id="updateExpFuncByIds" parameterType="String">
+        update bd_expfunc set status = '2' where func_id in
+        <foreach item="funcId" collection="array" open="(" separator="," close=")">
+            #{funcId}
+        </foreach>
+    </update>
+
+    <!-- 批量插入支出功能分类 -->
+    <insert id="insertBatchBdExpfunc" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into bd_expfunc
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                func_id,
+                <if test="item.year != null ">year,</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code,</if>
+                <if test="item.unitId != null  and item.unitId != ''">unit_id,</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name,</if>
+                <if test="item.funcCode != null  and item.funcCode != ''">func_code,</if>
+                <if test="item.funcName != null  and item.funcName != ''">func_name,</if>
+                <if test="item.subjectNature != null  and item.subjectNature != ''">subject_nature,</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest,</if>
+                del_flag,
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code,</if>
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.year != null ">#{item.year},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">#{item.unitCode},</if>
+                <if test="item.unitId != null  and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.unitName != null  and item.unitName != ''">#{item.unitName},</if>
+                <if test="item.funcCode != null  and item.funcCode != ''">#{item.funcCode},</if>
+                <if test="item.funcName != null  and item.funcName != ''">#{item.funcName},</if>
+                <if test="item.subjectNature != null  and item.subjectNature != ''">#{item.subjectNature},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">#{item.isLowest},</if>
+                <if test="item.delFlag == null  ">0,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">#{item.parentCode},</if>
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改支出功能分类 -->
+    <update id="updateBatchBdExpfunc" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_expfunc
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.year != null ">year = #{item.year},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code = #{item.unitCode},</if>
+                <if test="item.unitId != null  and item.unitId != ''">unit_id = #{item.unitId},</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name = #{item.unitName},</if>
+                <if test="item.funcCode != null  and item.funcCode != ''">func_code = #{item.funcCode},</if>
+                <if test="item.funcName != null  and item.funcName != ''">func_name = #{item.funcName},</if>
+                <if test="item.subjectNature != null  and item.subjectNature != ''">subject_nature =
+                    #{item.subjectNature},
+                </if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest = #{item.isLowest},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code = #{item.parentCode},</if>
+                <if test="item.parentId != null ">parent_id = #{item.parentId},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+            </trim>
+            <where>
+                func_id = #{item.funcId}
+            </where>
+        </foreach>
+    </update>
+
+    <select id="selectLatestYear" resultType="Integer">
+        select max(year)
+        from BD_EXPFUNC
+    </select>
+
+    <insert id="carryForwardData" parameterType="Integer">
+        insert into bd_expfunc (
+            select #{newYear},
+                   func_code,
+                   func_name,
+                   subject_nature,
+                   is_lowest,
+                   del_flag,
+                   parent_code,
+                   parent_id || 'A',
+                   status,
+                   create_by,
+                   create_time,
+                   update_by,
+                   update_time,
+                   func_id || 'A',
+                   unit_id,
+                   unit_code,
+                   unit_name
+            from BD_EXPFUNC
+            where year = #{oldYear} and unit_id = '*')
+    </insert>
+
+</mapper>

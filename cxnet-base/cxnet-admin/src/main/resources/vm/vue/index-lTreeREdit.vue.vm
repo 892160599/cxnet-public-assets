@@ -1,0 +1,361 @@
+<template>
+  <div class="app-container">
+    <el-row class="mainBox" :gutter="20">
+      <el-col class="boxLeft" :span="4" :xs="24">
+        <div class="head-input">
+          <el-input
+              v-model="$TreeName"
+              placeholder="请输入"
+              clearable
+              size="small"
+              prefix-icon="el-icon-search"
+              style="margin-bottom: 20px"
+          >
+            <el-button slot="append" class="el-icon-refresh-right" size="mini"
+                       @click="refreshTree"></el-button>
+          </el-input>
+        </div>
+        <div class="head-container">
+          <div :style="{overflow:'auto',height:screenHeight-180+'px'}">
+            <el-tree
+                :data="${businessName}Options"
+                :props="defaultProps"
+                :expand-on-click-node="false"
+                :filter-node-method="filterNode"
+                ref="tree"
+                @node-click="handleNodeClick"
+            />
+          </div>
+        </div>
+      </el-col>
+
+      <el-col class="boxRight" :span="20" :xs="24">
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+                type="primary"
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+                v-hasPermi="['${moduleName}:${businessName}:add']"
+            >新增
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                :disabled="!form.${TreeCode}"
+                @click="handleDelete"
+                v-hasPermi="['${moduleName}:${businessName}:delete']"
+            >删除
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="primary"
+                       icon="el-icon-check"
+                       size="mini"
+                       v-hasPermi="['${moduleName}:${businessName}:add','${moduleName}:${businessName}:update']"
+                       @click="submitForm">提交
+            </el-button>
+          </el-col>
+        </el-row>
+      </el-col>
+
+      <el-col class="boxRight" :span="20" :xs="24">
+        <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+          <el-row>
+              #set($columnArr=[])
+              #foreach($column in $options.lTreeRTable.columns)
+                  #if($column.isEdit == "1")
+                      #if($columnArr.add($column))#end
+                  #end
+              #end
+              #foreach($column in $columnArr)
+                  #set($field=$column.javaField)
+                  #if($column.insert && !$column.pk)
+                      #if(($column.usableColumn) || (!$column.superColumn))
+                          #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                          #if($parentheseIndex != -1)
+                              #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                          #else
+                              #set($comment=$column.columnComment)
+                          #end
+                          #set($dictType=$column.dictType)
+                          #if($column.htmlType == "input")
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}" prop="${field}">
+                                <el-input v-model="form.${field}" placeholder="请输入${comment}"/>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "select" &&  $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}">
+                                <el-select v-model="form.${field}" placeholder="请选择${comment}"
+                                           clearable
+                                           filterable>
+                                  <el-option
+                                      v-for="dict in ${field}Options"
+                                      :key="dict.dictValue"
+                                      :label="dict.dictLabel"
+                                      :value="dict.dictValue"></el-option>
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "select" && $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}">
+                                <el-select v-model="form.${field}" placeholder="请选择${comment}"
+                                           clearable
+                                           filterable>
+                                  <el-option label="请选择字典生成" value=""/>
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "radio" && $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}">
+                                <el-radio-group v-model="form.${field}">
+                                  <el-radio
+                                      v-for="dict in ${field}Options"
+                                      :key="dict.dictValue"
+                                      :label="dict.dictValue">{{dict.dictLabel}}
+                                  </el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "radio" && $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}">
+                                <el-radio-group v-model="form.${field}">
+                                  <el-radio label="1">请选择字典生成</el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "datetime")
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}" prop="${field}">
+                                <el-date-picker clearable size="small"
+                                                v-model="form.${field}"
+                                                type="date"
+                                                value-format="yyyy-MM-dd"
+                                                placeholder="选择${comment}">
+                                </el-date-picker>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "textarea")
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment}" prop="${field}">
+                                <el-input v-model="form.${field}" type="textarea"
+                                          placeholder="请输入内容"/>
+                              </el-form-item>
+                            </el-col>
+                          #end
+                      #end
+                  #end
+              #end
+          </el-row>
+        </el-form>
+      </el-col>
+    </el-row>
+
+  </div>
+</template>
+
+<script>
+  import {
+    list${ClassName},
+    get${ClassName},
+    del${ClassName},
+    add${ClassName},
+    upd${ClassName},
+    exp${ClassName},
+    treeselect
+  } from "@/api/${moduleName}/${businessName}";
+
+  export default {
+    name: '${BusinessName}',
+    data() {
+      return {
+        // 动态宽度
+        screenWidth: '',
+        // 动态高度
+        screenHeight: '',
+        // 树名称
+              $TreeName: undefined,
+        // 树选项
+              ${businessName}Options: [],
+        defaultProps: {
+          children: "children",
+          label: "label"
+        },
+          #foreach ($column in $options.lTreeRTable.columns)
+              #set($parentheseIndex=$column.columnComment.indexOf("（"))
+              #if($parentheseIndex != -1)
+                  #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+              #else
+                  #set($comment=$column.columnComment)
+              #end
+              #if(${column.dictType})
+                // $comment字典
+                      ${column.javaField}Options: [],
+              #end
+          #end
+        // 表单参数
+        form: {},
+        // 表单校验
+        rules: {
+            #foreach ($column in $options.lTreeRTable.columns)
+                #if($column.required)
+                    #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                    #if($parentheseIndex != -1)
+                        #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                    #else
+                        #set($comment=$column.columnComment)
+                    #end
+                    #set($comment=$column.columnComment)
+
+                  // $comment 校验
+                        $column.javaField: [{
+                    required: true, message: "$comment不能为空", trigger: "blur"
+                  }]#if($velocityCount != $options.lTreeRTable.columns.size()),#end
+                #end
+            #end
+
+        }
+      }
+    },
+    watch: {
+      // 筛选树
+            $TreeName(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
+    created() {
+      this.getTreeselect();
+        #foreach ($column in $options.lTreeRTable.columns)
+            #if(${column.dictType})
+              this.getDicts("${column.dictType}").then(res => {
+                this.${column.javaField}Options = res.data;
+              });
+            #end
+        #end
+    },
+    mounted() {
+      this.windowRender();
+    },
+    methods: {
+      /** 窗口动态渲染 */
+      windowRender() {
+        this.screenWidth = document.body.clientWidth;
+        this.screenHeight = document.body.clientHeight;
+        window.onresize = () => {
+          this.screenWidth = document.body.clientWidth;
+          this.screenHeight = document.body.clientHeight;
+        };
+      },
+        #foreach ($column in $options.lTreeRTable.columns)
+            #if(${column.dictType})
+                #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                #if($parentheseIndex != -1)
+                    #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                #else
+                    #set($comment=$column.columnComment)
+                #end
+              /** $comment字典翻译 */
+                  ${column.javaField}Format(row, column) {
+                return this.selectDictLabel(this.${column.javaField}Options, row.${column.javaField});
+              },
+            #end
+        #end
+
+      /**刷新下拉树结构数据*/
+      refreshTree(val) {
+        this.$refs.tree.filter(val);
+        this.getTreeselect();
+      },
+      /** 查询部门下拉树结构 */
+      getTreeselect() {
+        treeselect().then(response => {
+          this.${businessName}Options = response.data;
+        });
+      },
+      /** 筛选节点 */
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+      /** 节点单击事件 */
+      handleNodeClick(data) {
+        list${ClassName}({${TreeCode}: data.id}).then(res => {
+          this.form = res.data.rows[0];
+        });
+      },
+      /** 表单重置 */
+      reset() {
+        this.form = {
+            #foreach ($column in $options.lTreeRTable.columns)
+                #if($column.htmlType == "radio")
+                        $column.javaField: "0"#if($velocityCount != $options.lTreeRTable.columns.size()),#end
+
+                #else
+                        $column.javaField: undefined#if($velocityCount != $options.lTreeRTable.columns.size()),#end
+
+                #end
+            #end
+        }
+        this.resetForm("form");
+      },
+      /** 新增按钮操作 */
+      handleAdd() {
+        this.reset();
+      },
+      /** 提交按钮 */
+      submitForm: function () {
+        this.#[[$]]
+        #refs["form"].validate(valid => {
+          if (valid) {
+            if (this.form.${pkColumn.javaField} != undefined) {
+              upd${ClassName}(this.form).then(res => {
+                if (res.code === 200) {
+                  this.reset();
+                  this.getTreeselect();
+                  this.msgSuccess("修改成功");
+                } else {
+                  this.msgError(res.msg);
+                }
+              });
+            } else {
+              add${ClassName}(this.form).then(res => {
+                if (res.code === 200) {
+                  this.reset();
+                  this.getTreeselect();
+                  this.msgSuccess("新增成功");
+                } else {
+                  this.msgError(res.msg);
+                }
+              });
+            }
+          }
+        });
+      },
+      /** 删除按钮操作 */
+      handleDelete() {
+        let id = this.form.${pkColumn.javaField};
+        this.$confirm('是否确认删除${functionName}编号为"' + id + '"的数据项?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function () {
+          return del${ClassName}(id);
+        }).then(() => {
+          this.reset();
+          this.getTreeselect();
+          this.msgSuccess("删除成功");
+        }).catch(function () {
+        });
+      }
+    }
+  };
+</script>

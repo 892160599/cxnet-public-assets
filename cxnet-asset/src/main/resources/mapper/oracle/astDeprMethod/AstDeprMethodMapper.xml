@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.businessSet.mapper.AstDeprMethodMapper">
+
+    <resultMap type="com.cxnet.asset.businessSet.domain.AstDeprMethod" id="AstDeprMethodResult">
+        <result property="id" column="ID"/>
+        <result property="deprMethodCode" column="asset_code"/>
+        <result property="deprMethodName" column="asset_name"/>
+        <result property="deprValueFormula" column="parent_id"/>
+        <result property="remark" column="parent_code"/>
+        <result property="status" column="is_lowest"/>
+        <result property="unitId" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--查询部门预算经济分类tree-->
+    <select id="selectAstDeprMethodTree" resultType="com.cxnet.common.utils.tree.Zone">
+        SELECT ID,DEPR_METHOD_CODE,DEPR_METHOD_NAME,UNIT_ID
+        from AST_DEPR_METHOD
+        <where>
+            <if test="unitId != null  and unitId != ''">and unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+    </select>
+
+</mapper>

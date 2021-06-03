@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.depr.mapper.AstDeprListMapper">
+
+    <resultMap type="com.cxnet.asset.depr.domain.AstDeprList" id="AstDeprListMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="astDeprId" column="AST_DEPR_ID" jdbcType="VARCHAR"/>
+        <result property="astId" column="AST_ID" jdbcType="VARCHAR"/>
+        <result property="astCode" column="AST_CODE" jdbcType="VARCHAR"/>
+        <result property="assetName" column="ASSET_NAME" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="INTEGER"/>
+        <result property="deprMo" column="DEPR_MO" jdbcType="INTEGER"/>
+        <result property="categoryId" column="CATEGORY_ID" jdbcType="VARCHAR"/>
+        <result property="categoryCode" column="CATEGORY_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryName" column="CATEGORY_NAME" jdbcType="VARCHAR"/>
+        <result property="classCode" column="CLASS_CODE" jdbcType="VARCHAR"/>
+        <result property="className" column="CLASS_NAME" jdbcType="VARCHAR"/>
+        <result property="depMethod" column="DEP_METHOD" jdbcType="VARCHAR"/>
+        <result property="cost" column="COST" jdbcType="OTHER"/>
+        <result property="depTotal" column="DEP_TOTAL" jdbcType="OTHER"/>
+        <result property="depedMo" column="DEPED_MO" jdbcType="INTEGER"/>
+        <result property="netValue" column="NET_VALUE" jdbcType="OTHER"/>
+        <result property="depMoValue" column="DEP_MO_VALUE" jdbcType="OTHER"/>
+        <result property="depreciationMo" column="DEPRECIATION_MO" jdbcType="INTEGER"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="cardBill" column="CARD_BILL" jdbcType="VARCHAR"/>
+        <result property="thisValue" column="THIS_VALUE" jdbcType="OTHER"/>
+        <result property="resiRate" column="RESI_RATE" jdbcType="OTHER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstDeprListVo">
+        select t0.ID,
+               t0.AST_DEPR_ID,
+               t0.AST_ID,
+               t0.AST_CODE,
+               t0.ASSET_NAME,
+               t0.FISCAL,
+               t0.DEPR_MO,
+               t0.CATEGORY_ID,
+               t0.CATEGORY_CODE,
+               t0.CATEGORY_NAME,
+               t0.CLASS_CODE,
+               t0.CLASS_NAME,
+               t0.DEP_METHOD,
+               t0.COST,
+               t0.DEP_TOTAL,
+               t0.DEPED_MO,
+               t0.NET_VALUE,
+               t0.DEP_MO_VALUE,
+               t0.DEPRECIATION_MO,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.CARD_BILL,
+               t0.THIS_VALUE,
+               t0.RESI_RATE
+        from AST_DEPR_LIST t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstDeprListMap">
+        <include refid="AstDeprListVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="astDeprId != null and astDeprId != ''">and t0.AST_DEPR_ID = #{astDeprId}</if>
+            <if test="astId != null and astId != ''">and t0.AST_ID = #{astId}</if>
+            <if test="astCode != null and astCode != ''">and t0.AST_CODE = #{astCode}</if>
+            <if test="assetName != null and assetName != ''">and t0.ASSET_NAME = #{assetName}</if>
+            <if test="fiscal != null">and t0.FISCAL = #{fiscal}</if>
+            <if test="deprMo != null">and t0.DEPR_MO = #{deprMo}</if>
+            <if test="categoryId != null and categoryId != ''">and t0.CATEGORY_ID = #{categoryId}</if>
+            <if test="categoryCode != null and categoryCode != ''">and t0.CATEGORY_CODE = #{categoryCode}</if>
+            <if test="categoryName != null and categoryName != ''">and t0.CATEGORY_NAME = #{categoryName}</if>
+            <if test="classCode != null and classCode != ''">and t0.CLASS_CODE = #{classCode}</if>
+            <if test="className != null and className != ''">and t0.CLASS_NAME = #{className}</if>
+            <if test="depMethod != null and depMethod != ''">and t0.DEP_METHOD = #{depMethod}</if>
+            <if test="cost != null">and t0.COST = #{cost}</if>
+            <if test="depTotal != null">and t0.DEP_TOTAL = #{depTotal}</if>
+            <if test="depedMo != null">and t0.DEPED_MO = #{depedMo}</if>
+            <if test="netValue != null">and t0.NET_VALUE = #{netValue}</if>
+            <if test="depMoValue != null">and t0.DEP_MO_VALUE = #{depMoValue}</if>
+            <if test="depreciationMo != null">and t0.DEPRECIATION_MO = #{depreciationMo}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="cardBill != null and cardBill != ''">and t0.CARD_BILL = #{cardBill}</if>
+            <if test="thisValue != null">and t0.THIS_VALUE = #{thisValue}</if>
+            <if test="resiRate != null">and t0.RESI_RATE = #{resiRate}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.user.mapper.SysUserMapper">
+
+    <resultMap type="com.cxnet.rpc.domain.system.userrpc.SysUserRpc" id="SysUserRpcResult">
+        <id property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptCode" column="dept_code"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="userType" column="user_type"/>
+        <result property="loginMode" column="login_mode"/>
+        <result property="caSerialNumber" column="ca_serial_number"/>
+    </resultMap>
+
+    <resultMap type="com.cxnet.project.system.user.domain.SysUser" id="SysUserResult">
+        <id property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptCode" column="dept_code"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="userType" column="user_type"/>
+        <result property="openingBank" column="opening_bank"/>
+        <result property="bankAccount" column="bank_account"/>
+        <result property="validity" column="validity"/>
+        <result property="loginMode" column="login_mode"/>
+        <result property="caSerialNumber" column="ca_serial_number"/>
+        <association property="dept" column="dept_id" javaType="com.cxnet.project.system.dept.domain.SysDept"
+                     resultMap="deptResult"/>
+        <collection property="roles" javaType="java.util.List" resultMap="RoleResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="com.cxnet.project.system.dept.domain.SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <resultMap id="RoleResult" type="com.cxnet.project.system.role.domain.SysRole">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleKey" column="role_key"/>
+        <result property="roleSort" column="role_sort"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="status" column="role_status"/>
+    </resultMap>
+
+    <sql id="selectUserVo">
+        SELECT u.user_id,
+               u.dept_id,
+               u.user_name,
+               u.nick_name,
+               u.email,
+               u.avatar,
+               u.phonenumber,
+               u.password,
+               u.sex,
+               u.status,
+               u.del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_by,
+               u.create_time,
+               u.remark,
+               u.user_type,
+               u.validity,
+               u.login_mode,
+               u.ca_serial_number,
+               d.parent_id,
+               d.dept_name,
+               d.order_num,
+               d.leader,
+               d.status AS dept_status,
+               r.role_id,
+               r.role_name,
+               r.role_key,
+               r.role_sort,
+               r.data_scope,
+               r.status AS role_status
+        FROM sys_user u
+                 LEFT JOIN sys_dept d ON u.dept_id = d.dept_id
+                 LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
+                 LEFT JOIN sys_role r ON r.role_id = ur.role_id
+    </sql>
+
+    <select id="selectUserList" parameterType="com.cxnet.project.system.user.domain.SysUser" resultMap="SysUserResult">
+        select u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.password, u.sex,
+        u.login_mode,u.ca_serial_number,
+        u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.dept_code,
+        d.leader from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+        where u.del_flag = '0'
+        <if test="userName != null and userName != ''">
+            AND u.user_name like concat(concat('%', #{userName}), '%')
+        </if>
+        <if test="nickName != null and nickName != ''">
+            AND u.nick_name like concat(concat('%', #{nickName}), '%')
+        </if>
+        <if test='status == "0"'>
+            AND u.status = '0'
+        </if>
+        <if test='status == "1"'>
+            AND u.status in ('1', '3')
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND u.phonenumber like concat(concat('%', #{phonenumber}), '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND u.create_time &gt;= to_date(#{params.beginTime},'yyyy-MM-dd HH24:mi:ss')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND u.create_time &lt;= to_date(#{params.endTime},'yyyy-MM-dd HH24:mi:ss')
+        </if>
+        <if test="deptId != null and deptId != ''">
+            AND (u.dept_id = #{deptId} OR u.dept_id IN
+            ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) <![CDATA[ <> ]]> 0 ))
+        </if>
+        <if test="searchValue!=null">
+            and (instr(user_name,#{searchValue}) > 0 OR INSTR(nick_name, #{searchValue}) >0 or d.dept_code =
+            #{searchValue} or INSTR(d.dept_name, #{searchValue}) >0 )
+        </if>
+        <!-- 数据范围过滤 -->
+        ${dataScope}
+        order by u.create_time desc, u.user_name, u.user_id
+    </select>
+
+    <select id="selectBdUserList" parameterType="com.cxnet.project.system.user.domain.SysUser"
+            resultMap="SysUserResult">
+        select u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.password, u.sex,
+        u.login_mode,u.ca_serial_number,
+        u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.dept_code,
+        d.leader from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+        where u.del_flag = '0'
+        and USER_ID not in (select USER_ID from BD_PERSONNEL where USER_ID is not null and DEL_FLAG = '0')
+        <if test="deptId != null and deptId != ''">
+            AND (u.dept_id = #{deptId} OR u.dept_id IN
+            ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) <![CDATA[ <> ]]> 0 ))
+        </if>
+        <if test="userId != null and userId != ''">
+            or user_id = #{userId}
+        </if>
+        order by u.create_time desc, u.user_name, u.user_id
+    </select>
+
+    <select id="selectUserPost" parameterType="com.cxnet.project.system.user.domain.SysUser" resultMap="SysUserResult">
+        select u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.password, u.sex,
+        u.login_mode,u.ca_serial_number,
+        u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.dept_code,
+        d.leader from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+        where u.del_flag = '0'
+        <if test="deptId != null and deptId != ''">
+            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET
+            (#{deptId},ancestors) <![CDATA[ <> ]]> 0 ))
+        </if>
+        <!-- 数据范围过滤 -->
+        ${dataScope}
+        order by u.create_time desc, u.user_id
+    </select>
+
+    <select id="selectUserByUserName" parameterType="string" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.user_name = #{userName} and u.del_flag = '0'
+    </select>
+
+    <select id="selectUserByPhone" parameterType="string" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.phonenumber = #{phone} and u.del_flag = '0'
+    </select>
+
+    <select id="selectUserRpcByName" parameterType="string" resultMap="SysUserRpcResult">
+        SELECT u.user_id,
+               u.dept_id,
+               u.user_name,
+               u.nick_name,
+               u.email,
+               u.avatar,
+               u.phonenumber,
+               u.password,
+               u.sex,
+               u.status,
+               u.del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_by,
+               u.create_time,
+               u.remark,
+               u.user_type,
+               u.validity,
+               u.login_mode,
+               u.ca_serial_number
+        FROM sys_user u
+        WHERE u.del_flag = '0'
+          AND u.user_name = #{userName}
+          AND ROWNUM &lt;= 1
+    </select>
+
+    <select id="selectUserById" parameterType="string" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.user_id = #{userId}
+    </select>
+
+    <select id="selectUserListByRoleId" parameterType="string" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where ur.role_id = #{roleId}
+    </select>
+
+    <select id="selectUserListByPostId" parameterType="string" resultMap="SysUserResult">
+        select u.user_id,
+               u.dept_id,
+               u.nick_name,
+               u.user_name,
+               u.email,
+               u.avatar,
+               u.phonenumber,
+               u.password,
+               u.sex,
+               u.status,
+               u.del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_by,
+               u.create_time,
+               u.remark,
+               u.validity,
+               u.login_mode,
+               u.ca_serial_number,
+               d.dept_name,
+               d.dept_code,
+               d.leader
+        from sys_user u
+                 left join sys_dept d on u.dept_id = d.dept_id
+                 LEFT JOIN sys_user_post up on up.user_id = u.user_id
+        where u.del_flag = '0'
+          and up.post_id = #{postId}
+        order by u.create_time desc, u.user_id
+    </select>
+
+    <select id="checkUserNameUnique" parameterType="String" resultType="int">
+        select count(1)
+        from sys_user
+        where user_name = #{userName}
+          and del_flag = '0'
+    </select>
+
+    <select id="checkPhoneUnique" parameterType="string" resultMap="SysUserResult">
+        select user_id, phonenumber
+        from sys_user
+        where phonenumber = #{phonenumber}
+    </select>
+
+    <select id="checkEmailUnique" parameterType="string" resultMap="SysUserResult">
+        select user_id, email
+        from sys_user
+        where email = #{email}
+    </select>
+
+    <select id="selectUserByDept" parameterType="string" resultMap="SysUserResult">
+        select t0.*, bp.OPENING_BANK, bp.BANK_ACCOUNT
+        from (
+                 select su.*
+                 from sys_user su
+                 where su.user_id in
+                       (
+                           select t.user_id
+                           from SYS_USER_POST t
+                           where t.post_id in (
+                               select sp.post_id
+                               from SYS_POST sp
+                               where sp.dept_code = #{deptCode}))
+                   and su.del_flag = '0'
+                   and su.status = '0'
+             ) t0
+                 left join BD_PERSONNEL bp
+                           on t0.user_id = bp.user_id
+                               and bp.IS_CREATE = '1'
+                               and bp.DEL_FLAG = '0'
+                               and bp.STATUS = '0'
+    </select>
+
+    <insert id="insertUser" parameterType="com.cxnet.project.system.user.domain.SysUser" useGeneratedKeys="true"
+            keyProperty="userId">
+        <selectKey keyProperty="userId" resultType="string" order="BEFORE">
+            select sys_guid() as userId FROM DUAL
+        </selectKey>
+        insert into sys_user(
+        <if test="userId != null and userId != ''">user_id,</if>
+        <if test="deptId != null and deptId != ''">dept_id,</if>
+        <if test="userName != null and userName != ''">user_name,</if>
+        <if test="nickName != null and nickName != ''">nick_name,</if>
+        <if test="email != null and email != ''">email,</if>
+        <if test="avatar != null and avatar != ''">avatar,</if>
+        <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
+        <if test="sex != null and sex != ''">sex,</if>
+        <if test="password != null and password != ''">password,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="userType != null and userType != ''">user_type,</if>
+        <if test="validity != null">validity,</if>
+        <if test="loginMode != null and loginMode != ''">login_mode,</if>
+        <if test="caSerialNumber != null and caSerialNumber != ''">ca_serial_number,</if>
+        create_time
+        )values(
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="deptId != null and deptId != ''">#{deptId},</if>
+        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="nickName != null and nickName != ''">#{nickName},</if>
+        <if test="email != null and email != ''">#{email},</if>
+        <if test="avatar != null and avatar != ''">#{avatar},</if>
+        <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
+        <if test="sex != null and sex != ''">#{sex},</if>
+        <if test="password != null and password != ''">#{password},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="userType != null and userType != ''">#{userType},</if>
+        <if test="validity != null">#{validity},</if>
+        <if test="loginMode != null and loginMode != ''">#{loginMode},</if>
+        <if test="caSerialNumber != null and caSerialNumber != ''">#{caSerialNumber},</if>
+        sysdate
+        )
+    </insert>
+
+    <insert id="insertUserAndPost" parameterType="com.cxnet.project.system.user.domain.SysUser" useGeneratedKeys="true"
+            keyProperty="userId">
+        <selectKey keyProperty="userId" resultType="string" order="BEFORE">
+            select sys_guid() as userId FROM DUAL
+        </selectKey>
+        insert into sys_user(
+        <if test="userId != null and userId != ''">user_id,</if>
+        <if test="deptId != null and deptId != ''">dept_id,</if>
+        <if test="userName != null and userName != ''">user_name,</if>
+        <if test="nickName != null and nickName != ''">nick_name,</if>
+        <if test="email != null and email != ''">email,</if>
+        <if test="avatar != null and avatar != ''">avatar,</if>
+        <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
+        <if test="sex != null and sex != ''">sex,</if>
+        <if test="password != null and password != ''">password,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="userType != null and userType != ''">user_type,</if>
+        <if test="validity != null">validity,</if>
+        <if test="loginMode != null and loginMode != ''">login_mode,</if>
+        <if test="caSerialNumber != null and caSerialNumber != ''">ca_serial_number,</if>
+        create_time
+        )values(
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="deptId != null and deptId != ''">#{deptId},</if>
+        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="nickName != null and nickName != ''">#{nickName},</if>
+        <if test="email != null and email != ''">#{email},</if>
+        <if test="avatar != null and avatar != ''">#{avatar},</if>
+        <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
+        <if test="sex != null and sex != ''">#{sex},</if>
+        <if test="password != null and password != ''">#{password},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="userType != null and userType != ''">#{userType},</if>
+        <if test="validity != null">#{validity},</if>
+        <if test="loginMode != null and loginMode != ''">#{loginMode},</if>
+        <if test="caSerialNumber != null and caSerialNumber != ''">#{caSerialNumber},</if>
+        sysdate
+        )
+    </insert>
+
+    <!-- 批量插入用户信息 -->
+    <insert id="insertBatchSysUser" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                user_id,
+                <if test="item.deptId != null and item.deptId != ''">dept_id,</if>
+                <if test="item.userName != null  and item.userName != ''">user_name,</if>
+                <if test="item.nickName != null  and item.nickName != ''">nick_name,</if>
+                <if test="item.userType != null  and item.userType != ''">user_type,</if>
+                <if test="item.email != null  and item.email != ''">email,</if>
+                <if test="item.phonenumber != null  and item.phonenumber != ''">phonenumber,</if>
+                <if test="item.sex != null  and item.sex != ''">sex,</if>
+                <if test="item.avatar != null  and item.avatar != ''">avatar,</if>
+                <if test="item.password != null  and item.password != ''">password,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.loginIp != null  and item.loginIp != ''">login_ip,</if>
+                <if test="item.loginDate != null ">login_date,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                create_time,
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.remark != null  and item.remark != ''">remark,</if>
+                <if test="item.validity != null">validity,</if>
+                <if test="item.loginMode != null  and item.loginMode != ''">login_mode,</if>
+                <if test="item.caSerialNumber != null  and item.caSerialNumber != ''">ca_serial_number,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.deptId != null ">#{item.deptId},</if>
+                <if test="item.userName != null  and item.userName != ''">#{item.userName},</if>
+                <if test="item.nickName != null  and item.nickName != ''">#{item.nickName},</if>
+                <if test="item.userType != null  and item.userType != ''">#{item.userType},</if>
+                <if test="item.email != null  and item.email != ''">#{item.email},</if>
+                <if test="item.phonenumber != null  and item.phonenumber != ''">#{item.phonenumber},</if>
+                <if test="item.sex != null  and item.sex != ''">#{item.sex},</if>
+                <if test="item.avatar != null  and item.avatar != ''">#{item.avatar},</if>
+                <if test="item.password != null  and item.password != ''">#{item.password},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.loginIp != null  and item.loginIp != ''">#{item.loginIp},</if>
+                <if test="item.loginDate != null ">#{item.loginDate},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                sysdate,
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.remark != null  and item.remark != ''">#{item.remark},</if>
+                <if test="item.validity != null">#{item.validity},</if>
+                <if test="item.loginMode != null  and item.loginMode != ''">#{item.loginMode},</if>
+                <if test="item.caSerialNumber != null  and item.caSerialNumber != ''">#{item.caSerialNumber},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <update id="updateUser" parameterType="com.cxnet.project.system.user.domain.SysUser">
+        update sys_user
+        <set>
+            <if test="deptId != null and deptId != ''">dept_id = #{deptId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="userType != null">user_type = #{userType},</if>
+            <if test="validity != null">validity = #{validity},</if>
+            <if test="loginMode != null and loginMode != ''">login_mode = #{loginMode},</if>
+            <if test="caSerialNumber != null and caSerialNumber != ''">ca_serial_number = #{caSerialNumber},</if>
+            update_time = sysdate
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.cxnet.project.system.user.domain.SysUser">
+        update sys_user
+        set
+        <if test="validity != null">validity = #{validity},</if>
+        user_name = #{userName},
+        nick_name = #{nickName},
+        sex = #{sex},
+        avatar = #{avatar},
+        password = #{password},
+        status = #{status},
+        login_ip = #{loginIp},
+        login_date = #{loginDate},
+        update_by = #{updateBy},
+        remark = #{remark},
+        user_type = #{userType},
+        login_mode = #{loginMode},
+        ca_serial_number = #{caSerialNumber},
+        email = #{email},
+        phonenumber = #{phonenumber},
+        update_time = sysdate
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateUserStatus" parameterType="com.cxnet.project.system.user.domain.SysUser">
+        update sys_user
+        set status = #{status}
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateUserAvatar" parameterType="com.cxnet.project.system.user.domain.SysUser">
+        update sys_user
+        set avatar = #{avatar}
+        where user_name = #{userName}
+    </update>
+
+    <update id="resetUserPwd" parameterType="com.cxnet.project.system.user.domain.SysUser">
+        update sys_user
+        set password = #{password}
+        where user_name = #{userName}
+    </update>
+
+    <delete id="deleteUserById" parameterType="string">
+        delete
+        from sys_user
+        where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserByIds" parameterType="string">
+        update sys_user set del_flag = '2' where user_id in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <select id="getDeptPermission" parameterType="string" resultType="string">
+        select distinct sd.dept_code
+        from sys_dept sd
+                 left join sys_user su on su.dept_id = sd.dept_id
+        where su.user_id = #{userId}
+    </select>
+
+
+    <update id="updateDeptId" parameterType="com.cxnet.project.system.user.domain.SysUser">
+        update sys_user t
+        set t.dept_id = #{unitId}
+        where t.user_id = #{userId}
+    </update>
+
+    <update id="updateUserValidity">
+        update SYS_USER t
+        set t.validity = #{dateTime}
+        where user_id != '2'
+    </update>
+
+</mapper>

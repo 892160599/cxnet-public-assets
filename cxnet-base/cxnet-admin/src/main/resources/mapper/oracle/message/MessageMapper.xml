@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.message.mapper.MessageMapper">
+
+    <!-- 消息记录 结果集 -->
+    <resultMap type="com.cxnet.project.system.message.domain.Message" id="MessageResult">
+        <result property="messageId" column="message_id"/>
+        <result property="content" column="content"/>
+        <result property="menuUrl" column="menu_url"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!-- 查询消息记录 通用sql -->
+    <sql id="selectMessageVo">
+        select t0.message_id,
+               t0.content,
+               t0.menu_url,
+               t0.type,
+               t0.status,
+               t0.del_flag,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.remark
+        from sys_message t0
+
+    </sql>
+
+
+    <!-- 查询消息记录 集合 -->
+    <select id="selectMessageList" parameterType="com.cxnet.project.system.message.domain.Message"
+            resultMap="MessageResult">
+        <include refid="selectMessageVo"/>
+        <where>
+            <if test="content != null  and content != ''">and t0.content = #{content}</if>
+            <if test="menuUrl != null  and menuUrl != ''">and t0.menu_url = #{menuUrl}</if>
+            <if test="type != null  and type != ''">and t0.type = #{type}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+        </where>
+    </select>
+
+    <!-- 查询消息记录 ById -->
+    <select id="selectMessageById" parameterType="string" resultMap="MessageResult">
+        <include refid="selectMessageVo"/>
+        where message_id = #{messageId}
+    </select>
+
+    <!-- 插入消息记录 -->
+    <insert id="insertMessage" parameterType="com.cxnet.project.system.message.domain.Message">
+        <selectKey keyProperty="messageId" resultType="string" order="BEFORE">
+            select sys_guid() as messageId FROM DUAL
+        </selectKey>
+        insert into sys_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="messageId != null and messageId != ''">message_id,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="menuUrl != null  and menuUrl != ''">menu_url,</if>
+            <if test="type != null  and type != ''">type,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="messageId != null and messageId != ''">#{messageId},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="menuUrl != null  and menuUrl != ''">#{menuUrl},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改消息记录 -->
+    <update id="updateMessage" parameterType="com.cxnet.project.system.message.domain.Message">
+        update sys_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="menuUrl != null  and menuUrl != ''">menu_url = #{menuUrl},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where message_id = #{messageId}
+    </update>
+
+    <!-- 删除消息记录 ById -->
+    <delete id="deleteMessageById" parameterType="string">
+        delete
+        from sys_message
+        where message_id = #{messageId}
+    </delete>
+
+    <!-- 批量删除消息记录 ByIds -->
+    <delete id="deleteMessageByIds" parameterType="string">
+        delete from sys_message where message_id in
+        <foreach item="messageId" collection="array" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入消息记录 -->
+    <insert id="insertBatchMessage" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_message
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                message_id,
+                <if test="item.content != null  and item.content != ''">content,</if>
+                <if test="item.menuUrl != null  and item.menuUrl != ''">menu_url,</if>
+                <if test="item.type != null  and item.type != ''">type,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.remark != null  and item.remark != ''">remark,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.content != null  and item.content != ''">#{item.content},</if>
+                <if test="item.menuUrl != null  and item.menuUrl != ''">#{item.menuUrl},</if>
+                <if test="item.type != null  and item.type != ''">#{item.type},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.remark != null  and item.remark != ''">#{item.remark},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改消息记录 -->
+    <update id="updateBatchMessage" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update sys_message
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.content != null  and item.content != ''">content = #{item.content},</if>
+                <if test="item.menuUrl != null  and item.menuUrl != ''">menu_url = #{item.menuUrl},</if>
+                <if test="item.type != null  and item.type != ''">type = #{item.type},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+                <if test="item.remark != null  and item.remark != ''">remark = #{item.remark},</if>
+            </trim>
+            <where>
+                message_id = #{item.messageId}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

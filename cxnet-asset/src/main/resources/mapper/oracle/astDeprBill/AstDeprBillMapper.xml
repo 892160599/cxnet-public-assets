@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.depr.mapper.AstDeprBillMapper">
+
+    <resultMap type="com.cxnet.asset.depr.domain.AstDeprBill" id="AstDeprBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="billNo" column="BILL_NO" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="INTEGER"/>
+        <result property="deprMo" column="DEPR_MO" jdbcType="INTEGER"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="confirmedId" column="CONFIRMED_ID" jdbcType="VARCHAR"/>
+        <result property="confirmedName" column="CONFIRMED_NAME" jdbcType="VARCHAR"/>
+        <result property="confirmedDate" column="CONFIRMED_DATE" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstDeprBillVo">
+        select t0.ID,
+               t0.BILL_NO,
+               t0.STATUS,
+               t0.FISCAL,
+               t0.DEPR_MO,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.CREATE_BY,
+               t0.CREATE_TIME,
+               t0.CREATE_NAME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.CONFIRMED_ID,
+               t0.CONFIRMED_NAME,
+               t0.CONFIRMED_DATE,
+               t0.DEL_FLAG,
+               t0.REMARK,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5
+        from AST_DEPR_BILL t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstDeprBillMap">
+        <include refid="AstDeprBillVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="billNo != null and billNo != ''">and t0.BILL_NO = #{billNo}</if>
+            <if test="billtypeCode != null and billtypeCode != ''">and t0.BILLTYPE_CODE = #{billtypeCode}</if>
+            <if test="status != null and status != ''">and t0.STATUS = #{status}</if>
+            <if test="fiscal != null">and t0.FISCAL = #{fiscal}</if>
+            <if test="deprMo != null">and t0.DEPR_MO = #{deprMo}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="confirmedId != null and confirmedId != ''">and t0.CONFIRMED_ID = #{confirmedId}</if>
+            <if test="confirmedName != null and confirmedName != ''">and t0.CONFIRMED_NAME = #{confirmedName}</if>
+            <if test="confirmedDate != null">and t0.CONFIRMED_DATE = #{confirmedDate}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+        </where>
+    </select>
+
+    <select id="record" resultType="java.util.Map">
+        SELECT a.id                         "id",
+               c.bill_no                    "billNo",
+               a.THIS_VALUE                 "thisValue",
+               a.DEP_TOTAL                  "depTotal",
+               a.NET_VALUE                  "netValue",
+               a.FISCAL || '-' || a.DEPR_MO "deprDate",
+               c.status                     "status",
+               b.DEPR_REPAIR_VALUE          "deprRepairValue"
+        FROM AST_DEPR_LIST a
+                 left join AST_DEPR_REPAIR_LIST b
+                           on a.ast_id = b.ast_id
+                 left join AST_DEPR_BILL c
+                           on a.AST_DEPR_ID = c.id
+                 left join AST_DEPR_REPAIR_BILL d
+                           on b.AST_DEPR_ID = d.id
+        where a.ast_id = #{id}
+          and d.status = '2'
+          and c.status = '2'
+        order by a.FISCAL, a.DEPR_MO
+    </select>
+
+</mapper>

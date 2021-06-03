@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.astsurrenderbill.mapper.AstSurrenderBillMapper">
+
+    <resultMap type="com.cxnet.asset.astsurrenderbill.domain.AstSurrenderBill" id="AstSurrenderBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="astBill" column="AST_BILL" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="processinstid" column="PROCESSINSTID" jdbcType="VARCHAR"/>
+        <result property="approvalPost" column="APPROVAL_POST" jdbcType="VARCHAR"/>
+        <result property="auditDate" column="AUDIT_DATE" jdbcType="TIMESTAMP"/>
+        <result property="auditOpinion" column="AUDIT_OPINION" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="VARCHAR"/>
+        <result property="agentId" column="AGENT_ID" jdbcType="VARCHAR"/>
+        <result property="agentName" column="AGENT_NAME" jdbcType="VARCHAR"/>
+        <result property="restoreDeptId" column="RESTORE_DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="restoreDeptCode" column="RESTORE_DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="restoreDeptName" column="RESTORE_DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="cost" column="COST" jdbcType="OTHER"/>
+        <result property="restoreDate" column="RESTORE_DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstSurrenderBillVo">
+        select t0.ID,
+               t0.AST_BILL,
+               t0.REMARK,
+               t0.STATUS,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.CREATE_BY,
+               t0.CREATE_NAME,
+               t0.CREATE_TIME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.DEL_FLAG,
+               t0.SORT,
+               t0.PROCESSINSTID,
+               t0.APPROVAL_POST,
+               t0.AUDIT_DATE,
+               t0.AUDIT_OPINION,
+               t0.FISCAL,
+               t0.AGENT_ID,
+               t0.AGENT_NAME,
+               t0.RESTORE_DEPT_ID,
+               t0.RESTORE_DEPT_CODE,
+               t0.RESTORE_DEPT_NAME,
+               t0.QTY,
+               t0.COST,
+               t0.RESTORE_DATE
+        from AST_SURRENDER_BILL t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstSurrenderBillMap"
+            parameterType="com.cxnet.asset.astsurrenderbill.domain.AstSurrenderBill">
+        select
+        t0.ID, t0.AST_BILL, t0.REMARK, t0.STATUS,t0.CREATE_BY, t0.CREATE_NAME, t0.CREATE_TIME, t0.UPDATE_BY,
+        t0.UPDATE_TIME, t0.EXTEND1,
+        t0.EXTEND2, t0.EXTEND3, t0.EXTEND4, t0.EXTEND5, t0.DEL_FLAG, t0.SORT, t0.PROCESSINSTID, t0.APPROVAL_POST,
+        t0.AUDIT_DATE,
+        t0.AUDIT_OPINION, t0.FISCAL, t0.AGENT_ID, t0.AGENT_NAME, t0.RESTORE_DEPT_ID, t0.RESTORE_DEPT_CODE,
+        t0.RESTORE_DEPT_NAME, t0.QTY, t0.COST, t0.RESTORE_DATE,
+        t0.unit_id,
+        t1.dept_code as unit_code,
+        t1.dept_name as unit_name,
+        t0.dept_id,
+        t2.dept_code as dept_code,
+        t2.dept_name as dept_name
+        from AST_SURRENDER_BILL t0
+        left join sys_dept t1
+        on t0.unit_id = t1.dept_id
+        left join sys_dept t2
+        on t0.dept_id = t2.dept_id
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="astBill != null and astBill != ''">and t0.AST_BILL like CONCAT('%',#{params},'%')</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test='status == "0" '>and t0.status in ('0','9')</if>
+            <if test='status == "1" '>and t0.status in ('1','7')</if>
+            <if test='status == "2" '>and t0.status not in ('0','2')</if>
+            <if test='status == "3" '>and t0.status = '2'</if>
+            <if test="status == null or status == ''">and t0.status != '0' or ( t0.status = '0' and t0.create_by =
+                #{createBy} )
+            </if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="sort != null">and t0.SORT = #{sort}</if>
+            <if test="processinstid != null and processinstid != ''">and t0.PROCESSINSTID = #{processinstid}</if>
+            <if test="approvalPost != null and approvalPost != ''">and t0.APPROVAL_POST = #{approvalPost}</if>
+            <if test="auditOpinion != null and auditOpinion != ''">and t0.AUDIT_OPINION = #{auditOpinion}</if>
+            <if test="fiscal != null and fiscal != ''">and t0.FISCAL = #{fiscal}</if>
+
+            <if test="agentId != null and agentId != ''">and t0.AGENT_ID = #{agentId}</if>
+            <if test="agentName != null and agentName != ''">and t0.AGENT_NAME = #{agentName}</if>
+            <if test="restoreDeptId != null and restoreDeptId != ''">and t0.RESTORE_DEPT_ID = #{restoreDeptId}</if>
+            <if test="restoreDeptCode != null and restoreDeptCode != ''">and t0.RESTORE_DEPT_CODE = #{restoreDeptCode}
+            </if>
+            <if test="restoreDeptName != null and restoreDeptName != ''">and t0.DEPARTMENT_NAME = #{restoreDeptName}
+            </if>
+
+            <if test="startTime != null">and t0.create_time &gt;= #{startTime,jdbcType=DATE}</if>
+            <if test="endTime != null">and t0.create_time &lt;= #{endTime,jdbcType=DATE}</if>
+            <if test="piids != null and piids.size > 0">
+                AND t0.processinstid IN
+                <trim suffixOverrides=" OR t0.processinstid IN()">
+                    <foreach collection="piids" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR t0.processinstid IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </select>
+</mapper>

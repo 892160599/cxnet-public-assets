@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.parameter.mapper.SysParameterMapper">
+
+
+    <select id="selectSysParameter" resultType="com.cxnet.project.system.parameter.domain.SysParameter">
+        select PARAMETER_ID         as parameterId,
+               PRODUCT_NAME         as productName,
+               COPYRIGHT_INFO       as copyRight,
+               SYS_HINT_INFO        as hintInfo,
+               TITLE                as title,
+               CODE_RULE            as codeRule,
+               IMGID                as imgId,
+               IMGURL               as imgUrl,
+               LOGIN_INDEX_NAME     as loginIndexName,
+               EXP_EXTEND1          as expExtend1,
+               EXP_EXTEND2          as expExtend2,
+               EXP_EXTEND3          as expExtend3,
+               EXP_EXTEND4          as expExtend4,
+               EXP_EXTEND5          as expExtend5,
+               EXP_EXTEND6          as expExtend6,
+               EXP_EXTEND7          as expExtend7,
+               EXP_EXTEND8          as expExtend8,
+               EXP_EXTEND9          as expExtend9,
+               EXP_EXTEND10         as expExtend10,
+               HOME_UNIT_DEPT_STYLE as homeUnitDeptStyle
+        from SYS_PARAMETER
+
+    </select>
+
+    <select id="selectSysParameterById" parameterType="string"
+            resultType="com.cxnet.project.system.parameter.domain.SysParameter">
+        select PARAMETER_ID         as parameterId,
+               PRODUCT_NAME         as productName,
+               COPYRIGHT_INFO       as copyRight,
+               SYS_HINT_INFO        as hintInfo,
+               TITLE                as title,
+               CODE_RULE            as codeRule,
+               IMGID                as imgId,
+               IMGURL               as imgUrl,
+               LOGIN_INDEX_NAME     as loginIndexName,
+               EXP_EXTEND1          as expExtend1,
+               EXP_EXTEND2          as expExtend2,
+               EXP_EXTEND3          as expExtend3,
+               EXP_EXTEND4          as expExtend4,
+               EXP_EXTEND5          as expExtend5,
+               EXP_EXTEND6          as expExtend6,
+               EXP_EXTEND7          as expExtend7,
+               EXP_EXTEND8          as expExtend8,
+               EXP_EXTEND9          as expExtend9,
+               EXP_EXTEND10         as expExtend10,
+               HOME_UNIT_DEPT_STYLE as homeUnitDeptStyle
+        from SYS_PARAMETER
+        where PARAMETER_ID = #{parameterId}
+
+    </select>
+
+    <insert id="insertSysParameter" parameterType="com.cxnet.project.system.parameter.domain.SysParameter"
+            keyProperty="parameterId">
+        <selectKey keyProperty="parameterId" resultType="string" order="BEFORE">
+            select sys_guid() as parameterId FROM DUAL
+        </selectKey>
+        insert into sys_parameter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parameterId != null and parameterId != ''">PARAMETER_ID,</if>
+            <if test="productName != null  and productName != ''">PRODUCT_NAME,</if>
+            <if test="copyRight != null  and copyRight != ''">COPYRIGHT_INFO,</if>
+            <if test="hintInfo != null  and hintInfo != ''">SYS_HINT_INFO,</if>
+            <if test="title != null ">TITLE,</if>
+            <if test="codeRule != null ">CODE_RULE,</if>
+            <if test="imgId != null ">IMGID,</if>
+            <if test="imgUrl != null  and imgUrl != ''">IMGURL,</if>
+            <if test="loginIndexName!=null and loginIndexName!=''">LOGIN_INDEX_NAME,</if>
+            <if test="expExtend1 !=null and expExtend1 !=''">EXP_EXTEND1,</if>
+            <if test="expExtend2 !=null and expExtend2 !=''">EXP_EXTEND2,</if>
+            <if test="expExtend3 !=null and expExtend3 !=''">EXP_EXTEND3,</if>
+            <if test="expExtend4 !=null and expExtend4 !=''">EXP_EXTEND4,</if>
+            <if test="expExtend5 !=null and expExtend5 !=''">EXP_EXTEND5,</if>
+            <if test="expExtend6 !=null and expExtend6 !=''">EXP_EXTEND6,</if>
+            <if test="expExtend7 !=null and expExtend7 !=''">EXP_EXTEND7,</if>
+            <if test="expExtend8 !=null and expExtend8 !=''">EXP_EXTEND8,</if>
+            <if test="expExtend9 !=null and expExtend9 !=''">EXP_EXTEND9,</if>
+            <if test="expExtend10 !=null and expExtend10 !=''">EXP_EXTEND10,</if>
+            <if test="homeUnitDeptStyle!=null and homeUnitDeptStyle!=''">HOME_UNIT_DEPT_STYLE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parameterId != null and parameterId != ''">#{parameterId},</if>
+            <if test="productName != null  and productName != ''">#{productName},</if>
+            <if test="copyRight != null  and copyRight != ''">#{copyRight},</if>
+            <if test="hintInfo != null  and hintInfo != ''">#{hintInfo},</if>
+            <if test="title != null ">#{title},</if>
+            <if test="codeRule != null ">#{codeRule},</if>
+            <if test="imgId != null ">#{imgId},</if>
+            <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
+            <if test="loginIndexName !=null and loginIndexName !=''">#{loginIndexName},</if>
+            <if test="expExtend1 !=null and expExtend1 !=''">#{expExtend1},</if>
+            <if test="expExtend2 !=null and expExtend2 !=''">#{expExtend2},</if>
+            <if test="expExtend3 !=null and expExtend3 !=''">#{expExtend3},</if>
+            <if test="expExtend4 !=null and expExtend4 !=''">#{expExtend4},</if>
+            <if test="expExtend5 !=null and expExtend5 !=''">#{expExtend5},</if>
+            <if test="expExtend6 !=null and expExtend6 !=''">#{expExtend6},</if>
+            <if test="expExtend7 !=null and expExtend7 !=''">#{expExtend7},</if>
+            <if test="expExtend8 !=null and expExtend8 !=''">#{expExtend8},</if>
+            <if test="expExtend9 !=null and expExtend9 !=''">#{expExtend9},</if>
+            <if test="expExtend10 !=null and expExtend10 !=''">#{expExtend10},</if>
+            <if test="homeUnitDeptStyle !=null and homeUnitDeptStyle !=''">#{homeUnitDeptStyle},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysparameter" parameterType="com.cxnet.project.system.parameter.domain.SysParameter">
+        update SYS_PARAMETER
+        <trim prefix="set" suffixOverrides="," suffix="where PARAMETER_ID=#{parameterId}">
+            <if test="productName != null and productName != ''">PRODUCT_NAME=#{productName},</if>
+            <if test="copyRight != null and copyRight != ''">COPYRIGHT_INFO=#{copyRight},</if>
+            <if test="hintInfo != null and hintInfo != ''">SYS_HINT_INFO=#{hintInfo},</if>
+            <if test="title != null ">TITLE=#{title},</if>
+            <if test="codeRule != null ">CODE_RULE=#{codeRule},</if>
+            <if test="imgId != null and imgId !=''">IMGID=#{imgId},</if>
+            <if test="imgUrl != null and imgUrl!=''">IMGURL=#{imgUrl},</if>
+            <if test="loginIndexName!=null and loginIndexName!=''">LOGIN_INDEX_NAME=#{loginIndexName},</if>
+            <if test="expExtend1 !=null and expExtend1 !=''">EXP_EXTEND1 =#{expExtend1},</if>
+            <if test="expExtend2 !=null and expExtend2 !=''">EXP_EXTEND2 =#{expExtend2},</if>
+            <if test="expExtend3 !=null and expExtend3 !=''">EXP_EXTEND3 =#{expExtend3},</if>
+            <if test="expExtend4 !=null and expExtend4 !=''">EXP_EXTEND4 =#{expExtend4},</if>
+            <if test="expExtend5 !=null and expExtend5 !=''">EXP_EXTEND5 =#{expExtend5},</if>
+            <if test="expExtend6 !=null and expExtend6 !=''">EXP_EXTEND6 =#{expExtend6},</if>
+            <if test="expExtend7 !=null and expExtend7 !=''">EXP_EXTEND7 =#{expExtend7},</if>
+            <if test="expExtend8 !=null and expExtend8 !=''">EXP_EXTEND8 =#{expExtend8},</if>
+            <if test="expExtend9 !=null and expExtend9 !=''">EXP_EXTEND9 =#{expExtend9},</if>
+            <if test="expExtend10 !=null and expExtend10 !=''">EXP_EXTEND10 =#{expExtend10},</if>
+            <if test="homeUnitDeptStyle !=null and homeUnitDeptStyle !=''">HOME_UNIT_DEPT_STYLE =
+                #{homeUnitDeptStyle},
+            </if>
+        </trim>
+    </update>
+
+
+</mapper>

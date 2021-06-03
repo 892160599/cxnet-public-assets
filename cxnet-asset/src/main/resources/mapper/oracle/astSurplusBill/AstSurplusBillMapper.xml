@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.inventory.mapper.AstSurplusBillMapper">
+
+    <resultMap type="com.cxnet.asset.inventory.domain.AstSurplusBill" id="AstSurplusBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="billNo" column="BILL_NO" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="INTEGER"/>
+        <result property="deprMo" column="DEPR_MO" jdbcType="INTEGER"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="collectDate" column="COLLECT_DATE" jdbcType="TIMESTAMP"/>
+        <result property="collectCode" column="COLLECT_CODE" jdbcType="VARCHAR"/>
+        <result property="collectName" column="COLLECT_NAME" jdbcType="VARCHAR"/>
+        <result property="collectDeptCode" column="COLLECT_DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="collectDeptName" column="COLLECT_DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="collectAmount" column="COLLECT_AMOUNT" jdbcType="VARCHAR"/>
+        <result property="collectQuantity" column="COLLECT_QUANTITY" jdbcType="VARCHAR"/>
+        <result property="surplusDate" column="SURPLUS_DATE" jdbcType="TIMESTAMP"/>
+        <result property="handlingCode" column="HANDLING_CODE" jdbcType="VARCHAR"/>
+        <result property="handlingName" column="HANDLING_NAME" jdbcType="VARCHAR"/>
+        <result property="handlingDeptCode" column="HANDLING_DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="handlingDeptName" column="HANDLING_DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="VARCHAR"/>
+        <result property="processinstid" column="PROCESSINSTID" jdbcType="VARCHAR"/>
+        <result property="approvalPost" column="APPROVAL_POST" jdbcType="VARCHAR"/>
+        <result property="isProduce" column="IS_PRODUCE" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstSurplusBillVo">
+        select t0.ID,
+               t0.BILL_NO,
+               t0.FISCAL,
+               t0.DEPR_MO,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.COLLECT_DATE,
+               t0.COLLECT_CODE,
+               t0.COLLECT_NAME,
+               t0.COLLECT_DEPT_CODE,
+               t0.COLLECT_DEPT_NAME,
+               t0.COLLECT_AMOUNT,
+               t0.COLLECT_QUANTITY,
+               t0.SURPLUS_DATE,
+               t0.HANDLING_CODE,
+               t0.HANDLING_NAME,
+               t0.HANDLING_DEPT_CODE,
+               t0.HANDLING_DEPT_NAME,
+               t0.SORT,
+               t0.PROCESSINSTID,
+               t0.APPROVAL_POST,
+               t0.IS_PRODUCE,
+               t0.DEL_FLAG,
+               t0.STATUS,
+               t0.REMARK,
+               t0.CREATE_BY,
+               t0.CREATE_TIME,
+               t0.CREATE_NAME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5
+        from AST_SURPLUS_BILL t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstSurplusBillMap">
+        <include refid="AstSurplusBillVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="billNo != null and billNo != ''">and t0.BILL_NO = #{billNo}</if>
+            <if test="fiscal != null">and t0.FISCAL = #{fiscal}</if>
+            <if test="deprMo != null">and t0.DEPR_MO = #{deprMo}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="collectDate != null">and t0.COLLECT_DATE = #{collectDate}</if>
+            <if test="collectCode != null and collectCode != ''">and t0.COLLECT_CODE = #{collectCode}</if>
+            <if test="collectName != null and collectName != ''">and t0.COLLECT_NAME = #{collectName}</if>
+            <if test="collectDeptCode != null and collectDeptCode != ''">and t0.COLLECT_DEPT_CODE = #{collectDeptCode}
+            </if>
+            <if test="collectDeptName != null and collectDeptName != ''">and t0.COLLECT_DEPT_NAME = #{collectDeptName}
+            </if>
+            <if test="collectAmount != null and collectAmount != ''">and t0.COLLECT_AMOUNT = #{collectAmount}</if>
+            <if test="collectQuantity != null and collectQuantity != ''">and t0.COLLECT_QUANTITY = #{collectQuantity}
+            </if>
+            <if test="surplusDate != null">and t0.SURPLUS_DATE = #{surplusDate}</if>
+            <if test="handlingCode != null and handlingCode != ''">and t0.HANDLING_CODE = #{handlingCode}</if>
+            <if test="handlingName != null and handlingName != ''">and t0.HANDLING_NAME = #{handlingName}</if>
+            <if test="handlingDeptCode != null and handlingDeptCode != ''">and t0.HANDLING_DEPT_CODE =
+                #{handlingDeptCode}
+            </if>
+            <if test="handlingDeptName != null and handlingDeptName != ''">and t0.HANDLING_DEPT_NAME =
+                #{handlingDeptName}
+            </if>
+            <if test="sort != null and sort != ''">and t0.SORT = #{sort}</if>
+            <if test="processinstid != null and processinstid != ''">and t0.PROCESSINSTID = #{processinstid}</if>
+            <if test="approvalPost != null and approvalPost != ''">and t0.APPROVAL_POST = #{approvalPost}</if>
+            <if test="isProduce != null and isProduce != ''">and t0.IS_PRODUCE = #{isProduce}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="status != null and status != ''">and t0.STATUS = #{status}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAstSurplusList" parameterType="com.cxnet.asset.inventory.domain.AstSurplusBill"
+            resultMap="AstSurplusBillMap">
+        SELECT
+        t0.ID,
+        t0.BILL_NO,
+        t0.COLLECT_DATE,
+        t0.COLLECT_NAME,
+        t0.COLLECT_DEPT_NAME,
+        t0.COLLECT_AMOUNT,
+        t0.COLLECT_QUANTITY,
+        t0.HANDLING_ID,
+        t0.HANDLING_CODE,
+        t0.HANDLING_NAME,
+        t0.HANDLING_DEPT_ID,
+        t0.HANDLING_DEPT_CODE,
+        t0.HANDLING_DEPT_NAME,
+        t0.REMARK,
+        t0.STATUS,
+        t0.CREATE_BY,
+        t0.CREATE_NAME,
+        t0.CREATE_TIME,
+        t0.UPDATE_BY,
+        t0.UPDATE_TIME,
+        t0.DEL_FLAG,
+        t0.SORT,
+        t0.PROCESSINSTID,
+        t0.APPROVAL_POST,
+        t0.IS_PRODUCE,
+        t0.unit_id,
+        t1.dept_code AS unit_code,
+        t1.dept_name AS unit_name,
+        t0.DEPT_ID as DEPT_ID,
+        t2.dept_code AS dept_code,
+        t2.dept_name AS dept_name
+        FROM
+        AST_SURPLUS_BILL t0
+        LEFT JOIN sys_dept t1 ON t0.unit_id = t1.dept_id
+        LEFT JOIN sys_dept t2 ON t0.dept_id = t2.dept_id
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="billNo != null and billNo != ''">and t0.BILL_NO like concat(concat('%',#{billNo}),'%')</if>
+            <if test="collectDate != null">and t0.COLLECT_DATE = #{collectDate}</if>
+            <if test="collectName != null and collectName != ''">and t0.COLLECT_NAME like
+                concat(concat('%',#{collectName}),'%')
+            </if>
+            <if test="collectDeptName != null and collectDeptName != ''">and t0.COLLECT_DEPT_NAME like
+                concat(concat('%',#{collectDeptName}),'%')
+            </if>
+            <if test="collectAmount != null and collectAmount != ''">and t0.COLLECT_AMOUNT = #{collectAmount}</if>
+            <if test="collectQuantity != null and collectQuantity != ''">and t0.COLLECT_QUANTITY = #{collectQuantity}
+            </if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test='status == "0" '>and t0.status in ('0','9')</if>
+            <if test='status == "1" '>and t0.status in ('1','7')</if>
+            <if test='status == "2" '>and t0.status not in ('0','2')</if>
+            <if test='status == "3" '>and t0.status = '2'</if>
+            <if test="status == null or status == ''">and t0.status in ('0','1','2','7','9')</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="createTime != null">and t0.CRATE_TIME = #{createTime}</if>
+            <if test="updateBy != null and updateBy != '' ">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="sort != null">and t0.SORT = #{sort}</if>
+            <if test="processinstid != null and processinstid != ''">and t0.PROCESSINSTID = #{processinstid}</if>
+            <if test="approvalPost != null and approvalPost != ''">and t0.APPROVAL_POST = #{approvalPost}</if>
+            <if test="isProduce != null and isProduce != ''">and t0.IS_PRODUCE = #{isProduce}</if>
+            <if test="startTime != null">and t0.create_time &gt;= #{startTime,jdbcType=DATE}</if>
+            <if test="endTime != null">and t0.create_time &lt;= #{endTime,jdbcType=DATE}</if>
+            <if test="status != null and status != ''">
+                <if test="piids != null and piids.size > 0">
+                    AND t0.processinstid IN
+                    <trim suffixOverrides=" OR t0.processinstid IN()">
+                        <foreach collection="piids" item="item" index="index" open="(" close=")">
+                            <if test="index != 0">
+                                <choose>
+                                    <when test="index % 1000 == 999">) OR t0.processinstid IN (</when>
+                                    <otherwise>,</otherwise>
+                                </choose>
+                            </if>
+                            #{item}
+                        </foreach>
+                    </trim>
+                </if>
+            </if>
+            <if test="status == null or status == ''">
+                <if test="piids != null and piids.size > 0">
+                    or t0.processinstid IN
+                    <trim suffixOverrides=" OR t0.processinstid IN()">
+                        <foreach collection="piids" item="item" index="index" open="(" close=")">
+                            <if test="index != 0">
+                                <choose>
+                                    <when test="index % 1000 == 999">) OR t0.processinstid IN (</when>
+                                    <otherwise>,</otherwise>
+                                </choose>
+                            </if>
+                            #{item}
+                        </foreach>
+                    </trim>
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>

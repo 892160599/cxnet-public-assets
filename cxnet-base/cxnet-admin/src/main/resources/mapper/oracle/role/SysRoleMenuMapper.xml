@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.role.mapper.SysRoleMenuMapper">
+
+    <resultMap type="com.cxnet.project.system.role.domain.SysRoleMenu" id="SysRoleMenuResult">
+        <result property="roleId" column="role_id"/>
+        <result property="menuId" column="menu_id"/>
+        <result property="dataScope" column="data_scope"/>
+    </resultMap>
+
+    <select id="checkMenuExistRole" resultType="int">
+        select count(1)
+        from sys_role_menu
+        where menu_id = #{menuId}
+    </select>
+
+    <select id="roleIdMenuIdSelect" resultType="java.lang.String">
+        select data_scope
+        from sys_role_menu
+        where ROLE_ID = #{roleId}
+          and menu_id = #{menuId}
+    </select>
+
+    <delete id="deleteRoleMenuByRoleId" parameterType="string">
+        delete
+        from sys_role_menu
+        where role_id = #{roleId}
+    </delete>
+
+    <insert id="batchRoleMenu" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_role_menu
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.roleId != null  and item.roleId != '' ">role_id,</if>
+                <if test="item.menuId != null  and item.menuId != '' ">menu_id,</if>
+                <if test="item.dataScope != null  and item.dataScope != '' ">data_scope,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                <if test="item.roleId != null  and item.roleId != ''">#{item.roleId},</if>
+                <if test="item.menuId != null  and item.menuId != ''">#{item.menuId},</if>
+                <if test="item.dataScope != null  and item.dataScope != ''">#{item.dataScope},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+</mapper> 

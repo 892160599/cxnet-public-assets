@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.purItem.mapper.BdItemAssetMapper">
+
+    <!-- 采购品目与资产类别关联表 结果集 -->
+    <resultMap type="com.cxnet.baseData.purItem.domain.BdItemAsset" id="BdItemAssetResult">
+        <result property="itemId" column="item_id"/>
+        <result property="assetId" column="asset_id"/>
+    </resultMap>
+
+    <!-- 查询采购品目与资产类别关联表 通用sql -->
+    <sql id="selectBdItemAssetVo">
+        select t0.item_id, t0.asset_id
+        from bd_item_asset t0
+
+    </sql>
+
+
+    <!-- 查询采购品目与资产类别关联表 集合 -->
+    <select id="selectBdItemAssetList" parameterType="com.cxnet.baseData.purItem.domain.BdItemAsset"
+            resultMap="BdItemAssetResult">
+        <include refid="selectBdItemAssetVo"/>
+        <where>
+        </where>
+    </select>
+
+    <!-- 查询采购品目与资产类别关联表 ById -->
+    <select id="selectBdItemAssetById" parameterType="String" resultMap="BdItemAssetResult">
+        <include refid="selectBdItemAssetVo"/>
+        where item_id = #{itemId}
+    </select>
+
+
+    <!-- 插入采购品目与资产类别关联表 -->
+    <insert id="insertBdItemAsset" parameterType="com.cxnet.baseData.purItem.domain.BdItemAsset">
+        insert into bd_item_asset
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null ">item_id,</if>
+            <if test="assetId != null ">asset_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null ">#{itemId},</if>
+            <if test="assetId != null ">#{assetId},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改采购品目与资产类别关联表 -->
+    <update id="updateBdItemAsset" parameterType="com.cxnet.baseData.purItem.domain.BdItemAsset">
+        update bd_item_asset
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetId != null ">asset_id = #{assetId},</if>
+        </trim>
+        where item_id = #{itemId}
+    </update>
+
+    <!-- 删除采购品目与资产类别关联表 ById -->
+    <delete id="deleteBdItemAssetById" parameterType="String">
+        delete
+        from bd_item_asset
+        where item_id = #{itemId}
+    </delete>
+
+    <delete id="deleteBdItemAssetByCode" parameterType="java.lang.String">
+        delete
+        from bd_item_asset
+        where item_code = #{itemCode}
+    </delete>
+
+    <!-- 批量删除采购品目与资产类别关联表 ByIds -->
+    <delete id="deleteBdItemAssetByIds" parameterType="String">
+        delete from bd_item_asset where item_id in
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入采购品目与资产类别关联表 -->
+    <insert id="insertBatchBdItemAsset" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            <if test="item.itemCode != null and item.assetId != null">
+                insert into bd_item_asset
+                (item_code,asset_id)
+                values (#{item.itemCode},#{item.assetId});
+            </if>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改采购品目与资产类别关联表 -->
+    <update id="updateBatchBdItemAsset" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_item_asset
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.assetId != null ">asset_id = #{item.assetId},</if>
+            </trim>
+            <where>
+                item_id = #{item.itemId}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

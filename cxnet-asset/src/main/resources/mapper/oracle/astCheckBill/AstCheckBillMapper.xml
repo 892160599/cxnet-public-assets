@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.check.mapper.AstCheckBillMapper">
+
+    <resultMap type="com.cxnet.asset.check.domain.AstCheckBill" id="AstCheckBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="checkCode" column="CHECK_CODE" jdbcType="VARCHAR"/>
+        <result property="checkPerson" column="CHECK_PERSON" jdbcType="VARCHAR"/>
+        <result property="checkPersonName" column="CHECK_PERSON_NAME" jdbcType="VARCHAR"/>
+        <result property="checkDeptId" column="CHECK_DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="checkDeptCode" column="CHECK_DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="checkDeptName" column="CHECK_DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="checkDate" column="CHECK_DATE" jdbcType="TIMESTAMP"/>
+        <result property="totalAmt" column="TOTAL_AMT" jdbcType="OTHER"/>
+        <result property="totalNum" column="TOTAL_NUM" jdbcType="INTEGER"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="processinstid" column="PROCESSINSTID" jdbcType="VARCHAR"/>
+        <result property="approvalPost" column="APPROVAL_POST" jdbcType="VARCHAR"/>
+        <result property="isProduce" column="IS_PRODUCE" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAstCheckBillsList" parameterType="com.cxnet.asset.check.domain.AstCheckBill"
+            resultMap="AstCheckBillMap">
+        select
+        t0.ID, t0.CHECK_CODE, t0.CHECK_PERSON, t0.CHECK_PERSON_NAME, t0.CHECK_DEPT_ID, t0.CHECK_DEPT_CODE,
+        t0.CHECK_DEPT_NAME, t0.CHECK_DATE,
+        t0.TOTAL_AMT, t0.TOTAL_NUM, t0.REMARK, t0.STATUS, t0.CREATE_BY,t0.CREATE_NAME, t0.CREATE_TIME, t0.UPDATE_BY,
+        t0.UPDATE_TIME, t0.EXTEND1, t0.EXTEND2,
+        t0.EXTEND3, t0.EXTEND4, t0.EXTEND5, t0.DEL_FLAG, t0.SORT,PROCESSINSTID, t0.APPROVAL_POST,t0.IS_PRODUCE,
+        t0.unit_id,
+        t1.dept_code as unit_code,
+        t1.dept_name as unit_name,
+        t0.dept_id,
+        t2.dept_code as dept_code,
+        t2.dept_name as dept_name
+        from AST_CHECK_BILL t0
+        left join sys_dept t1
+        on t0.unit_id = t1.dept_id
+        left join sys_dept t2
+        on t0.dept_id = t2.dept_id
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="checkCode != null and checkCode != ''">and t0.CHECK_CODE = #{checkCode}</if>
+            <if test="checkPerson != null and checkPerson != ''">and t0.CHECK_PERSON = #{checkPerson}</if>
+            <if test="checkPersonName != null and checkPersonName != ''">and t0.CHECK_PERSON_NAME = #{checkPersonName}
+            </if>
+            <if test="checkDeptId != null and checkDeptId != ''">and t0.CHECK_DEPT_ID = #{checkDeptId}</if>
+            <if test="checkDeptCode != null and checkDeptCode != ''">and t0.CHECK_DEPT_CODE = #{checkDeptCode}</if>
+            <if test="checkDeptName != null and checkDeptName != ''">and t0.CHECK_DEPT_NAME = #{checkDeptName}</if>
+            <if test="checkDate != null">and t0.CHECK_DATE = #{checkDate}</if>
+            <if test="totalAmt != null">and t0.TOTAL_AMT = #{totalAmt}</if>
+            <if test="totalNum != null">and t0.TOTAL_NUM = #{totalNum}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test='status == "0" '>and t0.status in ('0','9')</if>
+            <if test='status == "1" '>and t0.status in ('1','7')</if>
+            <if test='status == "2" '>and t0.status not in ('0','2')</if>
+            <if test='status == "3" '>and t0.status = '2'</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="createTime != null">and t0.CRATE_TIME = #{createTime}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="sort != null">and t0.SORT = #{sort}</if>
+            <if test="processinstid != null and processinstid != ''">and t0.PROCESSINSTID = #{processinstid}</if>
+            <if test="approvalPost != null and approvalPost != ''">and t0.APPROVAL_POST = #{approvalPost}</if>
+            <if test="isProduce != null and isProduce != ''">and t0.IS_PRODUCE = #{isProduce}</if>
+            <if test="startTime != null">and t0.create_time &gt;= #{startTime,jdbcType=DATE}</if>
+            <if test="endTime != null">and t0.create_time &lt;= #{endTime,jdbcType=DATE}</if>
+            <if test="piids != null and piids.size > 0">
+                AND t0.processinstid IN
+                <trim suffixOverrides=" OR t0.processinstid IN()">
+                    <foreach collection="piids" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR t0.processinstid IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+        order by t0.update_time desc,t0.id
+    </select>
+</mapper>

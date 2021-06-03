@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.inventory.mapper.AstInventoryListMapper">
+
+    <resultMap type="com.cxnet.asset.inventory.domain.AstInventoryList" id="AstInventoryListMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="cardId" column="CARD_ID" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="billNo" column="BILL_NO" jdbcType="VARCHAR"/>
+        <result property="checkType" column="CHECK_TYPE" jdbcType="VARCHAR"/>
+        <result property="classCode" column="CLASS_CODE" jdbcType="VARCHAR"/>
+        <result property="className" column="CLASS_NAME" jdbcType="VARCHAR"/>
+        <result property="astTypeCode" column="AST_TYPE_CODE" jdbcType="VARCHAR"/>
+        <result property="astTypeName" column="AST_TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="spec" column="SPEC" jdbcType="VARCHAR"/>
+        <result property="measurement" column="MEASUREMENT" jdbcType="VARCHAR"/>
+        <result property="acquisitionDate" column="ACQUISITION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="cardCode" column="CARD_CODE" jdbcType="VARCHAR"/>
+        <result property="assetName" column="ASSET_NAME" jdbcType="VARCHAR"/>
+        <result property="applyDeptCode" column="APPLY_DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="applyDeptName" column="APPLY_DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="empCode" column="EMP_CODE" jdbcType="VARCHAR"/>
+        <result property="empName" column="EMP_NAME" jdbcType="VARCHAR"/>
+        <result property="assetUselife" column="ASSET_USELIFE" jdbcType="INTEGER"/>
+        <result property="cost" column="COST" jdbcType="OTHER"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="cardQty" column="CARD_QTY" jdbcType="INTEGER"/>
+        <result property="cardCost" column="CARD_COST" jdbcType="OTHER"/>
+        <result property="firmOfferQty" column="FIRM_OFFER_QTY" jdbcType="INTEGER"/>
+        <result property="firmOfferMoney" column="FIRM_OFFER_MONEY" jdbcType="OTHER"/>
+        <result property="lossAssetsQty" column="LOSS_ASSETS_QTY" jdbcType="INTEGER"/>
+        <result property="lossAssetsMoney" column="LOSS_ASSETS_MONEY" jdbcType="OTHER"/>
+        <result property="planResults" column="PLAN_RESULTS" jdbcType="VARCHAR"/>
+        <result property="placeLocation" column="PLACE_LOCATION" jdbcType="VARCHAR"/>
+        <result property="planMode" column="PLAN_MODE" jdbcType="VARCHAR"/>
+        <result property="reviewStatus" column="REVIEW_STATUS" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstInventoryListVo">
+        select t0.ID,
+               t0.CARD_ID,
+               t0.FISCAL,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.BILL_NO,
+               t0.CHECK_TYPE,
+               t0.AST_TYPE_CODE,
+               t0.AST_TYPE_NAME,
+               t0.SPEC,
+               t0.MEASUREMENT,
+               t0.ACQUISITION_DATE,
+               t0.CARD_CODE,
+               t0.ASSET_NAME,
+               t0.APPLY_DEPT_CODE,
+               t0.APPLY_DEPT_NAME,
+               t0.ASSET_USELIFE,
+               t0.COST,
+               t0.QTY,
+               t0.CARD_QTY,
+               t0.CARD_COST,
+               t0.FIRM_OFFER_QTY,
+               t0.FIRM_OFFER_MONEY,
+               t0.LOSS_ASSETS_QTY,
+               t0.LOSS_ASSETS_MONEY,
+               t0.PLAN_RESULTS,
+               t0.PLACE_LOCATION,
+               t0.PLAN_MODE,
+               t0.REVIEW_STATUS,
+               t0.STATUS,
+               t0.DEL_FLAG,
+               t0.REMARK,
+               t0.CREATE_BY,
+               t0.CREATE_NAME,
+               t0.CREATE_TIME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5
+        from AST_INVENTORY_LIST t0
+    </sql>
+
+    <!-- 批量插入卡片 -->
+    <insert id="insertAstIntory" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into AST_BILL_LIST
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                ID,
+                <if test="item.billId != null ">BILL_ID,</if>
+                <if test="item.cardId != null ">AST_ID,</if>
+                <if test="item.unitId != null  and item.unitId != ''">UNIT_ID,</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">UNIT_CODE,</if>
+                <if test="item.unitName != null  and item.unitName != ''">UNIT_NAME,</if>
+                <if test="item.cardCode != null  ">AST_CODE,</if>
+                <if test="item.classCode != null ">CLASS_CODE,</if>
+                <if test="item.className != null ">CLASS_NAME,</if>
+                <if test="item.astTypeCode != null  and item.astTypeCode != ''">CATEGORY_CODE,</if>
+                <if test="item.astTypeName != null  and item.astTypeName != ''">CATEGORY_NAME,</if>
+                <if test="item.qty != null  and item.qty != ''">QTY,</if>
+                <if test="item.measurement != null ">MEASUREMENT,</if>
+                <if test="item.cost != null ">COST,</if>
+                <if test="item.applyDeptCode != null ">DEPARTMENT_CODE,</if>
+                <if test="item.applyDeptName != null ">DEPARTMENT_NAME,</if>
+                <if test="item.empCode != null  and item.empCode != ''">EMP_CODE,</if>
+                <if test="item.empName != null  and item.empName != ''">EMP_NAME,</if>
+                <if test="item.placeLocation != null  and item.placeLocation != ''">PLACE_NAME,</if>
+                <if test="item.spec != null ">SPEC,</if>
+                <if test="item.acquisitionDate != null ">ACQUISITION_DATE,</if>
+                <if test="item.remark != null  and item.remark != ''">remark,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid(),
+                <if test="item.billId != null ">#{item.billId},</if>
+                <if test="item.cardId != null ">#{item.cardId},</if>
+                <if test="item.unitId != null  and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">#{item.unitCode},</if>
+                <if test="item.unitName != null  and item.unitName != ''">#{item.unitName},</if>
+                <if test="item.cardCode != null  ">#{item.cardCode},</if>
+                <if test="item.classCode != null ">#{item.classCode},</if>
+                <if test="item.className != null ">#{item.className},</if>
+                <if test="item.astTypeCode != null  and item.astTypeCode != ''">#{item.astTypeCode},</if>
+                <if test="item.astTypeName != null  and item.astTypeName != ''">#{item.astTypeName},</if>
+                <if test="item.qty != null  and item.qty != ''">#{item.qty},</if>
+                <if test="item.measurement != null ">#{item.measurement},</if>
+                <if test="item.cost != null ">#{item.cost},</if>
+                <if test="item.applyDeptCode != null ">#{item.applyDeptCode},</if>
+                <if test="item.applyDeptName != null ">#{item.applyDeptName},</if>
+                <if test="item.empCode != null  and item.empCode != ''">#{item.empCode},</if>
+                <if test="item.empName != null  and item.empName != ''">#{item.empName},</if>
+                <if test="item.placeLocation != null  and item.placeLocation != ''">#{item.placeLocation},</if>
+                <if test="item.spec != null ">#{item.spec},</if>
+                <if test="item.acquisitionDate != null ">#{item.acquisitionDate},</if>
+                <if test="item.remark != null  and item.remark != ''">#{item.remark},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstInventoryListMap">
+        <include refid="AstInventoryListVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="fiscal != null and fiscal != ''">and t0.FISCAL = #{fiscal}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="billNo != null and billNo != ''">and t0.BILL_NO = #{billNo}</if>
+            <if test="checkType != null and checkType != ''">and t0.CHECK_TYPE = #{checkType}</if>
+            <if test="astTypeCode != null and astTypeCode != ''">and t0.AST_TYPE_CODE = #{astTypeCode}</if>
+            <if test="astTypeName != null and astTypeName != ''">and t0.AST_TYPE_NAME = #{astTypeName}</if>
+            <if test="sepc != null and sepc != ''">and t0.SEPC = #{sepc}</if>
+            <if test="measurement != null and measurement != ''">and t0.MEASUREMENT = #{measurement}</if>
+            <if test="acquisitionDate != null">and t0.ACQUISITION_DATE = #{acquisitionDate}</if>
+            <if test="cardCode != null and cardCode != ''">and t0.CARD_CODE = #{cardCode}</if>
+            <if test="cardName != null and cardName != ''">and t0.CARD_NAME = #{cardName}</if>
+            <if test="applyDept != null and applyDept != ''">and t0.APPLY_DEPT = #{applyDept}</if>
+            <if test="applyName != null and applyName != ''">and t0.APPLY_NAME = #{applyName}</if>
+            <if test="assetUselife != null">and t0.ASSET_USELIFE = #{assetUselife}</if>
+            <if test="cost != null">and t0.COST = #{cost}</if>
+            <if test="qty != null">and t0.QTY = #{qty}</if>
+            <if test="cardQty != null">and t0.CARD_QTY = #{cardQty}</if>
+            <if test="cardCost != null">and t0.CARD_COST = #{cardCost}</if>
+            <if test="firmOfferQty != null">and t0.FIRM_OFFER_QTY = #{firmOfferQty}</if>
+            <if test="firmOfferMoney != null">and t0.FIRM_OFFER_MONEY = #{firmOfferMoney}</if>
+            <if test="lossAssetsQty != null">and t0.LOSS_ASSETS_QTY = #{lossAssetsQty}</if>
+            <if test="lossAssetsMoney != null">and t0.LOSS_ASSETS_MONEY = #{lossAssetsMoney}</if>
+            <if test="planResults != null and planResults != ''">and t0.PLAN_RESULTS = #{planResults}</if>
+            <if test="placeLocation != null and placeLocation != ''">and t0.PLACE_LOCATION = #{placeLocation}</if>
+            <if test="planMode != null and planMode != ''">and t0.PLAN_MODE = #{planMode}</if>
+            <if test="reviewStatus != null and reviewStatus != ''">and t0.REVIEW_STATUS = #{reviewStatus}</if>
+            <if test="status != null and status != ''">and t0.STATUS = #{status}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+        </where>
+    </select>
+</mapper>

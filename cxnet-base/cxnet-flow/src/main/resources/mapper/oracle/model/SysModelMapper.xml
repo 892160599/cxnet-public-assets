@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.flow.model.mapper.SysModelMapper">
+
+    <!-- 系统模块管理 结果集 -->
+    <resultMap type="com.cxnet.flow.model.domain.SysModel" id="SysModelResult">
+        <result property="modelId" column="model_id"/>
+        <result property="modelCode" column="model_code"/>
+        <result property="modelName" column="model_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="modelType" column="model_type"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="dictId" column="dict_id"/>
+        <result property="tableMain" column="table_main"/>
+        <result property="tableExpName" column="table_exp_name"/>
+        <result property="regimeExplain" column="regime_explain"/>
+        <result property="isAllowedApply" column="is_allowed_apply"/>
+        <result property="expExtend1" column="exp_extend1"/>
+        <result property="expExtend2" column="exp_extend2"/>
+        <result property="expExtend3" column="exp_extend3"/>
+        <result property="expExtend4" column="exp_extend4"/>
+        <result property="expExtend5" column="exp_extend5"/>
+    </resultMap>
+
+    <!-- 系统模块管理 结果集 -->
+    <resultMap type="com.cxnet.flow.model.domain.SysModelBill" id="SysModelBillResult">
+        <result property="modelId" column="model_id"/>
+        <result property="modelCode" column="model_code"/>
+        <result property="modelName" column="model_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="modelType" column="model_type"/>
+        <result property="ruleName" column="rule_name"/>
+        <result property="dictName" column="dict_name"/>
+        <result property="modelNameParent" column="model_name_parent"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询系统模块管理 通用sql -->
+    <sql id="selectSysModelVo">
+        select t0.model_id,
+               t0.model_code,
+               t0.model_name,
+               t0.parent_id,
+               t0.order_num,
+               t0.model_type,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.rule_id,
+               t0.dict_id,
+               t0.table_main,
+               t0.table_exp_name,
+               t0.regime_explain,
+               t0.is_allowed_apply,
+               t0.exp_extend1,
+               t0.exp_extend2,
+               t0.exp_extend3,
+               t0.exp_extend4,
+               t0.exp_extend5
+        from sys_model t0
+    </sql>
+
+
+    <!-- 查询系统模块管理 集合 -->
+    <select id="selectSysModelList" parameterType="com.cxnet.flow.model.domain.SysModel" resultMap="SysModelResult">
+        <include refid="selectSysModelVo"/>
+        <where>
+            <if test="modelCode != null  and modelCode != ''">and t0.model_code = #{modelCode}</if>
+            <if test="modelName != null  and modelName != ''">and t0.model_name like concat(concat('%', #{modelName}),
+                '%')
+            </if>
+            <if test="parentId != null and parentId != ''">and t0.parent_id = #{parentId}</if>
+            <if test="orderNum != null ">and t0.order_num = #{orderNum}</if>
+            <if test="modelType != null ">and t0.model_type = #{modelType}</if>
+        </where>
+    </select>
+
+    <!-- 查询系统模块管理 集合 -->
+    <select id="selectSysModelTree" parameterType="com.cxnet.flow.model.domain.SysModel"
+            resultType="com.cxnet.common.utils.tree.Zone">
+        select model_id id,model_code code,model_name name,parent_id pid from sys_model
+        <where>
+            <if test="modelType != null ">and model_type = #{modelType}</if>
+        </where>
+        order by model_id,order_num
+    </select>
+
+    <!-- 查询系统模块管理 ById -->
+    <select id="selectSysModelById" parameterType="string" resultMap="SysModelResult">
+        <include refid="selectSysModelVo"/>
+        where model_id = #{modelId}
+    </select>
+
+    <!-- 查询系统模块管理 ById -->
+    <!--<select id="selectSysModelByIdAndUnitId" parameterType="string" resultMap="SysModelResult">-->
+    <!--<include refid="selectSysModelVo"/>-->
+    <!--where model_id = #{modelId} and unit_id = #{unitId}-->
+    <!--</select>-->
+
+    <!-- 业务单据集合 ById -->
+    <select id="selectModelBill" parameterType="string" resultMap="SysModelBillResult">
+        select t.model_id,
+               t.model_code,
+               t.model_name,
+               (select a.model_name from sys_model a where a.model_id = #{modelId}) as model_name_parent,
+               sr.rule_name,
+               sd.dict_name,
+               t.create_time,
+               t.update_time
+        from sys_model t
+                 left join sys_rule sr on sr.rule_id = t.rule_id
+                 left join sys_dict_type sd on sd.dict_id = t.dict_id
+        where t.parent_id = #{modelId}
+    </select>
+
+    <!--查询单据绑定的流程key-->
+    <select id="selectProcessKeyByModelCode" resultType="java.lang.String">
+        select t1.key
+        from sys_model t0
+                 left join (
+            select *
+            from sys_model_deployment
+            where del_flag = '0'
+              and status = '0'
+              and unit_id = '0'
+        ) t1
+                           on t0.model_id = t1.model_id
+        where t0.model_code = #{billTypeCode}
+          and t0.model_type = '2'
+    </select>
+
+    <!--根据单据类型和单位id查询单据绑定的流程key-->
+    <select id="selectProcessKeyByModelCodeAndUnitId" resultType="java.lang.String">
+        select t1.key
+        from sys_model t0
+                 left join (
+            select *
+            from sys_model_deployment
+            where del_flag = '0'
+              and status = '0'
+              and unit_id = #{unitId}
+        ) t1
+                           on t0.model_id = t1.model_id
+        where t0.model_code = #{billTypeCode}
+          and t0.model_type = '2'
+    </select>
+
+    <!--查询单据编号器编码-->
+    <select id="selectRuleCodeByModelCode" resultType="java.lang.String">
+        select t1.rule_code
+        from sys_model t0
+                 left join sys_rule t1
+                           on t0.rule_id = t1.rule_id
+        where t0.model_code = #{billTypeCode}
+          and t0.model_type = '2'
+    </select>
+
+    <!--查询单据附件类型值集编码-->
+    <select id="selectDictTypeCodeByModelCode" resultType="java.lang.String">
+        select t0.dict_type
+        from sys_dict_type t0
+                 left join sys_model t1
+                           on t0.dict_id = t1.dict_id
+        where t1.model_code = #{billTypeCode}
+          and t1.model_type = '2'
+    </select>
+
+    <select id="selectSysModelByBillTypeCode" parameterType="string" resultMap="SysModelResult">
+        <include refid="selectSysModelVo"/>
+        where model_code = #{billTypeCode}
+    </select>
+
+    <!--查询同单位用户-->
+    <select id="selectUserNamesByUnitId" resultType="java.lang.String">
+        select distinct user_name
+        from sys_user
+        where del_flag = 0
+          and status = 0
+          and dept_id = #{unitId,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询同部门用户-->
+    <select id="getUsersByUnitIdAndDeptId" resultType="java.lang.String">
+        select distinct user_name
+        from sys_post p
+                 inner join sys_user_post up on up.post_id = p.post_id
+                 inner join sys_user u on up.user_id = u.user_id
+        where u.del_flag = 0
+          and u.status = 0
+          and p.dept_id = #{deptId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAcivitiTodo" resultType="com.cxnet.rpc.domain.SysDbYb">
+        select t1.*,nvl(t2.model_name,t1.model_name) bill_name,art.name_ audit_post,art.nick_name
+        asset_name,t4.path,t2.model_code from (
+        SELECT * FROM sys_db_yb
+        WHERE
+        processinstid IN (
+        SELECT
+        *
+        FROM
+        (
+        SELECT DISTINCT RES.PROC_INST_ID_
+        FROM ACT_RU_TASK RES
+        LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES.ID_
+        WHERE RES.SUSPENSION_STATE_ = 1
+        AND (RES.ASSIGNEE_ = #{userAccount} OR
+        (RES.ASSIGNEE_ IS NULL AND
+        (I.USER_ID_ = #{userAccount} OR
+        I.GROUP_ID_ IN
+        (SELECT G.GROUP_ID_
+        FROM ACT_ID_MEMBERSHIP G
+        WHERE G.USER_ID_ = #{userAccount}))))
+        ORDER BY RES.CREATE_TIME_ DESC
+        )
+        )
+        ) t1
+        left join sys_model t2
+        on t1.table_main = t2.table_main
+        left join (
+        SELECT PROC_INST_ID_,wm_concat(nick_name) nick_name,name_ FROM ( select t7.PROC_INST_ID_,t7.name_,t3.nick_name
+        from (
+        select t5.PROC_INST_ID_,t5.name_,nvl(t5.assignee_,t6.user_id_) assignee_ from ACT_RU_TASK t5
+        left join (select * from ACT_RU_IDENTITYLINK where user_id_ is not null ) t6
+        on t5.id_ = t6.task_id_
+        ) t7
+        left join sys_user t3
+        on t7.assignee_ = t3.user_name and t3.DEL_FLAG = 0 )
+        GROUP BY PROC_INST_ID_ ,name_
+        ) art
+        on t1.processinstid = art.PROC_INST_ID_
+        inner join sys_menu t4
+        on t2.model_code = t4.model_code
+        <where>
+            <if test="modelName != null and modelName != ''">and (t1.model_name = #{modelName} or t2.model_name =
+                #{modelName})
+            </if>
+            <if test="startTime != null ">and t1.create_time &gt;= #{startTime}</if>
+            <if test="endTime != null ">and t1.create_time &lt;= #{endTime}</if>
+            <if test="searchValue != null and searchValue != '' ">
+                and
+                (t1.dept_name like '%'||#{searchValue}||'%' or
+                t1.unit_name like '%'||#{searchValue}||'%' or
+                t1.create_name like '%'||#{searchValue}||'%')
+            </if>
+            <if test="deptCode != null and deptCode != ''">and t1.dept_code = #{deptCode}</if>
+            <if test="billNo != null and billNo != ''">and t1.bill_no like '%'||#{billNo}||'%'</if>
+            <if test="minAmt != null and minAmt != 0">and t1.money &gt;= #{minAmt}</if>
+            <if test="maxAmt != null and maxAmt != 0">and t1.money &lt;= #{maxAmt}</if>
+            <if test="status!=null and status!=''">and t1.status=#{status}</if>
+            <if test="parentPath!=null and parentPath!=''">and t1.parent_path=#{parentPath}</if>
+        </where>
+        order by t1.update_time desc ,t1.PRIMARY_ID
+    </select>
+
+    <select id="selectActiviDone" resultType="com.cxnet.rpc.domain.SysDbYb">
+        select t1.*,nvl(t2.model_name,t1.model_name) bill_name,nvl(art.name_,'终审') audit_post,art.nick_name
+        asset_name,t4.path,t2.model_code from (
+        SELECT * FROM sys_db_yb
+        WHERE
+        processinstid IN (
+        SELECT PROC_INST_ID_
+        FROM (SELECT DISTINCT RES.PROC_INST_ID_
+        FROM ACT_HI_TASKINST RES
+        WHERE RES.ASSIGNEE_ = #{userAccount}
+        AND RES.END_TIME_ IS NOT NULL
+        ORDER BY RES.END_TIME_ DESC)
+        )
+        ) t1
+        left join sys_model t2
+        on t1.table_main = t2.table_main
+        left join (
+        SELECT PROC_INST_ID_,wm_concat(nick_name) nick_name,name_ FROM ( select t7.PROC_INST_ID_,t7.name_,t3.nick_name
+        from (
+        select t5.PROC_INST_ID_,t5.name_,nvl(t5.assignee_,t6.user_id_) assignee_ from ACT_RU_TASK t5
+        left join (select * from ACT_RU_IDENTITYLINK where user_id_ is not null ) t6
+        on t5.id_ = t6.task_id_
+        ) t7
+        left join sys_user t3
+        on t7.assignee_ = t3.user_name and t3.DEL_FLAG = 0 )
+        GROUP BY PROC_INST_ID_ ,name_
+        ) art
+        on t1.processinstid = art.PROC_INST_ID_
+        inner join sys_menu t4
+        on t2.model_code = t4.model_code
+        <where>
+            <if test="modelName != null and modelName != ''">and t1.model_name = #{modelName} or t2.model_name =
+                #{modelName}
+            </if>
+            <if test="startTime != null ">and t1.create_time &gt;= #{startTime}</if>
+            <if test="endTime != null ">and t1.create_time &lt;= #{endTime}</if>
+            <if test="searchValue != null and searchValue != '' ">
+                and
+                (t1.dept_name like '%'||#{searchValue}||'%' or
+                t1.unit_name like '%'||#{searchValue}||'%' or
+                t1.create_name like '%'||#{searchValue}||'%')
+            </if>
+            <if test="deptCode != null and deptCode != ''">and t1.dept_code = #{deptCode}</if>
+            <if test="billNo != null and billNo != ''">and t1.bill_no like '%'||#{billNo}||'%'</if>
+            <if test="minAmt != null and minAmt != 0">and t1.money &gt;= #{minAmt}</if>
+            <if test="maxAmt != null and maxAmt != 0">and t1.money &lt;= #{maxAmt}</if>
+            <if test="status!=null and status!=''">and t1.status=#{status}</if>
+            <if test="parentPath!=null and parentPath!=''">and t1.parent_path=#{parentPath}</if>
+        </where>
+        order by t1.update_time desc ,t1.PRIMARY_ID
+    </select>
+
+    <!-- 插入系统模块管理 -->
+    <insert id="insertSysModel" parameterType="com.cxnet.flow.model.domain.SysModel">
+        <selectKey keyProperty="modelId" resultType="string" order="BEFORE">
+            select sys_guid() as modelId FROM DUAL
+        </selectKey>
+        insert into sys_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelId != null and modelId != ''">model_id,</if>
+            <if test="modelCode != null  and modelCode != ''">model_code,</if>
+            <if test="modelName != null  and modelName != ''">model_name,</if>
+            <if test="parentId != null and parentId != ''">parent_id,</if>
+            <if test="orderNum != null ">order_num,</if>
+            <if test="modelType != null ">model_type,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="tableMain != null  and tableMain != ''">table_main,</if>
+            <if test="tableExpName != null  and tableExpName != ''">table_exp_name,</if>
+            <if test="regimeExplain != null  and regimeExplain != ''">regime_explain,</if>
+            <if test="isAllowedApply != null  and isAllowedApply != ''">is_allowed_apply,</if>
+            <if test="expExtend1 != null  and expExtend1 != ''">exp_extend1,</if>
+            <if test="expExtend2 != null  and expExtend2 != ''">exp_extend2,</if>
+            <if test="expExtend3 != null  and expExtend3 != ''">exp_extend3,</if>
+            <if test="expExtend4 != null  and expExtend4 != ''">exp_extend4,</if>
+            <if test="expExtend5 != null  and expExtend5 != ''">exp_extend5,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="modelId != null and modelId != ''">#{modelId},</if>
+            <if test="modelCode != null  and modelCode != ''">#{modelCode},</if>
+            <if test="modelName != null  and modelName != ''">#{modelName},</if>
+            <if test="parentId != null and parentId != ''">#{parentId},</if>
+            <if test="orderNum != null ">#{orderNum},</if>
+            <if test="modelType != null ">#{modelType},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="tableMain != null  and tableMain != ''">#{table_main},</if>
+            <if test="tableExpName != null  and tableExpName != ''">#{tableExpName},</if>
+            <if test="regimeExplain != null  and regimeExplain != ''">#{regimeExplain},</if>
+            <if test="isAllowedApply != null  and isAllowedApply != ''">#{isAllowedApply},</if>
+            <if test="expExtend1 != null  and expExtend1 != ''">#{expExtend1},</if>
+            <if test="expExtend2 != null  and expExtend2 != ''">#{expExtend2},</if>
+            <if test="expExtend3 != null  and expExtend3 != ''">#{expExtend3},</if>
+            <if test="expExtend4 != null  and expExtend4 != ''">#{expExtend4},</if>
+            <if test="expExtend5 != null  and expExtend5 != ''">#{expExtend5},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改系统模块管理 -->
+    <update id="updateSysModel" parameterType="com.cxnet.flow.model.domain.SysModel">
+        update sys_model
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelCode != null  and modelCode != ''">model_code = #{modelCode},</if>
+            <if test="modelName != null  and modelName != ''">model_name = #{modelName},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="orderNum != null ">order_num = #{orderNum},</if>
+            <if test="modelType != null ">model_type = #{modelType},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="ruleId != null ">rule_id = #{ruleId},</if>
+            <if test="dictId != null ">dict_id = #{dictId},</if>
+            <if test="tableMain != null and tableMain != '' ">table_main = #{tableMain},</if>
+            <if test="tableExpName != null and tableExpName != '' ">table_exp_name = #{tableExpName},</if>
+            <if test="regimeExplain != null">regime_explain = #{regimeExplain},</if>
+            <if test="isAllowedApply != null and isAllowedApply != '' ">is_allowed_apply = #{isAllowedApply},</if>
+            <if test="expExtend1 != null and expExtend1 != '' ">exp_extend1 = #{expExtend1},</if>
+            <if test="expExtend2 != null and expExtend2 != '' ">exp_extend2 = #{expExtend2},</if>
+            <if test="expExtend3 != null and expExtend3 != '' ">exp_extend3 = #{expExtend3},</if>
+            <if test="expExtend4 != null and expExtend4 != '' ">exp_extend4 = #{expExtend4},</if>
+            <if test="expExtend5 != null and expExtend5 != '' ">exp_extend5 = #{expExtend5},</if>
+        </trim>
+        where model_id = #{modelId}
+    </update>
+
+    <!-- 删除系统模块管理 ById -->
+    <delete id="deleteSysModelById" parameterType="string">
+        delete
+        from sys_model
+        where model_id = #{modelId}
+    </delete>
+
+    <!-- 批量删除系统模块管理 ByIds -->
+    <delete id="deleteSysModelByIds" parameterType="string">
+        delete from sys_model where model_id in
+        <foreach item="modelId" collection="array" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入系统模块管理 -->
+    <insert id="insertBatchSysModel" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_model
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                model_id,
+                <if test="item.modelCode != null  and item.modelCode != ''">model_code,</if>
+                <if test="item.modelName != null  and item.modelName != ''">model_name,</if>
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.orderNum != null ">order_num,</if>
+                <if test="item.modelType != null ">model_type,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.tableMain != null  and item.tableMain != ''">table_main,</if>
+                <if test="item.tableExpName != null  and item.tableExpName != ''">table_exp_name,</if>
+                <if test="item.regimeExplain != null  and item.regimeExplain != ''">regime_explain,</if>
+                <if test="item.isAllowedApply != null  and item.isAllowedApply != ''">is_allowed_apply,</if>
+                <if test="item.expExtend1 != null  and item.expExtend1 != ''">exp_extend1,</if>
+                <if test="item.expExtend2 != null  and item.expExtend2 != ''">exp_extend2,</if>
+                <if test="item.expExtend3 != null  and item.expExtend3 != ''">exp_extend3,</if>
+                <if test="item.expExtend4 != null  and item.expExtend4 != ''">exp_extend4,</if>
+                <if test="item.expExtend5 != null  and item.expExtend5 != ''">exp_extend5,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid(),
+                <if test="item.modelCode != null  and item.modelCode != ''">#{item.modelCode},</if>
+                <if test="item.modelName != null  and item.modelName != ''">#{item.modelName},</if>
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.orderNum != null ">#{item.orderNum},</if>
+                <if test="item.modelType != null ">#{item.modelType},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.tableMain != null  and item.tableMain != ''">#{item.tableMain},</if>
+                <if test="item.tableExpName != null  and item.tableExpName != ''">#{item.tableExpName},</if>
+                <if test="item.regimeExplain != null  and item.regimeExplain != ''">#{item.regimeExplain},</if>
+                <if test="item.isAllowedApply != null  and item.isAllowedApply != ''">#{item.isAllowedApply},</if>
+                <if test="item.expExtend1 != null  and item.expExtend1 != ''">#{item.expExtend1},</if>
+                <if test="item.expExtend2 != null  and item.expExtend2 != ''">#{item.expExtend2},</if>
+                <if test="item.expExtend3 != null  and item.expExtend3 != ''">#{item.expExtend3},</if>
+                <if test="item.expExtend4 != null  and item.expExtend4 != ''">#{item.expExtend4},</if>
+                <if test="item.expExtend5 != null  and item.expExtend5 != ''">#{item.expExtend5},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改系统模块管理 -->
+    <update id="updateBatchSysModel" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update sys_model
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.modelCode != null  and item.modelCode != ''">model_code = #{item.modelCode},</if>
+                <if test="item.modelName != null  and item.modelName != ''">model_name = #{item.modelName},</if>
+                <if test="item.parentId != null ">parent_id = #{item.parentId},</if>
+                <if test="item.orderNum != null ">order_num = #{item.orderNum},</if>
+                <if test="item.modelType != null ">model_type = #{item.modelType},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+                <if test="item.tableMain != null  and item.tableMain != ''">table_main = #{item.tableMain},</if>
+                <if test="item.tableExpName != null  and item.tableExpName != ''">table_exp_name =
+                    #{item.tableExpName},
+                </if>
+                <if test="item.regimeExplain != null  and item.regimeExplain != ''">regime_explain =
+                    #{item.regimeExplain},
+                </if>
+                <if test="item.isAllowedApply != null  and item.isAllowedApply != ''">is_allowed_apply =
+                    #{item.isAllowedApply},
+                </if>
+                <if test="item.expExtend1 != null  and expExtend1 != ''">exp_extend1 = #{item.expExtend1},</if>
+                <if test="item.expExtend2 != null  and expExtend2 != ''">exp_extend2 = #{item.expExtend2},</if>
+                <if test="item.expExtend3 != null  and expExtend3 != ''">exp_extend3 = #{item.expExtend3},</if>
+                <if test="item.expExtend4 != null  and expExtend4 != ''">exp_extend4 = #{item.expExtend4},</if>
+                <if test="item.expExtend5 != null  and expExtend5 != ''">exp_extend5 = #{item.expExtend5},</if>
+            </trim>
+            <where>
+                model_id = #{item.modelId}
+            </where>
+        </foreach>
+    </update>
+
+    <select id="mobileSelectMyselfStart" resultType="com.cxnet.rpc.domain.SysDbYb">
+        SELECT
+        t1.*,
+        nvl( t2.model_name, t1.model_name ) bill_name,
+        t2.model_code
+        FROM
+        SYS_DB_YB t1
+        LEFT JOIN sys_model t2 ON t1.table_main = t2.table_main
+        <where>
+            and t1.CREATE_NAME =#{userName}
+            <if test="modelName != null and modelName != ''">and (t1.model_name = #{modelName} or t2.model_name =
+                #{modelName})
+            </if>
+            <if test="startTime != null ">and t1.create_time &gt;= #{startTime}</if>
+            <if test="endTime != null ">and t1.create_time &lt;= #{endTime}</if>
+            <if test="deptCode != null and deptCode != ''">and t1.dept_code = #{deptCode}</if>
+            <if test="billNo != null and billNo != ''">and t1.bill_no like '%'||#{billNo}||'%'</if>
+            <if test="minAmt != null and minAmt != 0">and t1.money &gt;= #{minAmt}</if>
+            <if test="maxAmt != null and maxAmt != 0">and t1.money &lt;= #{maxAmt}</if>
+            <if test="status!=null and status!=''">and t1.status=#{status}</if>
+            <if test="parentPath!=null and parentPath!=''">and t1.parent_path=#{parentPath}</if>
+        </where>
+    </select>
+
+
+</mapper>

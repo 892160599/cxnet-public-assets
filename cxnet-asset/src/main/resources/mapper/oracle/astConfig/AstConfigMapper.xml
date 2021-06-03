@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.businessSet.mapper.AstConfigMapper">
+
+    <resultMap type="com.cxnet.asset.businessSet.domain.AstConfig" id="AstConfigMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="deprStartDate" column="DEPR_START_DATE" jdbcType="TIMESTAMP"/>
+        <result property="deprNewestDate" column="DEPR_NEWEST_DATE" jdbcType="TIMESTAMP"/>
+        <result property="deprMethodChange" column="DEPR_METHOD_CHANGE" jdbcType="VARCHAR"/>
+        <result property="useLifeChange" column="USE_LIFE_CHANGE" jdbcType="VARCHAR"/>
+        <result property="usageStatusChange" column="USAGE_STATUS_CHANGE" jdbcType="VARCHAR"/>
+        <result property="tailDifference" column="TAIL_DIFFERENCE" jdbcType="VARCHAR"/>
+        <result property="assetTypeChange" column="ASSET_TYPE_CHANGE" jdbcType="VARCHAR"/>
+        <result property="departmentChange" column="DEPARTMENT_CHANGE" jdbcType="VARCHAR"/>
+        <result property="deptChange" column="DEPT_CHANGE" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstConfigVo">
+        select t0.ID,
+               t0.UNIT_ID,
+               t0.DEPR_START_DATE,
+               t0.DEPR_NEWEST_DATE,
+               t0.DEPR_METHOD_CHANGE,
+               t0.USE_LIFE_CHANGE,
+               t0.USAGE_STATUS_CHANGE,
+               t0.TAIL_DIFFERENCE,
+               t0.ASSET_TYPE_CHANGE,
+               t0.DEPARTMENT_CHANGE,
+               t0.DEPT_CHANGE,
+               t0.CREATE_BY,
+               t0.CREATE_TIME,
+               t0.CREATE_NAME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5
+        from AST_CONFIG t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstConfigMap">
+        <include refid="AstConfigVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="deprStartDate != null">and t0.DEPR_START_DATE = #{deprStartDate}</if>
+            <if test="deprNewestDate != null">and t0.DEPR_NEWEST_DATE = #{deprNewestDate}</if>
+            <if test="deprMethodChange != null and deprMethodChange != ''">and t0.DEPR_METHOD_CHANGE =
+                #{deprMethodChange}
+            </if>
+            <if test="useLifeChange != null and useLifeChange != ''">and t0.USE_LIFE_CHANGE = #{useLifeChange}</if>
+            <if test="usageStatusChange != null and usageStatusChange != ''">and t0.USAGE_STATUS_CHANGE =
+                #{usageStatusChange}
+            </if>
+            <if test="tailDifference != null and tailDifference != ''">and t0.TAIL_DIFFERENCE = #{tailDifference}</if>
+            <if test="assetTypeChange != null and assetTypeChange != ''">and t0.ASSET_TYPE_CHANGE = #{assetTypeChange}
+            </if>
+            <if test="departmentChange != null and departmentChange != ''">and t0.DEPARTMENT_CHANGE =
+                #{departmentChange}
+            </if>
+            <if test="deptChange != null and deptChange != ''">and t0.DEPT_CHANGE = #{deptChange}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.role.mapper.SysRoleDeptMapper">
+
+    <resultMap type="com.cxnet.project.system.role.domain.SysRoleDept" id="SysRoleDeptResult">
+        <result property="roleId" column="role_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="menuId" column="menu_id"/>
+    </resultMap>
+
+    <delete id="deleteRoleDeptByRoleId" parameterType="string">
+        delete
+        from sys_role_dept
+        where role_id = #{roleId}
+    </delete>
+
+    <select id="selectCountRoleDeptByDeptId" resultType="long">
+        select count(1)
+        from sys_role_dept
+        where dept_id = #{deptId}
+    </select>
+
+    <delete id="deleteRoleDept" parameterType="string">
+        delete from sys_role_dept where role_id in
+        <foreach collection="array" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteRoleDeptByRoleIdAndMenuId">
+        delete
+        from sys_role_dept
+        where role_id = #{roleId}
+          and menu_id = #{menuId}
+    </delete>
+
+    <insert id="batchRoleDept" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_role_dept
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.roleId != null  and item.roleId != ''">role_id,</if>
+                <if test="item.deptId != null  and item.deptId != ''">dept_id,</if>
+                <if test="item.menuId != null  and item.menuId != ''">menu_id,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                <if test="item.roleId != null  and item.roleId != ''">#{item.roleId, jdbcType=DECIMAL},</if>
+                <if test="item.deptId != null  and item.deptId != ''">#{item.deptId, jdbcType=DECIMAL},</if>
+                <if test="item.menuId != null  and item.menuId != ''">#{item.menuId, jdbcType=DECIMAL},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+</mapper> 

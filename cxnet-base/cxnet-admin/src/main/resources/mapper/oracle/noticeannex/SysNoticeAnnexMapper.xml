@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.noticeannex.mapper.SysNoticeAnnexMapper">
+    <!-- 采购附件关联 结果集 -->
+    <resultMap type="com.cxnet.project.system.noticeannex.domain.SysNoticeAnnex" id="annexResult">
+        <result property="annexId" column="annex_id"/>
+        <result property="noticeId" column="NOTICE_ID"/>
+        <result property="fileId" column="file_id"/>
+        <result property="annexType" column="annex_type"/>
+        <result property="annexOrder" column="annex_order"/>
+        <result property="dictValue" column="dict_value"/>
+        <result property="realName" column="real_name"/>
+        <result property="fileName" column="file_name"/>
+        <result property="createName" column="create_name"/>
+        <result property="bz" column="bz"/>
+    </resultMap>
+    <select id="selectAnnex" resultMap="annexResult" parameterType="java.lang.String">
+        SELECT t0.annex_id,
+               t0.NOTICE_ID,
+               t0.file_id,
+               t0.annex_type,
+               t0.annex_order,
+               t0.dict_value,
+               t0.bz,
+               t1.real_name,
+               t1.FILE_NAME,
+               t1.create_by,
+               t1.create_time,
+               t1.create_name
+        FROM SYS_NOTICE_ANNEX t0
+                 LEFT JOIN SYS_FILE_UPLOAD t1 ON t0.FILE_ID = t1.FILE_ID
+        WHERE t0.NOTICE_ID = #{noticeId}
+          AND t0.annex_type = #{annexType}
+    </select>
+</mapper>

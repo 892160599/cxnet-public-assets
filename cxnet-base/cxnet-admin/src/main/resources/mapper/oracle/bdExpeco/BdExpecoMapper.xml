@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.expeco.bdExpeco.mapper.BdExpecoMapper">
+
+    <!-- 部门预算经济分类 结果集 -->
+    <resultMap type="com.cxnet.baseData.expeco.bdExpeco.domain.BdExpeco" id="BdExpecoResult">
+        <result property="expecoId" column="expeco_id"/>
+        <result property="year" column="year"/>
+        <result property="expecoCode" column="expeco_code"/>
+        <result property="expecoName" column="expeco_name"/>
+        <result property="isLowest" column="is_lowest"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="purpose" column="purpose"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="unitId" column="unit_id"/>
+    </resultMap>
+
+    <!-- 查询部门预算经济分类 通用sql -->
+    <sql id="selectBdExpecoVo">
+        select t0.expeco_id,
+               t0.year,
+               t0.expeco_code,
+               t0.expeco_name,
+               t0.is_lowest,
+               t0.del_flag,
+               t0.parent_code,
+               t0.parent_id,
+               t0.status,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.purpose,
+               t0.unit_id,
+               t1.dept_code as unit_code,
+               t1.dept_name as unit_name
+        from bd_expeco t0
+                 left join sys_dept t1
+                           on t0.unit_id = t1.dept_id
+
+    </sql>
+
+
+    <!-- 查询部门预算经济分类 集合 -->
+    <select id="selectBdExpecoList" parameterType="com.cxnet.baseData.expeco.bdExpeco.domain.BdExpeco"
+            resultMap="BdExpecoResult">
+        <include refid="selectBdExpecoVo"/>
+        <where>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="expecoCode != null  and expecoCode != ''">and t0.expeco_code = #{expecoCode}</if>
+            <if test="expecoName != null  and expecoName != ''">and t0.expeco_name like concat(concat('%',
+                #{expecoName}), '%')
+            </if>
+            <if test="isLowest != null  and isLowest != ''">and t0.is_lowest = #{isLowest}</if>
+            <if test="parentCode != null  and parentCode != ''">and t0.parent_code = #{parentCode}</if>
+            <if test="parentId != null ">and t0.parent_id = #{parentId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_Flag = #{delFlag}</if>
+            <if test="purpose != null  and purpose != ''">and t0.purpose = #{purpose}</if>
+        </where>
+        order by t0.expeco_code
+    </select>
+
+    <!-- 查询部门预算经济分类 ById -->
+    <select id="selectBdExpecoById" parameterType="String" resultMap="BdExpecoResult">
+        <include refid="selectBdExpecoVo"/>
+        where expeco_id = #{expecoId}
+    </select>
+
+    <!--查询部门预算经济分类tree-->
+    <select id="selectAssetTypeListTree" resultType="com.cxnet.common.utils.tree.Zone">
+        select t0.expeco_id id,t0.expeco_code code,t0.expeco_name name,nvl(t0.parent_id,'0'),t0.parent_code pcode
+        from bd_expeco t0
+        <where>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_flag = #{delFlag}</if>
+        </where>
+        order by t0.expeco_code
+    </select>
+
+    <!--根据ids查询-->
+    <select id="selectBdExpecoByIds" resultMap="BdExpecoResult">
+        <include refid="selectBdExpecoVo"/>
+
+        where t0.year='2020'
+        and t0.unit_id = '*'
+        and t0.expeco_code in
+        <if test="array != null and array.length > 0">
+            <trim suffixOverrides=" OR t0.expeco_code IN()">
+                <foreach collection="array" item="item" index="index" open="(" close=")">
+                    <if test="index != 0">
+                        <choose>
+                            <when test="index % 1000 == 999">) OR t0.expeco_code IN (</when>
+                            <otherwise>,</otherwise>
+                        </choose>
+                    </if>
+                    #{item}
+                </foreach>
+            </trim>
+        </if>
+    </select>
+
+    <!--查询所有上级集合-->
+    <select id="selectBdExpfuncUpList" resultMap="BdExpecoResult">
+        <include refid="selectBdExpecoVo"/>
+        start with t0.expeco_code = #{expecoCode} and t0.year = #{year} and t0.UNIT_ID = '*'
+        connect by prior t0.parent_id = t0.expeco_id
+        order by t0.expeco_code
+    </select>
+
+    <select id="existChildren" resultType="java.lang.Integer">
+        select count(1)
+        from bd_expeco t0
+        where t0.UNIT_ID = #{unitId}
+          and t0.year = #{year}
+          and t0.PARENT_CODE = #{expecoCode}
+          and del_flag = '0'
+    </select>
+
+    <select id="checkCode" parameterType="com.cxnet.baseData.expeco.bdExpeco.domain.BdExpeco"
+            resultType="java.lang.Integer">
+        select count(1) from bd_expeco
+        where year = #{year} and UNIT_ID = #{unitId} and expeco_code = #{expecoCode} and del_flag = '0'
+        <if test="expecoId != null ">and expeco_id != #{expecoId}</if>
+    </select>
+
+    <select id="selectBdExpecoByCodes" resultMap="BdExpecoResult">
+        <include refid="selectBdExpecoVo"/>
+        where t0.del_flag = '0' and t0.year = #{year} and t0.UNIT_ID = #{unitId} and t0.expeco_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 插入部门预算经济分类 -->
+    <insert id="insertBdExpeco" parameterType="com.cxnet.baseData.expeco.bdExpeco.domain.BdExpeco">
+        <selectKey keyProperty="expecoId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into bd_expeco
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="expecoId != null ">expeco_id,</if>
+            <if test="year != null ">year,</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code,</if>
+            <if test="unitName != null  and unitName != ''">unit_name,</if>
+            <if test="unitId != null  and unitId != ''">unit_id,</if>
+            <if test="expecoCode != null  and expecoCode != ''">expeco_code,</if>
+            <if test="expecoName != null  and expecoName != ''">expeco_name,</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="purpose != null  and purpose != ''">purpose,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="expecoId != null ">#{expecoId},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="unitCode != null  and unitCode != ''">#{unitCode},</if>
+            <if test="unitName != null  and unitName != ''">#{unitName},</if>
+            <if test="unitId != null  and unitId != ''">#{unitId},</if>
+            <if test="expecoCode != null  and expecoCode != ''">#{expecoCode},</if>
+            <if test="expecoName != null  and expecoName != ''">#{expecoName},</if>
+            <if test="isLowest != null  and isLowest != ''">#{isLowest},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="purpose != null  and purpose != ''">#{purpose},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改部门预算经济分类 -->
+    <update id="updateBdExpeco" parameterType="com.cxnet.baseData.expeco.bdExpeco.domain.BdExpeco">
+        update bd_expeco
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null ">year = #{year},</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code = #{unitCode},</if>
+            <if test="unitName != null  and unitName != ''">unit_name = #{unitName},</if>
+            <if test="unitId != null  and unitId != ''">unit_id = #{unitId},</if>
+            <if test="expecoCode != null  and expecoCode != ''">expeco_code = #{expecoCode},</if>
+            <if test="expecoName != null  and expecoName != ''">expeco_name = #{expecoName},</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest = #{isLowest},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code = #{parentCode},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="purpose != null  and purpose != ''">purpose = #{purpose},</if>
+        </trim>
+        where expeco_id = #{expecoId}
+    </update>
+
+    <!-- 删除部门预算经济分类 ById -->
+    <delete id="deleteBdExpecoById" parameterType="String">
+        update bd_expeco
+        set del_flag = '2'
+        where expeco_id = #{expecoId}
+    </delete>
+
+    <!-- 批量删除部门预算经济分类 ByIds -->
+    <delete id="deleteBdExpecoByIds" parameterType="String">
+        update bd_expeco set del_flag = '2' expeco_id in
+        <foreach item="expecoId" collection="array" open="(" separator="," close=")">
+            #{expecoId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入部门预算经济分类 -->
+    <insert id="insertBatchBdExpeco" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into bd_expeco
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                expeco_id,
+                <if test="item.year != null ">year,</if>
+                <if test="item.unitId != null  and item.unitId != ''">unit_id,</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code,</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name,</if>
+                <if test="item.expecoCode != null  and item.expecoCode != ''">expeco_code,</if>
+                <if test="item.expecoName != null  and item.expecoName != ''">expeco_name,</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code,</if>
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.purpose != null  and item.purpose != ''">purpose,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.year != null ">#{item.year},</if>
+                <if test="item.unitId != null  and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">#{item.unitCode},</if>
+                <if test="item.unitName != null  and item.unitName != ''">#{item.unitName},</if>
+                <if test="item.expecoCode != null  and item.expecoCode != ''">#{item.expecoCode},</if>
+                <if test="item.expecoName != null  and item.expecoName != ''">#{item.expecoName},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">#{item.isLowest},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">#{item.parentCode},</if>
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.purpose != null  and item.purpose != ''">#{item.purpose},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改部门预算经济分类 -->
+    <update id="updateBatchBdExpeco" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_expeco
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.year != null ">year = #{item.year},</if>
+                <if test="item.unitId != null  and item.unitId != ''">unit_id = #{item.unitId},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code = #{item.unitCode},</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name = #{item.unitName},</if>
+                <if test="item.expecoCode != null  and item.expecoCode != ''">expeco_code = #{item.expecoCode},</if>
+                <if test="item.expecoName != null  and item.expecoName != ''">expeco_name = #{item.expecoName},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest = #{item.isLowest},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code = #{item.parentCode},</if>
+                <if test="item.parentId != null ">parent_id = #{item.parentId},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+                <if test="item.purpose != null  and item.purpose != ''">purpose = #{item.purpose},</if>
+            </trim>
+            <where>
+                expeco_id = #{item.expecoId}
+            </where>
+        </foreach>
+    </update>
+
+    <delete id="deleteBdExpecoByYear">
+        delete bd_expeco
+        where year=#{year}
+        <if test="unitId != null and unitId != ''">
+            and unit_id=#{unitId}
+        </if>
+    </delete>
+
+    <select id="selectLatestYear" resultType="Integer">
+        select max(year)
+        from BD_EXPECO
+    </select>
+
+    <insert id="carryForwardData">
+        INSERT INTO BD_EXPECO (
+            SELECT EXPECO_ID || 'E',
+                   #{newYear},
+                   EXPECO_CODE,
+                   EXPECO_NAME,
+                   IS_LOWEST,
+                   DEL_FLAG,
+                   PARENT_CODE,
+                   PARENT_ID || 'E',
+                   STATUS,
+                   CREATE_BY,
+                   CREATE_TIME,
+                   UPDATE_BY,
+                   UPDATE_TIME,
+                   PURPOSE,
+                   UNIT_ID,
+                   UNIT_CODE,
+                   UNIT_NAME
+            FROM BD_EXPECO
+            WHERE
+                YEAR = #{oldYear}
+              AND UNIT_ID = '*'
+        )
+    </insert>
+
+</mapper>

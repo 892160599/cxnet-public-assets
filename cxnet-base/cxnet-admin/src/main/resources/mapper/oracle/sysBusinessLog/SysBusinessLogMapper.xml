@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.businesslog.mapper.SysBusinessLogMapper">
+
+    <resultMap type="com.cxnet.project.businesslog.domain.SysBusinessLog" id="SysBusinessLogMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="module" column="MODULE" jdbcType="VARCHAR"/>
+        <result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+        <result property="businessType" column="BUSINESS_TYPE" jdbcType="INTEGER"/>
+        <result property="operatorType" column="OPERATOR_TYPE" jdbcType="INTEGER"/>
+        <result property="method" column="METHOD" jdbcType="VARCHAR"/>
+        <result property="requestMethod" column="REQUEST_METHOD" jdbcType="VARCHAR"/>
+        <result property="operUrl" column="OPER_URL" jdbcType="VARCHAR"/>
+        <result property="operLocation" column="OPER_LOCATION" jdbcType="VARCHAR"/>
+        <result property="operParam" column="OPER_PARAM" jdbcType="OTHER"/>
+        <result property="jsonResult" column="JSON_RESULT" jdbcType="OTHER"/>
+        <result property="status" column="STATUS" jdbcType="INTEGER"/>
+        <result property="errorMsg" column="ERROR_MSG" jdbcType="OTHER"/>
+        <result property="operateKey" column="OPERATE_KEY" jdbcType="VARCHAR"/>
+        <result property="operUserId" column="OPER_USER_ID" jdbcType="VARCHAR"/>
+        <result property="operUserName" column="OPER_USER_NAME" jdbcType="VARCHAR"/>
+        <result property="operTime" column="OPER_TIME" jdbcType="TIMESTAMP"/>
+        <result property="operIp" column="OPER_IP" jdbcType="VARCHAR"/>
+        <result property="fieldName" column="FIELD_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="SysBusinessLogVo">
+        select t0.ID,
+               t0.MODULE,
+               t0.CONTENT,
+               t0.BUSINESS_TYPE,
+               t0.OPERATOR_TYPE,
+               t0.METHOD,
+               t0.REQUEST_METHOD,
+               t0.OPER_URL,
+               t0.OPER_LOCATION,
+               t0.OPER_PARAM,
+               t0.JSON_RESULT,
+               t0.STATUS,
+               t0.ERROR_MSG,
+               t0.OPERATE_KEY,
+               t0.OPER_USER_ID,
+               t0.OPER_USER_NAME,
+               t0.OPER_TIME
+        from SYS_BUSINESS_LOG t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="SysBusinessLogMap">
+        <include refid="SysBusinessLogVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="module != null and module != ''">and t0.MODULE = #{module}</if>
+            <if test="content != null and content != ''">and t0.CONTENT = #{content}</if>
+            <if test="businessType != null">and t0.BUSINESS_TYPE = #{businessType}</if>
+            <if test="operatorType != null">and t0.OPERATOR_TYPE = #{operatorType}</if>
+            <if test="method != null and method != ''">and t0.METHOD = #{method}</if>
+            <if test="requestMethod != null and requestMethod != ''">and t0.REQUEST_METHOD = #{requestMethod}</if>
+            <if test="operUrl != null and operUrl != ''">and t0.OPER_URL = #{operUrl}</if>
+            <if test="operLocation != null and operLocation != ''">and t0.OPER_LOCATION = #{operLocation}</if>
+            <if test="operIp != null and operIp != ''">and t0.OPER_IP = #{operIp}</if>
+            <if test="operParam != null">and t0.OPER_PARAM = #{operParam}</if>
+            <if test="jsonResult != null">and t0.JSON_RESULT = #{jsonResult}</if>
+            <if test="status != null">and t0.STATUS = #{status}</if>
+            <if test="errorMsg != null">and t0.ERROR_MSG = #{errorMsg}</if>
+            <if test="operateKey != null and operateKey != ''">and t0.OPERATE_KEY = #{operateKey}</if>
+            <if test="operUserId != null and operUserId != ''">and t0.OPER_USER_ID = #{operUserId}</if>
+            <if test="operUserName != null and operUserName != ''">and t0.OPER_USER_NAME = #{operUserName}</if>
+            <if test="fieldName != null and fieldName != ''">and t0.FIELD_NAME = #{operUserName}</if>
+            <if test="operTime != null">and t0.OPER_TIME = #{operTime}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.govexpeco.bdGovexpeco.mapper.BdGovGovexpecoMapper">
+
+    <!-- 政府/部门经济分类关系 结果集 -->
+    <resultMap type="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovGovexpeco" id="BdGovExpecoResult">
+        <result property="year" column="year"/>
+        <result property="govExpecoCode" column="gov_expeco_code"/>
+        <result property="govExpecoName" column="gov_expeco_name"/>
+        <result property="expecoCode" column="expeco_code"/>
+        <result property="expecoName" column="expeco_name"/>
+        <result property="deptTypeCode" column="dept_type_code"/>
+        <result property="deptTypeName" column="dept_type_name"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="unitId" column="unit_id"/>
+    </resultMap>
+
+    <!-- 查询政府/部门经济分类关系 通用sql -->
+    <sql id="selectBdGovExpecoVo">
+        select t0.year,
+               t0.gov_expeco_code,
+               t0.gov_expeco_name,
+               t0.expeco_code,
+               t0.expeco_name,
+               t0.dept_type_code,
+               t0.dept_type_name,
+               t0.unit_id,
+               t1.dept_code as unit_code,
+               t1.dept_name as unit_name
+        from bd_gov_expeco t0
+                 left join sys_dept t1
+                           on t0.unit_id = t1.dept_id
+
+    </sql>
+
+
+    <!-- 查询政府/部门经济分类关系 集合 -->
+    <select id="selectBdGovExpecoList" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovGovexpeco"
+            resultMap="BdGovExpecoResult">
+        <include refid="selectBdGovExpecoVo"/>
+        <where>
+            <if test="govExpecoName != null  and govExpecoName != ''">and t0.gov_expeco_name like concat(concat('%',
+                #{govExpecoName}), '%')
+            </if>
+            <if test="expecoName != null  and expecoName != ''">and t0.expeco_name like concat(concat('%',
+                #{expecoName}), '%')
+            </if>
+            <if test="deptTypeName != null  and deptTypeName != ''">and t0.dept_type_name like concat(concat('%',
+                #{deptTypeName}), '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询政府/部门经济分类关系 ById -->
+    <select id="selectBdGovExpecoById" parameterType="String" resultMap="BdGovExpecoResult">
+        <include refid="selectBdGovExpecoVo"/>
+        where unit_id = #{unitId}
+    </select>
+
+    <!--查询政府/部门经济分类关系-->
+    <select id="selectBdGovGovexpecoByYearGovCode"
+            resultMap="BdGovExpecoResult">
+        <include refid="selectBdGovExpecoVo"/>
+        where t0.year = #{year}
+        and t0.gov_expeco_code = #{govCode}
+    </select>
+
+    <!--查询政府/部门经济分类关系-->
+    <select id="selectBdGovGovexpecoByYearExpecoCode"
+            resultMap="BdGovExpecoResult">
+        <include refid="selectBdGovExpecoVo"/>
+        where t0.year = #{year}
+        and t0.expeco_code = #{expecoCode}
+        <choose>
+            <when test="unitQuality != null and unitQuality !=''">
+                and t0.DEPT_TYPE_CODE = #{unitQuality}
+            </when>
+            <otherwise>
+                and t0.DEPT_TYPE_CODE = '4'
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 插入政府/部门经济分类关系 -->
+    <insert id="insertBdGovExpeco" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovGovexpeco">
+        <selectKey keyProperty="unitId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into bd_gov_expeco
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitId != null  and unitId != ''">unit_id,</if>
+            <if test="year != null ">year,</if>
+            <if test="govExpecoCode != null  and govExpecoCode != ''">gov_expeco_code,</if>
+            <if test="govExpecoName != null  and govExpecoName != ''">gov_expeco_name,</if>
+            <if test="expecoCode != null  and expecoCode != ''">expeco_code,</if>
+            <if test="expecoName != null  and expecoName != ''">expeco_name,</if>
+            <if test="deptTypeCode != null  and deptTypeCode != ''">dept_type_code,</if>
+            <if test="deptTypeName != null  and deptTypeName != ''">dept_type_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="unitId != null  and unitId != ''">#{unitId},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="govExpecoCode != null  and govExpecoCode != ''">#{govExpecoCode},</if>
+            <if test="govExpecoName != null  and govExpecoName != ''">#{govExpecoName},</if>
+            <if test="expecoCode != null  and expecoCode != ''">#{expecoCode},</if>
+            <if test="expecoName != null  and expecoName != ''">#{expecoName},</if>
+            <if test="deptTypeCode != null  and deptTypeCode != ''">#{deptTypeCode},</if>
+            <if test="deptTypeName != null  and deptTypeName != ''">#{deptTypeName},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改政府/部门经济分类关系 -->
+    <update id="updateBdGovExpeco" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovGovexpeco">
+        update bd_gov_expeco
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null ">year = #{year},</if>
+            <if test="govExpecoCode != null  and govExpecoCode != ''">gov_expeco_code = #{govExpecoCode},</if>
+            <if test="govExpecoName != null  and govExpecoName != ''">gov_expeco_name = #{govExpecoName},</if>
+            <if test="expecoCode != null  and expecoCode != ''">expeco_code = #{expecoCode},</if>
+            <if test="expecoName != null  and expecoName != ''">expeco_name = #{expecoName},</if>
+            <if test="deptTypeCode != null  and deptTypeCode != ''">dept_type_code = #{deptTypeCode},</if>
+            <if test="deptTypeName != null  and deptTypeName != ''">dept_type_name = #{deptTypeName},</if>
+        </trim>
+        where unit_id = #{unitId}
+    </update>
+
+    <!-- 删除政府/部门经济分类关系 ById -->
+    <delete id="deleteBdGovExpecoById" parameterType="String">
+        delete
+        from bd_gov_expeco
+        where unit_id = #{unitId}
+    </delete>
+
+    <!-- 批量删除政府/部门经济分类关系 ByIds -->
+    <delete id="deleteBdGovExpecoByIds" parameterType="String">
+        delete from bd_gov_expeco where unit_id in
+        <foreach item="unitId" collection="array" open="(" separator="," close=")">
+            #{unitId}
+        </foreach>
+    </delete>
+
+    <!--删除-->
+    <delete id="deleteBdGovExpeco">
+        delete
+        from bd_gov_expeco
+        where year = #{year}
+          and GOV_EXPECO_CODE = #{govCode}
+    </delete>
+
+    <!-- 批量插入政府/部门经济分类关系 -->
+    <insert id="insertBatchBdGovExpeco" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into bd_gov_expeco
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.unitId != null  and item.unitId != ''">unit_id,</if>
+                <if test="item.year != null ">year,</if>
+                <if test="item.govExpecoCode != null  and item.govExpecoCode != ''">gov_expeco_code,</if>
+                <if test="item.govExpecoName != null  and item.govExpecoName != ''">gov_expeco_name,</if>
+                <if test="item.expecoCode != null  and item.expecoCode != ''">expeco_code,</if>
+                <if test="item.expecoName != null  and item.expecoName != ''">expeco_name,</if>
+                <if test="item.deptTypeCode != null  and item.deptTypeCode != ''">dept_type_code,</if>
+                <if test="item.deptTypeName != null  and item.deptTypeName != ''">dept_type_name,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                <if test="item.unitId != null  and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.year != null ">#{item.year},</if>
+                <if test="item.govExpecoCode != null  and item.govExpecoCode != ''">#{item.govExpecoCode},</if>
+                <if test="item.govExpecoName != null  and item.govExpecoName != ''">#{item.govExpecoName},</if>
+                <if test="item.expecoCode != null  and item.expecoCode != ''">#{item.expecoCode},</if>
+                <if test="item.expecoName != null  and item.expecoName != ''">#{item.expecoName},</if>
+                <if test="item.deptTypeCode != null  and item.deptTypeCode != ''">#{item.deptTypeCode},</if>
+                <if test="item.deptTypeName != null  and item.deptTypeName != ''">#{item.deptTypeName},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改政府/部门经济分类关系 -->
+    <update id="updateBatchBdGovExpeco" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_gov_expeco
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.year != null ">year = #{item.year},</if>
+                <if test="item.govExpecoCode != null  and item.govExpecoCode != ''">gov_expeco_code =
+                    #{item.govExpecoCode},
+                </if>
+                <if test="item.govExpecoName != null  and item.govExpecoName != ''">gov_expeco_name =
+                    #{item.govExpecoName},
+                </if>
+                <if test="item.expecoCode != null  and item.expecoCode != ''">expeco_code = #{item.expecoCode},</if>
+                <if test="item.expecoName != null  and item.expecoName != ''">expeco_name = #{item.expecoName},</if>
+                <if test="item.deptTypeCode != null  and item.deptTypeCode != ''">dept_type_code =
+                    #{item.deptTypeCode},
+                </if>
+                <if test="item.deptTypeName != null  and item.deptTypeName != ''">dept_type_name =
+                    #{item.deptTypeName},
+                </if>
+            </trim>
+            <where>
+                unit_id = #{item.unitId}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

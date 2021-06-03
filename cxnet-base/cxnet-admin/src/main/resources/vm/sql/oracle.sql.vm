@@ -1,0 +1,33 @@
+declare menuid number(20); begin
+menuid := seq_sys_menu.nextval;
+
+-- 菜单 SQL insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible,
+                                perms, icon, create_by, create_time, update_by, update_time, remark)
+          values (menuid, '${functionName}', '3', '1', '${businessName}', '${moduleName}/${businessName}/index', 1, 'C',
+                  '0', '${permissionPrefix}:list', '#', 'admin', sysdate, 'cxnet', sysdate, '${functionName}菜单');
+
+-- 按钮 SQL
+    insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible,
+                          perms, icon, create_by, create_time, update_by, update_time, remark)
+    values (seq_sys_menu.nextval, '${functionName}查询', menuid, '1', '#', '', 1, 'F', '0', '${permissionPrefix}:query',
+            '#', 'admin', sysdate, 'cxnet', sysdate, '');
+
+    insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible,
+                          perms, icon, create_by, create_time, update_by, update_time, remark)
+    values (seq_sys_menu.nextval, '${functionName}新增', menuid, '2', '#', '', 1, 'F', '0', '${permissionPrefix}:add',
+            '#', 'admin', sysdate, 'cxnet', sysdate, '');
+
+    insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible,
+                          perms, icon, create_by, create_time, update_by, update_time, remark)
+    values (seq_sys_menu.nextval, '${functionName}修改', menuid, '3', '#', '', 1, 'F', '0', '${permissionPrefix}:update',
+            '#', 'admin', sysdate, 'cxnet', sysdate, '');
+
+    insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible,
+                          perms, icon, create_by, create_time, update_by, update_time, remark)
+    values (seq_sys_menu.nextval, '${functionName}删除', menuid, '4', '#', '', 1, 'F', '0', '${permissionPrefix}:delete',
+            '#', 'admin', sysdate, 'cxnet', sysdate, '');
+
+    insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible,
+                          perms, icon, create_by, create_time, update_by, update_time, remark)
+    values (seq_sys_menu.nextval, '${functionName}导出', menuid, '5', '#', '', 1, 'F', '0', '${permissionPrefix}:export',
+            '#', 'admin', sysdate, 'cxnet', sysdate, ''); end;

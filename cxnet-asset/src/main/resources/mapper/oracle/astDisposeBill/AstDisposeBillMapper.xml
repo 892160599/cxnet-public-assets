@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.dispose.mapper.AstDisposeBillMapper">
+    <resultMap type="com.cxnet.asset.dispose.domain.AstDisposeBill" id="AstDisposeBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="disposeCode" column="DISPOSE_CODE" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="verificationDate" column="VERIFICATION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="astTypeCode" column="AST_TYPE_CODE" jdbcType="VARCHAR"/>
+        <result property="astTypeName" column="AST_TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="cost" column="COST" jdbcType="OTHER"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="disposetypeCode" column="DISPOSETYPE_CODE" jdbcType="VARCHAR"/>
+        <result property="contactPerson" column="CONTACT_PERSON" jdbcType="VARCHAR"/>
+        <result property="contactTel" column="CONTACT_TEL" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="processinstid" column="PROCESSINSTID" jdbcType="VARCHAR"/>
+        <result property="approvalPost" column="APPROVAL_POST" jdbcType="VARCHAR"/>
+        <result property="documentNumber" column="DOCUMENT_NUMBER" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAstDisposeBillList" parameterType="com.cxnet.asset.check.domain.AstCheckBill"
+            resultMap="AstDisposeBillMap">
+        select
+        t0.ID,t0.DISPOSE_CODE,t0.CREATE_BY,t0.CREATE_NAME,t0.CREATE_TIME,t0.UNIT_ID,t0.VERIFICATION_DATE,t0.AST_TYPE_CODE,t0.AST_TYPE_NAME,t0.COST,t0.QTY,t0.DISPOSETYPE_CODE,t0.CONTACT_PERSON,t0.CONTACT_TEL,t0.STATUS,t0.REMARK,t0.UPDATE_BY,t0.UPDATE_TIME,t0.EXTEND1,t0.EXTEND2,t0.EXTEND3,t0.EXTEND4,t0.EXTEND5,t0.DEL_FLAG,t0.PROCESSINSTID,t0.APPROVAL_POST,t0.DOCUMENT_NUMBER,t0.SORT,
+        t1.dept_code as unit_code,
+        t1.dept_name as unit_name,
+        t0.dept_id,
+        t2.dept_code as dept_code,
+        t2.dept_name as dept_name
+        from CXRD_NK_DEV.AST_DISPOSE_BILL t0
+        left join sys_dept t1
+        on t0.unit_id = t1.dept_id
+        left join sys_dept t2
+        on t0.dept_id = t2.dept_id
+        <where>
+            <if test="id != null and id != ''">
+                and t0.ID = #{id}
+            </if>
+            <if test="disposeCode != null and disposeCode != ''">
+                and t0.DISPOSE_CODE like concat(concat('%', #{disposeCode}), '%')
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and t0.CREATE_BY = #{createBy}
+            </if>
+            <if test="createName != null and createName != ''">
+                and t0.CREATE_NAME like concat(concat('%', #{createName}), '%')
+            </if>
+            <if test="createTime != null">
+                and t0.CREATE_TIME = #{createTime}
+            </if>
+            <if test="unitId != null and unitId != ''">
+                and t0.UNIT_ID = #{unitId}
+            </if>
+            <if test="unitCode != null and unitCode != ''">
+                and t0.UNIT_CODE = #{unitCode}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and t0.UNIT_NAME = #{unitName}
+            </if>
+            <if test="verificationDate != null">
+                and t0.VERIFICATION_DATE = #{verificationDate}
+            </if>
+            <if test="astTypeCode != null and astTypeCode != ''">
+                and t0.AST_TYPE_CODE = #{astTypeCode}
+            </if>
+            <if test="astTypeName != null and astTypeName != ''">
+                and t0.AST_TYPE_NAME = #{astTypeName}
+            </if>
+            <if test="cost != null">
+                and t0.COST = #{cost}
+            </if>
+            <if test="qty != null">
+                and t0.QTY = #{qty}
+            </if>
+            <if test="disposetypeCode != null and disposetypeCode != ''">
+                and t0.DISPOSETYPE_CODE = #{disposetypeCode}
+            </if>
+            <if test="contactPerson != null and contactPerson != ''">
+                and t0.CONTACT_PERSON = #{contactPerson}
+            </if>
+            <if test="contactTel != null and contactTel != ''">
+                and t0.CONTACT_TEL = #{contactTel}
+            </if>
+            <if test='status == "0" '>and t0.status in ('0','9')</if>
+            <if test='status == "1" '>and t0.status in ('1','7')</if>
+            <if test='status == "2" '>and t0.status not in ('0','2')</if>
+            <if test='status == "3" '>and t0.status = '2'</if>
+            <if test="status == null or status == ''">and t0.status != '0' or ( t0.status = '0' and t0.create_by =
+                #{createBy} )
+            </if>
+            <if test="remark != null and remark != ''">
+                and t0.REMARK = #{remark}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and t0.UPDATE_BY = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and t0.UPDATE_TIME = #{updateTime}
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                and t0.EXTEND1 = #{extend1}
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                and t0.EXTEND2 = #{extend2}
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                and t0.EXTEND3 = #{extend3}
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                and t0.EXTEND4 = #{extend4}
+            </if>
+            <if test="extend5 != null and extend5 != ''">
+                and t0.EXTEND5 = #{extend5}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and t0.DEL_FLAG = #{delFlag}
+            </if>
+            <if test="processinstid != null and processinstid != ''">
+                and t0.PROCESSINSTID = #{processinstid}
+            </if>
+            <if test="approvalPost != null and approvalPost != ''">
+                and t0.APPROVAL_POST = #{approvalPost}
+            </if>
+            <if test="documentNumber != null and documentNumber != ''">
+                and t0.DOCUMENT_NUMBER like concat(concat('%', #{documentNumber}), '%')
+            </if>
+            <if test="sort != null">
+                and t0.SORT = #{sort}
+            </if>
+            <if test="startTime != null">and t0.create_time &gt;= #{startTime,jdbcType=DATE}</if>
+            <if test="endTime != null">and t0.create_time &lt;= #{endTime,jdbcType=DATE}</if>
+            <if test="piids != null and piids.size > 0">
+                AND t0.processinstid IN
+                <trim suffixOverrides=" OR t0.processinstid IN()">
+                    <foreach collection="piids" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR t0.processinstid IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+            <if test="deptIds != null and deptIds.size > 0 ">
+                AND t0.dept_id IN
+                <foreach collection="deptIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

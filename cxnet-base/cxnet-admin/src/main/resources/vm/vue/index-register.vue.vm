@@ -1,0 +1,492 @@
+<template>
+  <div class="app-container">
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="24">
+        <el-col :span="1.5">
+          <el-button
+              type="primary"
+              class="el-icon-document"
+              size="mini"
+              @click="handleUpdate"
+              v-hasPermi="['${moduleName}:${businessName}:update']"> 保存
+          </el-button>
+        </el-col>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-card>
+        <div class="center-title">$options.register.title</div>
+        <div class="center-hr"></div>
+        <el-row style="line-height: 50px; margin-left: 50px;">
+          <el-col :span="6" :xs="24">
+            资产编号 : {{form.id || "自动编号"}}
+          </el-col>
+          <el-col :span="6" :xs="24">
+            资产状态 : {{form.type || "待审核"}}
+          </el-col>
+          <el-col :span="6" :xs="24">
+            单位名称 : {{form.deptName || "系统组"}}
+          </el-col>
+          <el-col :span="6" :xs="24">
+            修改日期 : {{form.createDate || nowFormatDate('Y-M-D')}}
+          </el-col>
+        </el-row>
+        <div class="card-one">基本信息</div>
+        <el-row style="margin-top: 20px;">
+          <el-form ref="queryForm" :model="queryParams" label-width="100px">
+              #set($columnArr=[])
+              #foreach($column in $options.register.columns)
+                  #if($column.isEdit == "1")
+                      #if($columnArr.add($column))#end
+                  #end
+              #end
+              #foreach($column in $columnArr)
+                  #set($field=$column.javaField)
+                  #if($column.insert && !$column.pk)
+                      #if(($column.usableColumn) || (!$column.superColumn))
+                          #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                          #if($parentheseIndex != -1)
+                              #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                          #else
+                              #set($comment=$column.columnComment)
+                          #end
+                          #set($dictType=$column.dictType)
+                          #if($column.htmlType == "input")
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :" prop="${field}">
+                                <el-input
+                                    v-model="queryParams.${field}"
+                                    placeholder="请输入${comment}"/>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "select" &&  $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :">
+                                <el-select
+                                    v-model="queryParams.${field}"
+                                    placeholder="请选择${comment}"
+                                    clearable
+                                    filterable>
+                                  <el-option
+                                      v-for="dict in ${field}Options"
+                                      :key="dict.dictValue"
+                                      :label="dict.dictLabel"
+                                      :value="dict.dictValue"></el-option>
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "select" && $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :">
+                                <el-select
+                                    v-model="queryParams.${field}"
+                                    placeholder="请选择${comment}"
+                                    clearable
+                                    filterable>
+                                  <el-option label="请选择字典生成" value=""/>
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "radio" && $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :">
+                                <el-radio-group v-model="queryParams.${field}">
+                                  <el-radio
+                                      v-for="dict in ${field}Options"
+                                      :key="dict.dictValue"
+                                      :label="dict.dictValue">{{dict.dictLabel}}
+                                  </el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "radio" && $dictType)
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :">
+                                <el-radio-group v-model="queryParams.${field}">
+                                  <el-radio label="1">请选择字典生成</el-radio>
+                                </el-radio-group>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "datetime")
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :" prop="${field}">
+                                <el-date-picker
+                                    clearable size="small"
+                                    v-model="queryParams.${field}"
+                                    type="date"
+                                    value-format="yyyy-MM-dd"
+                                    placeholder="选择${comment}">
+                                </el-date-picker>
+                              </el-form-item>
+                            </el-col>
+                          #elseif($column.htmlType == "textarea")
+                            <el-col :span="24/$options.col" :xs="24">
+                              <el-form-item label="${comment} :" prop="${field}">
+                                <el-input
+                                    v-model="queryParams.${field}" type="textarea"
+                                    placeholder="请输入内容"/>
+                              </el-form-item>
+                            </el-col>
+                          #end
+                      #end
+                      #set($intString = $options.col)
+                      #set($Integer = 0)
+                      #if($intString != 1 && $intString == $velocityCount ||
+                          $countCol == $velocityCount && $countCol != $columnArr.size())
+                          #set($countCol=$velocityCount+$Integer.parseInt($intString))
+                      #end
+                  #end
+              #end
+          </el-form>
+        </el-row>
+        <el-row>
+          <div class="card-one" style="clear: both; margin-top: 50px">详情信息</div>
+          <el-col :span="18" :xs="24">
+            <el-table
+                style="margin-top: 10px;width: 99%;"
+                :height="screenHeight-330"
+                v-loading="loading"
+                :data="${businessName}List"
+                border
+                @selection-change="handleSelectionChange">
+              <el-table-column type="selection" width="55" align="center"/>
+                #foreach($column in $options.register.columns)
+                    #if($column.isList == "1")
+                        #set($javaField=$column.javaField)
+                        #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                        #if($parentheseIndex != -1)
+                            #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                        #else
+                            #set($comment=$column.columnComment)
+                        #end
+                        #if($column.htmlType == "datetime")
+                          <el-table-column label="${comment}" align="center" prop="${javaField}" min-width="180">
+                            <template slot-scope="scope">
+                              <span>{{ parseTime(scope.row.${javaField}) }}</span>
+                            </template>
+                          </el-table-column>
+                        #elseif($column.dictType)
+                          <el-table-column label="${comment}" align="center" prop="${javaField}"
+                                           :formatter="${javaField}Format" min-width="120"
+                                           :show-overflow-tooltip="true"/>
+                        #elseif("" != $javaField)
+                          <el-table-column label="${comment}" align="center" prop="${javaField}" min-width="120"
+                                           :show-overflow-tooltip="true"/>
+                        #end
+                    #end
+                #end
+            </el-table>
+          </el-col>
+          <el-col :span="6" :xs="24">
+            <div class="left_table">
+              <el-row>
+                <div class="card-two" style="clear: both;">详情信息</div>
+                <el-form ref="queryForm" :model="queryParams" label-width="100px">
+                    #set($columnArr=[])
+                    #foreach($column in $options.register.columns)
+                        #if($column.isEdit == "1")
+                            #if($columnArr.add($column))#end
+                        #end
+                    #end
+                    #foreach($column in $columnArr)
+                        #set($field=$column.javaField)
+                        #if($column.insert && !$column.pk)
+                            #if(($column.usableColumn) || (!$column.superColumn))
+                                #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                                #if($parentheseIndex != -1)
+                                    #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                                #else
+                                    #set($comment=$column.columnComment)
+                                #end
+                                #set($dictType=$column.dictType)
+                                #if($column.htmlType == "input")
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :" prop="${field}">
+                                      <el-input
+                                          v-model="queryParams.${field}"
+                                          clearable
+                                          placeholder="请输入${comment}"/>
+                                    </el-form-item>
+                                  </el-col>
+                                #elseif($column.htmlType == "select" &&  $dictType)
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :">
+                                      <el-select
+                                          v-model="queryParams.${field}"
+                                          placeholder="请选择${comment}"
+                                          clearable
+                                          filterable>
+                                        <el-option
+                                            v-for="dict in ${field}Options"
+                                            :key="dict.dictValue"
+                                            :label="dict.dictLabel"
+                                            :value="dict.dictValue">
+                                        </el-option>
+                                      </el-select>
+                                    </el-form-item>
+                                  </el-col>
+                                #elseif($column.htmlType == "select" && $dictType)
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :">
+                                      <el-select
+                                          v-model="queryParams.${field}"
+                                          placeholder="请选择${comment}"
+                                          clearable
+                                          filterable>
+                                        <el-option label="请选择字典生成" value=""/>
+                                      </el-select>
+                                    </el-form-item>
+                                  </el-col>
+                                #elseif($column.htmlType == "radio" && $dictType)
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :">
+                                      <el-radio-group v-model="queryParams.${field}">
+                                        <el-radio
+                                            v-for="dict in ${field}Options"
+                                            :key="dict.dictValue"
+                                            :label="dict.dictValue">{{dict.dictLabel}}
+                                        </el-radio>
+                                      </el-radio-group>
+                                    </el-form-item>
+                                  </el-col>
+                                #elseif($column.htmlType == "radio" && $dictType)
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :">
+                                      <el-radio-group v-model="queryParams.${field}">
+                                        <el-radio label="1">请选择字典生成</el-radio>
+                                      </el-radio-group>
+                                    </el-form-item>
+                                  </el-col>
+                                #elseif($column.htmlType == "datetime")
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :" prop="${field}">
+                                      <el-date-picker
+                                          clearable size="small"
+                                          v-model="queryParams.${field}"
+                                          type="date"
+                                          clearable
+                                          value-format="yyyy-MM-dd"
+                                          placeholder="选择${comment}">
+                                      </el-date-picker>
+                                    </el-form-item>
+                                  </el-col>
+                                #elseif($column.htmlType == "textarea")
+                                  <el-col :span="24" :xs="24">
+                                    <el-form-item label="${comment} :" prop="${field}">
+                                      <el-input
+                                          v-model="queryParams.${field}"
+                                          type="textarea"
+                                          clearable
+                                          placeholder="请输入内容"/>
+                                    </el-form-item>
+                                  </el-col>
+                                #end
+                            #end
+                            #set($intString = $options.col)
+                            #set($Integer = 0)
+                            #if($intString != 1 && $intString == $velocityCount ||
+                                $countCol == $velocityCount && $countCol != $columnArr.size())
+                                #set($countCol=$velocityCount+$Integer.parseInt($intString))
+                            #end
+                        #end
+                    #end
+                </el-form>
+              </el-row>
+            </div>
+            <div style="text-align: center">
+              <el-button style="margin-top: 10px" class="el-icon-circle-plus" type="primary" size="mini">新增</el-button>
+              <el-button class="el-icon-document" type="primary" size="mini">重置</el-button>
+            </div>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-row>
+  </div>
+</template>
+
+<script>
+  import {
+    list${ClassName}, get${ClassName}, del${ClassName}, add${ClassName}, upd${ClassName}, exp${ClassName}
+  } from "@/api/${moduleName}/${businessName}";
+
+  export default {
+    name: '${BusinessName}',
+    components: {},
+    data() {
+      return {
+        // 动态宽度
+        screenWidth: '',
+        // 动态高度
+        screenHeight: '',
+        // 遮罩层
+        loading: true,
+        // 选中数组
+        ids: [],
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
+        // 总条数
+        total: 0,
+        // ${functionName}表格数据
+              ${businessName}List: [],
+        // 弹出层标题
+        title: "",
+        // 是否显示弹出层
+        open: false,
+          #foreach ($column in $options.register.columns)
+              #set($parentheseIndex=$column.columnComment.indexOf("（"))
+              #if($parentheseIndex != -1)
+                  #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+              #else
+                  #set($comment=$column.columnComment)
+              #end
+              #if(${column.dictType})
+                // $comment字典
+                      ${column.javaField}Options: [],
+              #end
+          #end
+        // 查询参数
+        queryParams: {
+          pageNum: 1,
+          pageSize: 30,
+            #foreach ($column in $options.register.columns)
+                #if($column.isQuery == "1")
+                        $column.javaField: undefined,
+                    #if($velocityCount != $options.register.columns.size())
+                    #end
+                #end
+            #end
+        },
+        // 表单参数
+        form: {},
+        // 表单校验
+        rules: {
+            #foreach ($column in $options.register.columns)
+                #if($column.required)
+                    #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                    #if($parentheseIndex != -1)
+                        #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                    #else
+                        #set($comment=$column.columnComment)
+                    #end
+                    #set($comment=$column.columnComment)
+                  // $comment 校验
+                        $column.javaField: [{
+                    required: true, message: "$comment不能为空", trigger: "blur"
+                  }]#if($velocityCount != $options.register.columns.size()),
+                #end
+                #end
+            #end
+        },
+      }
+    },
+    created() {
+      this.getList();
+        #foreach ($column in $options.register.columns)
+            #if(${column.dictType})
+              this.getDicts("${column.dictType}").then(res => {
+                this.${column.javaField}Options = res.data;
+              });
+            #end
+        #end
+    },
+    mounted() {
+      this.windowRender();
+    },
+    methods: {
+      /** 窗口动态渲染 */
+      windowRender() {
+        this.screenWidth = document.body.clientWidth;
+        this.screenHeight = document.body.clientHeight;
+        window.onresize = () => {
+          this.screenWidth = document.body.clientWidth;
+          this.screenHeight = document.body.clientHeight;
+        };
+      },
+      /** 查询${functionName}集合 */
+      getList() {
+        this.loading = true;
+        list${ClassName}(this.queryParams).then(res => {
+          this.${businessName}List = res.data.rows;
+          this.total = res.data.total || 0;
+          this.loading = false;
+        }, error => {
+          this.loading = false;
+        });
+      },
+      /** 多选框选中数据 */
+      handleSelectionChange(selection) {
+        this.ids = selection.map(item => item.${pkColumn.javaField})
+        this.single = selection.length != 1
+        this.multiple = !selection.length
+      },
+      /** 保存按钮 */
+      handleUpdate() {
+
+      },
+    }
+  }
+</script>
+<style scoped>
+  .center-hr {
+    width: 335px;
+    margin: 0 auto;
+    height: 4px;
+    border-top: 1px solid #409EFF;
+    border-bottom: 1px solid #409EFF;
+  }
+
+  .center-title {
+    width: 285px;
+    margin: 0 auto;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 24px;
+    color: #409EFF;
+  }
+
+  .card-one {
+    width: 100%;
+    height: 30px;
+    background-color: #409EFF;
+    border-radius: 7px 7px 0 0;
+    padding-left: 9px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .card-two {
+    width: 100%;
+    height: 30px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 30px;
+    background-color: #c1e8fe;
+  }
+
+  .left_table {
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+  }
+
+  /deep/ .el-table .el-table__header-wrapper th {
+    background-color: #c1e8fe;
+    font-weight: unset;
+  }
+
+  /deep/ .el-input__inner {
+    border: 0 none;
+    border-bottom: 1px solid #409EFF;
+    border-radius: 0px;
+  }
+
+  /deep/ .el-form-item__label {
+    color: #409EFF;
+  }
+</style>
+
+

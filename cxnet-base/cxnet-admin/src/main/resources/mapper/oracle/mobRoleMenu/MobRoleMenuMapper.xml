@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.role.mapper.MobRoleMenuMapper">
+
+    <resultMap type="com.cxnet.project.system.role.domain.MobRoleMenu" id="MobRoleMenuMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="roleId" column="ROLE_ID" jdbcType="VARCHAR"/>
+        <result property="mobMenuId" column="MOB_MENU_ID" jdbcType="VARCHAR"/>
+        <result property="dataScope" column="DATA_SCOPE" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="MobRoleMenuVo">
+        select t0.ID,
+               t0.ROLE_ID,
+               t0.MOB_MENU_ID,
+               t0.DATA_SCOPE
+        from MOB_ROLE_MENU t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="MobRoleMenuMap">
+        <include refid="MobRoleMenuVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="roleId != null and roleId != ''">and t0.ROLE_ID = #{roleId}</if>
+            <if test="mobMenuId != null and mobMenuId != ''">and t0.MOB_MENU_ID = #{mobMenuId}</if>
+            <if test="dataScope != null and dataScope != ''">and t0.DATA_SCOPE = #{dataScope}</if>
+        </where>
+    </select>
+</mapper>

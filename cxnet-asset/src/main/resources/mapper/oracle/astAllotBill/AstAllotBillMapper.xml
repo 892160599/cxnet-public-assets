@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.allot.mapper.AstAllotBillMapper">
+
+    <resultMap type="com.cxnet.asset.allot.domain.AstAllotBill" id="AstAllotBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="allotCode" column="ALLOT_CODE" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptIdOut" column="DEPT_ID_OUT" jdbcType="VARCHAR"/>
+        <result property="deptCodeOut" column="DEPT_CODE_OUT" jdbcType="VARCHAR"/>
+        <result property="deptNameOut" column="DEPT_NAME_OUT" jdbcType="VARCHAR"/>
+        <result property="empIdOut" column="EMP_ID_OUT" jdbcType="VARCHAR"/>
+        <result property="empCodeOut" column="EMP_CODE_OUT" jdbcType="VARCHAR"/>
+        <result property="empNameOut" column="EMP_NAME_OUT" jdbcType="VARCHAR"/>
+        <result property="empTelOut" column="EMP_TEL_OUT" jdbcType="VARCHAR"/>
+        <result property="deptIdIn" column="DEPT_ID_IN" jdbcType="VARCHAR"/>
+        <result property="deptCodeIn" column="DEPT_CODE_IN" jdbcType="VARCHAR"/>
+        <result property="deptNameIn" column="DEPT_NAME_IN" jdbcType="VARCHAR"/>
+        <result property="empIdIn" column="EMP_ID_IN" jdbcType="VARCHAR"/>
+        <result property="empCodeIn" column="EMP_CODE_IN" jdbcType="VARCHAR"/>
+        <result property="empNameIn" column="EMP_NAME_IN" jdbcType="VARCHAR"/>
+        <result property="empTelIn" column="EMP_TEL_IN" jdbcType="VARCHAR"/>
+        <result property="verificationDate" column="VERIFICATION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="cost" column="COST" jdbcType="OTHER"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="unitIdOut" column="UNIT_ID_OUT" jdbcType="VARCHAR"/>
+        <result property="unitCodeOut" column="UNIT_CODE_OUT" jdbcType="VARCHAR"/>
+        <result property="unitNameOut" column="UNIT_NAME_OUT" jdbcType="VARCHAR"/>
+        <result property="unitIdIn" column="UNIT_ID_IN" jdbcType="VARCHAR"/>
+        <result property="unitCodeIn" column="UNIT_CODE_IN" jdbcType="VARCHAR"/>
+        <result property="unitNameIn" column="UNIT_NAME_IN" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="processinstid" column="PROCESSINSTID" jdbcType="VARCHAR"/>
+        <result property="approvalPost" column="APPROVAL_POST" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="operatorId" column="OPERATOR_ID" jdbcType="VARCHAR"/>
+        <result property="operatorCode" column="OPERATOR_CODE" jdbcType="VARCHAR"/>
+        <result property="operatorName" column="OPERATOR_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstAllotBillVo">
+        select t0.ID,
+               t0.ALLOT_CODE,
+               t0.CREATE_BY,
+               t0.CREATE_NAME,
+               t0.CREATE_TIME,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.DEPT_ID_OUT,
+               t0.DEPT_CODE_OUT,
+               t0.DEPT_NAME_OUT,
+               t0.EMP_ID_OUT,
+               t0.EMP_CODE_OUT,
+               t0.EMP_NAME_OUT,
+               t0.EMP_TEL_OUT,
+               t0.DEPT_ID_IN,
+               t0.DEPT_CODE_IN,
+               t0.DEPT_NAME_IN,
+               t0.EMP_ID_IN,
+               t0.EMP_CODE_IN,
+               t0.EMP_NAME_IN,
+               t0.EMP_TEL_IN,
+               t0.VERIFICATION_DATE,
+               t0.COST,
+               t0.QTY,
+               t0.UNIT_ID_OUT,
+               t0.UNIT_CODE_OUT,
+               t0.UNIT_NAME_OUT,
+               t0.UNIT_ID_IN,
+               t0.UNIT_CODE_IN,
+               t0.UNIT_NAME_IN,
+               t0.STATUS,
+               t0.REMARK,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.DEL_FLAG,
+               t0.PROCESSINSTID,
+               t0.APPROVAL_POST,
+               t0.SORT,
+               t0.OPERATOR_ID,
+               t0.OPERATOR_CODE,
+               t0.OPERATOR_NAME
+        from AST_ALLOT_BILL t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstAllotBillMap">
+        select
+        t0.ID, t0.ALLOT_CODE, t0.CREATE_BY, t0.CREATE_NAME, t0.CREATE_TIME, t0.UNIT_ID, t0.DEPT_ID_OUT,
+        t0.DEPT_CODE_OUT, t0.DEPT_NAME_OUT, t0.EMP_ID_OUT, t0.EMP_CODE_OUT, t0.EMP_NAME_OUT, t0.EMP_TEL_OUT,
+        t0.DEPT_ID_IN, t0.DEPT_CODE_IN, t0.DEPT_NAME_IN, t0.EMP_ID_IN, t0.EMP_CODE_IN, t0.EMP_NAME_IN, t0.EMP_TEL_IN,
+        t0.VERIFICATION_DATE, t0.COST, t0.QTY, t0.UNIT_ID_OUT, t0.UNIT_CODE_OUT, t0.UNIT_NAME_OUT, t0.UNIT_ID_IN,
+        t0.UNIT_CODE_IN, t0.UNIT_NAME_IN, t0.STATUS, t0.REMARK, t0.UPDATE_BY, t0.UPDATE_TIME, t0.EXTEND1, t0.EXTEND2,
+        t0.EXTEND3, t0.EXTEND4, t0.EXTEND5, t0.DEL_FLAG, t0.PROCESSINSTID, t0.APPROVAL_POST, t0.SORT, t0.OPERATOR_ID,
+        t0.OPERATOR_CODE, t0.OPERATOR_NAME,
+        t1.DEPT_CODE as UNIT_CODE,
+        t1.DEPT_NAME as UNIT_NAME,
+        t0.DEPT_ID as DEPT_ID,
+        t2.DEPT_CODE as DEPT_CODE,
+        t2.DEPT_NAME as DEPT_NAME
+        from AST_ALLOT_BILL t0
+        left join sys_dept t1
+        on t0.unit_id = t1.dept_id
+        left join sys_dept t2
+        on t0.dept_id = t2.dept_id
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="allotCode != null and allotCode != ''">and t0.ALLOT_CODE like
+                concat(concat('%',#{allotCode}),'%'
+            </if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <!--<if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>-->
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="deptIdOut != null and deptIdOut != ''">and t0.DEPT_ID_OUT = #{deptIdOut}</if>
+            <if test="deptCodeOut != null and deptCodeOut != ''">and t0.DEPT_CODE_OUT = #{deptCodeOut}</if>
+            <if test="deptNameOut != null and deptNameOut != ''">and t0.DEPT_NAME_OUT = #{deptNameOut}</if>
+            <if test="empIdOut != null and empIdOut != ''">and t0.EMP_ID_OUT = #{empIdOut}</if>
+            <if test="empCodeOut != null and empCodeOut != ''">and t0.EMP_CODE_OUT = #{empCodeOut}</if>
+            <if test="empNameOut != null and empNameOut != ''">and t0.EMP_NAME_OUT = #{empNameOut}</if>
+            <if test="empTelOut != null and empTelOut != ''">and t0.EMP_TEL_OUT = #{empTelOut}</if>
+            <if test="deptIdIn != null and deptIdIn != ''">and t0.DEPT_ID_IN = #{deptIdIn}</if>
+            <if test="deptCodeIn != null and deptCodeIn != ''">and t0.DEPT_CODE_IN = #{deptCodeIn}</if>
+            <if test="deptNameIn != null and deptNameIn != ''">and t0.DEPT_NAME_IN = #{deptNameIn}</if>
+            <if test="empIdIn != null and empIdIn != ''">and t0.EMP_ID_IN = #{empIdIn}</if>
+            <if test="empCodeIn != null and empCodeIn != ''">and t0.EMP_CODE_IN = #{empCodeIn}</if>
+            <if test="empNameIn != null and empNameIn != ''">and t0.EMP_NAME_IN like
+                concat(concat('%',#{empNameIn}),'%')
+            </if>
+            <if test="empTelIn != null and empTelIn != ''">and t0.EMP_TEL_IN = #{empTelIn}</if>
+            <if test="verificationDate != null">and t0.VERIFICATION_DATE = #{verificationDate}</if>
+            <if test="cost != null">and t0.COST = #{cost}</if>
+            <if test="qty != null">and t0.QTY = #{qty}</if>
+            <!--<if test="unitIdOut != null and unitIdOut != ''">and t0.UNIT_ID_OUT = #{unitIdOut}</if>
+            <if test="unitCodeOut != null and unitCodeOut != ''">and t0.UNIT_CODE_OUT = #{unitCodeOut}</if>
+            <if test="unitNameOut != null and unitNameOut != ''">and t0.UNIT_NAME_OUT = #{unitNameOut}</if>
+            <if test="unitIdIn != null and unitIdIn != ''">and t0.UNIT_ID_IN = #{unitIdIn}</if>
+            <if test="unitCodeIn != null and unitCodeIn != ''">and t0.UNIT_CODE_IN = #{unitCodeIn}</if>
+            <if test="unitNameIn != null and unitNameIn != ''">and t0.UNIT_NAME_IN = #{unitNameIn}</if>-->
+            <if test='status == "0" '>and t0.status in ('0','9')</if>
+            <if test='status == "1" '>and t0.status in ('1','7')</if>
+            <if test='status == "2" '>and t0.status not in ('0','2')</if>
+            <if test='status == "3" '>and t0.status = '2'</if>
+            <if test="status == null or status == ''">and t0.status != '0' or ( t0.status = '0' and t0.create_by =
+                #{createBy} )
+            </if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="processinstid != null and processinstid != ''">and t0.PROCESSINSTID = #{processinstid}</if>
+            <if test="approvalPost != null and approvalPost != ''">and t0.APPROVAL_POST = #{approvalPost}</if>
+            <if test="sort != null">and t0.SORT = #{sort}</if>
+            <if test="operatorId != null and operatorId != ''">and t0.OPERATOR_ID = #{operatorId}</if>
+            <if test="operatorCode != null and operatorCode != ''">and t0.OPERATOR_CODE = #{operatorCode}</if>
+            <if test="operatorName != null and operatorName != ''">and t0.OPERATOR_NAME = #{operatorName}</if>
+            <if test="startTime != null">and t0.create_time &gt;= #{startTime,jdbcType=DATE}</if>
+            <if test="endTime != null">and t0.create_time &lt;= #{endTime,jdbcType=DATE}</if>
+            <if test="selectType != null and selectType != ''">
+                <if test='selectType == "0" '>
+                    and t0.UNIT_ID_OUT = #{unitId}
+                </if>
+                <if test='selectType == "1" '>
+                    AND t0.status in ('1','2')
+                    and t0.UNIT_ID_IN = #{unitId}
+                </if>
+            </if>
+            <if test="piids != null and piids.size > 0">
+                AND t0.processinstid IN
+                <trim suffixOverrides=" OR t0.processinstid IN()">
+                    <foreach collection="piids" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR t0.processinstid IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </select>
+</mapper>

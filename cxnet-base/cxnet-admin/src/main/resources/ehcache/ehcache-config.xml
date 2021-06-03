@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="ehcache-config" updateCheck="false">
+
+    <diskStore path="java.io.tmpdir/Tmp_EhCache"/>
+
+    <!--默认缓存-->
+    <defaultCache
+            eternal="false"
+            maxElementsInMemory="0"
+            overflowToDisk="false"
+            diskPersistent="false"
+            timeToIdleSeconds="0"
+            timeToLiveSeconds="0"
+            memoryStoreEvictionPolicy="LRU"/>
+
+    <!--权限缓存-->
+    <cache name="CachePreAuthorizeProcessor"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="false">
+        <searchable>
+            <searchAttribute name="searchValue" expression="value"/>
+        </searchable>
+    </cache>
+
+    <!--消息记录缓存-->
+    <cache name="CacheMessage"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="false">
+        <searchable>
+            <searchAttribute name="id" expression="value.getId()"/>
+            <searchAttribute name="type" expression="value.getType()"/>
+            <searchAttribute name="status" expression="value.getStatus()"/>
+            <searchAttribute name="searchValue" expression="value"/>
+            <searchAttribute name="xxx"
+                             class="com.cxnet.project.assets.data.cache.attribute.StatusAttribute"/>
+
+        </searchable>
+    </cache>
+
+    <!--字典类型缓存-->
+    <cache name="CacheDictType"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="false">
+        <searchable>
+            <searchAttribute name="dictId" expression="value.getDictId()"/>
+            <searchAttribute name="dictName" expression="value.getDictName()"/>
+            <searchAttribute name="dictType" expression="value.getDictType()"/>
+            <searchAttribute name="status" expression="value.getStatus()"/>
+            <searchAttribute name="createTime" expression="value.getCreateTime()"/>
+            <searchAttribute name="searchValue" expression="value"/>
+        </searchable>
+    </cache>
+
+    <!--字典数据缓存-->
+    <cache name="CacheDictData"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="false">
+        <searchable>
+            <searchAttribute name="dictCode" expression="value.getDictCode()"/>
+            <searchAttribute name="dictName" expression="value.getDictName()"/>
+            <searchAttribute name="dictType" expression="value.getDictType()"/>
+            <searchAttribute name="dictSort" expression="value.getDictSort()"/>
+            <searchAttribute name="status" expression="value.getStatus()"/>
+            <searchAttribute name="createTime" expression="value.getCreateTime()"/>
+            <searchAttribute name="searchValue" expression="value"/>
+        </searchable>
+    </cache>
+
+
+</ehcache>

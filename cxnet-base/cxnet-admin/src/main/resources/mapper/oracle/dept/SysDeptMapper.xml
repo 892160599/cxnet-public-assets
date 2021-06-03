@@ -1,0 +1,995 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.dept.mapper.SysDeptMapper">
+
+    <resultMap type="com.cxnet.project.system.dept.domain.SysDept" id="SysDeptResult">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptCode" column="dept_code"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="fullName" column="full_name"/>
+        <result property="deptType" column="dept_type"/>
+        <result property="unitType" column="unit_type"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="fax" column="fax"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="parentName" column="parent_name"/>
+        <result property="legalPerson" column="legal_person"/>
+        <result property="businessName" column="business_name"/>
+        <result property="financeLeader" column="finance_leader"/>
+        <result property="zoningCode" column="zoning_code"/>
+        <result property="creditCode" column="credit_code"/>
+        <result property="unitAdress" column="unit_adress"/>
+        <result property="unitQuality" column="unit_quality"/>
+        <result property="gradeName" column="grade_name"/>
+        <result property="isYsunit" column="is_ysunit"/>
+        <result property="budgeLevel" column="budge_level"/>
+        <result property="unitTrade" column="unit_trade"/>
+        <result property="goverFunction" column="gover_function"/>
+        <result property="affilUnitId" column="affil_unit_id"/>
+        <result property="affilUnitCode" column="affil_unit_code"/>
+        <result property="affilUnitName" column="affil_unit_name"/>
+        <result property="parentDeptId" column="parent_dept_id"/>
+        <result property="parentDeptCode" column="parent_dept_code"/>
+        <result property="parentDeptName" column="parent_dept_name"/>
+
+        <result property="deptLeadId" column="dept_lead_id"/>
+        <result property="deptLeadCode" column="dept_lead_code"/>
+        <result property="deptLeadName" column="dept_lead_name"/>
+        <result property="fgLeadId" column="fg_lead_id"/>
+        <result property="fgLeadCode" column="fg_lead_code"/>
+        <result property="fgLeadName" column="fg_lead_name"/>
+        <result property="financialCode" column="financial_code"/>
+        <result property="financialName" column="financial_name"/>
+        <result property="financialId" column="financial_id"/>
+        <result property="agencyCode" column="AGENCY_CODE"/>
+        <result property="isReim" column="is_reim"/>
+    </resultMap>
+
+    <resultMap type="com.cxnet.project.system.dept.domain.SysDeptVO" id="SysDeptResultVO">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptCode" column="dept_code"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="fullName" column="full_name"/>
+    </resultMap>
+
+
+    <resultMap id="rpcDeptMap" type="com.cxnet.rpc.domain.system.deptrpc.SysDeptRpc">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptCode" column="dept_code"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="fullName" column="full_name"/>
+        <result property="deptType" column="dept_type"/>
+        <result property="unitType" column="unit_type"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="fax" column="fax"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="parentName" column="parent_name"/>
+        <result property="legalPerson" column="legal_person"/>
+        <result property="businessName" column="business_name"/>
+        <result property="financeLeader" column="finance_leader"/>
+        <result property="zoningCode" column="zoning_code"/>
+        <result property="creditCode" column="credit_code"/>
+        <result property="unitAdress" column="unit_adress"/>
+        <result property="unitQuality" column="unit_quality"/>
+        <result property="gradeName" column="grade_name"/>
+        <result property="isYsunit" column="is_ysunit"/>
+        <result property="budgeLevel" column="budge_level"/>
+        <result property="unitTrade" column="unit_trade"/>
+        <result property="goverFunction" column="gover_function"/>
+        <result property="affilUnitId" column="affil_unit_id"/>
+        <result property="affilUnitCode" column="affil_unit_code"/>
+        <result property="affilUnitName" column="affil_unit_name"/>
+        <result property="parentDeptId" column="parent_dept_id"/>
+        <result property="parentDeptCode" column="parent_dept_code"/>
+        <result property="parentDeptName" column="parent_dept_name"/>
+        <result property="deptLeadId" column="dept_lead_id"/>
+        <result property="deptLeadCode" column="dept_lead_code"/>
+        <result property="deptLeadName" column="dept_lead_name"/>
+        <result property="fgLeadId" column="fg_lead_id"/>
+        <result property="fgLeadCode" column="fg_lead_code"/>
+        <result property="fgLeadName" column="fg_lead_name"/>
+        <result property="financialCode" column="financial_code"/>
+        <result property="financialName" column="financial_name"/>
+        <result property="financialId" column="financial_id"/>
+        <result property="agencyCode" column="AGENCY_CODE"/>
+        <result property="isReim" column="is_reim"/>
+    </resultMap>
+
+    <sql id="selectDeptVo">
+        select d.dept_id,
+               d.parent_id,
+               d.dept_code,
+               d.parent_code,
+               d.ancestors,
+               d.dept_name,
+               d.full_name,
+               d.dept_type,
+               d.unit_type,
+               d.order_num,
+               d.leader,
+               d.phone,
+               d.email,
+               d.fax,
+               d.description,
+               d.status,
+               d.del_flag,
+               d.create_by,
+               d.create_time,
+               d.update_by,
+               d.update_time,
+               d.legal_person,
+               d.business_name,
+               d.finance_leader,
+               d.zoning_code,
+               d.credit_code,
+               d.unit_adress,
+               d.unit_quality,
+               d.grade_name,
+               d.is_ysunit,
+               d.budge_level,
+               d.unit_trade,
+               d.gover_function,
+               d.affil_unit_id,
+               d.affil_unit_code,
+               d.affil_unit_name,
+               d.parent_dept_id,
+               d.parent_dept_code,
+               d.parent_dept_name,
+               e.dept_name parent_name,
+               d.dept_lead_id,
+               d.dept_lead_code,
+               d.dept_lead_name,
+               d.fg_lead_id,
+               d.fg_lead_code,
+               d.fg_lead_name,
+               d.financial_code,
+               d.financial_name,
+               d.financial_id,
+               d.AGENCY_CODE,
+               d.IS_REIM
+        from sys_dept d
+                 left join sys_dept e
+                           on d.parent_id = e.dept_id
+    </sql>
+
+    <select id="orgTreeSelectList" resultType="java.util.HashMap">
+        select * from v_sys_org_treeselect
+        <where>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="orgUserTreeSelectList" resultType="java.util.HashMap">
+        SELECT v.*
+        FROM v_sys_org_treeselect v
+        UNION ALL
+        SELECT u.USER_ID   AS "id",
+               u.DEPT_ID   AS "pid",
+               u.NICK_NAME AS "label",
+               '3'         AS "type",
+               u.USER_NAME AS "code",
+               ''          AS "pCode",
+               ''          AS "icon"
+        FROM SYS_USER u
+        WHERE u.DEL_FLAG = '0'
+    </select>
+
+
+    <select id="selectRpcDeptById" resultMap="rpcDeptMap">
+        <include refid="selectDeptVo"/>
+        where d.dept_id=#{deptId}
+    </select>
+
+    <select id="selectRpcDeptByCode" resultMap="rpcDeptMap">
+        <include refid="selectDeptVo"/>
+        where d.dept_code=#{deptCode} and d.parent_id = #{parentId}
+    </select>
+
+    <select id="selectDeptList" parameterType="com.cxnet.project.system.dept.domain.SysDept" resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        where d.del_flag = '0'
+        <if test="deptType != null and deptType == 0">
+            AND d.dept_type = #{deptType}
+        </if>
+        <if test="parentId != null and parentId != 0">
+            AND d.parent_id = #{parentId}
+        </if>
+        <if test="deptCode != null and deptCode != ''">
+            AND d.dept_code = #{deptCode}
+        </if>
+        <if test="deptName != null and deptName != ''">
+            AND d.dept_name like concat(concat('%', #{deptName}), '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND d.status = #{status}
+        </if>
+        <if test="unitType != null and unitType != ''">
+            AND d.unit_type = #{unitType}
+        </if>
+        or d.parent_id = '0'
+        <!-- 数据范围过滤 -->
+        ${dataScope}
+        order by d.dept_code, d.order_num
+    </select>
+
+    <select id="selectDeptListUnit" parameterType="string" resultMap="SysDeptResult">
+        select d.*
+        from (select d.*
+              from sys_dept d
+                  start
+              with d.dept_id = #{deptId}
+              connect by prior parent_id = dept_id
+              union all
+              select d.*
+              from sys_dept d
+              where d.parent_id = #{deptId}) d
+        where d.del_flag = '0'
+          and d.status = '0'
+          and dept_type = '0'
+        order by d.dept_code, d.order_num
+    </select>
+
+    <select id="selectDeptListByRoleId" parameterType="string" resultType="string">
+        SELECT d.dept_id,
+               d.parent_id
+        FROM sys_dept d
+                 LEFT JOIN sys_role_dept rd ON d.dept_id = rd.dept_id
+        WHERE rd.role_id = #{roleId}
+          and rd.menu_id = #{menuId}
+          AND d.dept_code NOT IN (SELECT d.parent_code
+                                  FROM sys_dept d
+                                           INNER JOIN sys_role_dept rd
+                                                      ON d.dept_id = rd.dept_id AND rd.role_id = #{roleId} and
+                                                         rd.menu_id = #{menuId})
+    </select>
+    <!--根据单位id查询下面的部门-->
+    <select id="selectDeptListByUnitId" resultMap="rpcDeptMap">
+        <include refid="selectDeptVo"/>
+        where d.parent_id = #{unitId}
+        and d.dept_type = 1
+        and d.del_flag = '0'
+        and d.status = '0'
+        order by dept_code
+    </select>
+
+    <select id="selectDeptById" parameterType="string" resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        where d.dept_id = #{deptId}
+    </select>
+    <select id="selectDeptListByIds" parameterType="string" resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        where d.dept_id in
+        <foreach collection="array" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+
+    <select id="checkDeptExistUser" parameterType="string" resultType="int">
+        SELECT count(1)
+        FROM sys_user u
+                 LEFT JOIN sys_dept d ON d.dept_id = u.dept_id
+        WHERE d.dept_code = #{deptCode}
+          AND u.del_flag = '0'
+    </select>
+
+    <select id="hasChildByDeptCode" resultType="int">
+        select count(1) from sys_dept
+        <where>
+            del_flag = '0'
+            <if test="deptCode!=null and deptCode!=''">
+                and parent_code = #{deptCode}
+            </if>
+            <if test="affilUnitCode!=null and affilUnitCode!=''">
+                and affil_unit_code = #{affilUnitCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="hasPostByDeptCode" resultType="int">
+        select count(1) from sys_post
+        <where>
+            <if test="deptCode!=null and deptCode!=''">
+                dept_code = #{deptCode}
+            </if>
+            <if test="affilUnitCode!=null and affilUnitCode!=''">
+                and affil_unit_code = #{affilUnitCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectChildrenDeptById" parameterType="string" resultMap="SysDeptResult">
+        select *
+        from sys_dept
+        where FIND_IN_SET(#{deptId}, ancestors) <![CDATA[ <> ]]> 0
+    </select>
+
+    <select id="checkDeptNameUnique" resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        <where>
+            d.del_flag = '0'
+            <if test="deptName != null  and deptName != ''">
+                and d.dept_name=#{deptName}
+            </if>
+            <if test="parentId!=null">
+                and d.parent_id=#{parentId}
+            </if>
+            <if test="parentCode != null  and parentCode != ''">
+                and d.parent_code=#{parentCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="checkDeptCodeUnique" resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        <where>
+            d.del_flag = '0'
+            <if test="deptCode != null  and deptCode != ''">
+                and d.dept_code=#{deptCode}
+            </if>
+            <if test="parentId!=null">
+                and d.parent_id=#{parentId}
+            </if>
+            <if test="parentCode != null  and parentCode != ''">
+                and d.parent_code=#{parentCode}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertDept" parameterType="com.cxnet.project.system.dept.domain.SysDept">
+        <selectKey keyProperty="deptId" resultType="java.lang.String" order="BEFORE">
+            select sys_guid() as deptId FROM DUAL
+        </selectKey>
+        insert into sys_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null ">dept_id,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="deptCode != null  and deptCode != ''">dept_code,</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code,</if>
+            <if test="ancestors != null  and ancestors != ''">ancestors,</if>
+            <if test="deptName != null  and deptName != ''">dept_name,</if>
+            <if test="fullName != null  and fullName != ''">full_name,</if>
+            <if test="deptType != null  and deptType != ''">dept_type,</if>
+            <if test="unitType != null  and unitType != ''">unit_type,</if>
+            <if test="orderNum != null ">order_num,</if>
+            <if test="leader != null  and leader != ''">leader,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="fax != null  and fax != ''">fax,</if>
+            <if test="description != null  and description != ''">description,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            create_time,
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="legalPerson != null  and legalPerson != ''">legal_person,</if>
+            <if test="businessName != null  and businessName != ''">business_name,</if>
+            <if test="financeLeader != null  and financeLeader != ''">finance_leader,</if>
+            <if test="zoningCode != null  and zoningCode != ''">zoning_code,</if>
+            <if test="creditCode != null  and creditCode != ''">credit_code,</if>
+            <if test="unitAdress != null  and unitAdress != ''">unit_adress,</if>
+            <if test="unitQuality != null  and unitQuality != ''">unit_quality,</if>
+            <if test="gradeName != null  and gradeName != ''">grade_name,</if>
+            <if test="isYsunit != null  and isYsunit != ''">is_ysunit,</if>
+            <if test="budgeLevel != null  and budgeLevel != ''">budge_level,</if>
+            <if test="unitTrade != null  and unitTrade != ''">unit_trade,</if>
+            <if test="goverFunction != null  and goverFunction != ''">gover_function,</if>
+            <if test="affilUnitId != null  and affilUnitId != ''">affil_unit_id,</if>
+            <if test="affilUnitCode != null  and affilUnitCode != ''">affil_unit_code,</if>
+            <if test="affilUnitName != null  and affilUnitName != ''">affil_unit_name,</if>
+            <if test="parentDeptId != null  and parentDeptId != ''">parent_dept_id,</if>
+            <if test="parentDeptCode != null  and parentDeptCode != ''">parent_dept_code,</if>
+            <if test="parentDeptName != null  and parentDeptName != ''">parent_dept_name,</if>
+
+            <if test="deptLeadId != null  and deptLeadId != ''">dept_lead_id,</if>
+            <if test="deptLeadCode != null  and deptLeadCode != ''">dept_lead_code,</if>
+            <if test="deptLeadName != null  and deptLeadName != ''">dept_lead_name,</if>
+            <if test="fgLeadId != null  and fgLeadId != ''">fg_lead_id,</if>
+            <if test="fgLeadCode != null  and fgLeadCode != ''">fg_lead_code,</if>
+            <if test="fgLeadName != null  and fgLeadName != ''">fg_lead_name,</if>
+            <if test="financialCode != null  and financialCode != ''">financial_code,</if>
+            <if test="financialName != null  and financialName != ''">financial_name,</if>
+            <if test="financialId != null  and financialId != ''">financial_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="deptCode != null  and deptCode != ''">#{deptCode},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
+            <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
+            <if test="deptName != null  and deptName != ''">#{deptName},</if>
+            <if test="fullName != null  and fullName != ''">#{fullName},</if>
+            <if test="deptType != null  and deptType != ''">#{deptType},</if>
+            <if test="unitType != null  and unitType != ''">#{unitType},</if>
+            <if test="orderNum != null ">#{orderNum},</if>
+            <if test="leader != null  and leader != ''">#{leader},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="description != null  and description != ''">#{description},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            sysdate,
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="legalPerson != null  and legalPerson != ''">#{legalPerson},</if>
+            <if test="businessName != null  and businessName != ''">#{businessName},</if>
+            <if test="financeLeader != null  and financeLeader != ''">#{financeLeader},</if>
+            <if test="zoningCode != null  and zoningCode != ''">#{zoningCode},</if>
+            <if test="creditCode != null  and creditCode != ''">#{creditCode},</if>
+            <if test="unitAdress != null  and unitAdress != ''">#{unitAdress},</if>
+            <if test="unitQuality != null  and unitQuality != ''">#{unitQuality},</if>
+            <if test="gradeName != null  and gradeName != ''">#{gradeName},</if>
+            <if test="isYsunit != null  and isYsunit != ''">#{isYsunit},</if>
+            <if test="budgeLevel != null  and budgeLevel != ''">#{budgeLevel},</if>
+            <if test="unitTrade != null  and unitTrade != ''">#{unitTrade},</if>
+            <if test="goverFunction != null  and goverFunction != ''">#{goverFunction},</if>
+            <if test="affilUnitId != null  and affilUnitId != ''">#{affilUnitId},</if>
+            <if test="affilUnitCode != null  and affilUnitCode != ''">#{affilUnitCode},</if>
+            <if test="affilUnitName != null  and affilUnitName != ''">#{affilUnitName},</if>
+            <if test="parentDeptId != null  and parentDeptId != ''">#{parentDeptId},</if>
+            <if test="parentDeptCode != null  and parentDeptCode != ''">#{parentDeptCode},</if>
+            <if test="parentDeptName != null  and parentDeptName != ''">#{parentDeptName},</if>
+
+            <if test="deptLeadId != null  and deptLeadId != ''">#{deptLeadId},</if>
+            <if test="deptLeadCode != null  and deptLeadCode != ''">#{deptLeadCode},</if>
+            <if test="deptLeadName != null  and deptLeadName != ''">#{deptLeadName},</if>
+            <if test="fgLeadId != null  and fgLeadId != ''">#{fgLeadId},</if>
+            <if test="fgLeadCode != null  and fgLeadCode != ''">#{fgLeadCode},</if>
+            <if test="fgLeadName != null  and fgLeadName != ''">#{fgLeadName},</if>
+            <if test="financialCode != null  and financialCode != ''">#{financialCode},</if>
+            <if test="financialName != null  and financialName != ''">#{financialName},</if>
+            <if test="financialId != null  and financialId != ''">#{financialId},</if>
+        </trim>
+    </insert>
+
+    <!-- 批量插入部门信息 -->
+    <insert id="insertBatchDept" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_dept
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                dept_id,
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.deptCode != null  and item.deptCode != ''">dept_code,</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code,</if>
+                <if test="item.ancestors != null  and item.ancestors != ''">ancestors,</if>
+                <if test="item.deptName != null  and item.deptName != ''">dept_name,</if>
+                <if test="item.fullName != null  and item.fullName != ''">full_name,</if>
+                <if test="item.deptType != null  and item.deptType != ''">dept_type,</if>
+                <if test="item.unitType != null  and item.unitType != ''">unit_type,</if>
+                <if test="item.orderNum != null ">order_num,</if>
+                <if test="item.leader != null  and item.leader != ''">leader,</if>
+                <if test="item.phone != null  and item.phone != ''">phone,</if>
+                <if test="item.email != null  and item.email != ''">email,</if>
+                <if test="item.fax != null  and item.fax != ''">fax,</if>
+                <if test="item.description != null  and item.description != ''">description,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                create_time,
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.legalPerson != null  and item.legalPerson != ''">legal_person,</if>
+                <if test="item.businessName != null  and item.businessName != ''">business_name,</if>
+                <if test="item.financeLeader != null  and item.financeLeader != ''">finance_leader,</if>
+                <if test="item.zoningCode != null  and item.zoningCode != ''">zoning_code,</if>
+                <if test="item.creditCode != null  and item.creditCode != ''">credit_code,</if>
+                <if test="item.unitAdress != null  and item.unitAdress != ''">unit_adress,</if>
+                <if test="item.unitQuality != null  and item.unitQuality != ''">unit_quality,</if>
+                <if test="item.gradeName != null  and item.gradeName != ''">grade_name,</if>
+                <if test="item.isYsunit != null  and item.isYsunit != ''">is_ysunit,</if>
+                <if test="item.budgeLevel != null  and item.budgeLevel != ''">budge_level,</if>
+                <if test="item.unitTrade != null  and item.unitTrade != ''">unit_trade,</if>
+                <if test="item.goverFunction != null  and item.goverFunction != ''">gover_function,</if>
+                <if test="item.affilUnitId != null  and item.affilUnitId != ''">affil_unit_id,</if>
+                <if test="item.affilUnitCode != null  and item.affilUnitCode != ''">affil_unit_code,</if>
+                <if test="item.affilUnitName != null  and item.affilUnitName != ''">affil_unit_name,</if>
+                <if test="item.parentDeptId != null  and item.parentDeptId != ''">parent_dept_id,</if>
+                <if test="item.parentDeptCode != null  and item.parentDeptCode != ''">parent_dept_code,</if>
+                <if test="item.parentDeptName != null  and item.parentDeptName != ''">parent_dept_name,</if>
+
+                <if test="item.deptLeadId != null  and item.deptLeadId != ''">dept_lead_id,</if>
+                <if test="item.deptLeadCode != null  and item.deptLeadCode != ''">dept_lead_code,</if>
+                <if test="item.deptLeadName != null  and item.deptLeadName != ''">dept_lead_name,</if>
+                <if test="item.fgLeadId != null  and item.fgLeadId != ''">fg_lead_id,</if>
+                <if test="item.fgLeadCode != null  and item.fgLeadCode != ''">fg_lead_code,</if>
+                <if test="item.fgLeadName != null  and item.fgLeadName != ''">fg_lead_name,</if>
+                <if test="item.financialCode != null  and item.financialCode != ''">financial_code,</if>
+                <if test="item.financialName != null  and item.financialName != ''">financial_name,</if>
+                <if test="item.financialId != null  and item.financialId != ''">financial_id,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.deptCode != null  and item.deptCode != ''">#{item.deptCode},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">#{item.parentCode},</if>
+                <if test="item.ancestors != null  and item.ancestors != ''">#{item.ancestors},</if>
+                <if test="item.deptName != null  and item.deptName != ''">#{item.deptName},</if>
+                <if test="item.fullName != null  and item.fullName != ''">#{item.fullName},</if>
+                <if test="item.deptType != null  and item.deptType != ''">#{item.deptType},</if>
+                <if test="item.unitType != null  and item.unitType != ''">#{item.unitType},</if>
+                <if test="item.orderNum != null ">#{item.orderNum},</if>
+                <if test="item.leader != null  and item.leader != ''">#{item.leader},</if>
+                <if test="item.phone != null  and item.phone != ''">#{item.phone},</if>
+                <if test="item.email != null  and item.email != ''">#{item.email},</if>
+                <if test="item.fax != null  and item.fax != ''">#{item.fax},</if>
+                <if test="item.description != null  and item.description != ''">#{item.description},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                sysdate,
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.legalPerson != null  and item.legalPerson != ''">#{item.legalPerson},</if>
+                <if test="item.businessName != null  and item.businessName != ''">#{item.businessName},</if>
+                <if test="item.financeLeader != null  and item.financeLeader != ''">#{item.financeLeader},</if>
+                <if test="item.zoningCode != null  and item.zoningCode != ''">#{item.zoningCode},</if>
+                <if test="item.creditCode != null  and item.creditCode != ''">#{item.creditCode},</if>
+                <if test="item.unitAdress != null  and item.unitAdress != ''">#{item.unitAdress},</if>
+                <if test="item.unitQuality != null  and item.unitQuality != ''">#{item.unitQuality},</if>
+                <if test="item.gradeName != null  and item.gradeName != ''">#{item.gradeName},</if>
+                <if test="item.isYsunit != null  and item.isYsunit != ''">#{item.isYsunit},</if>
+                <if test="item.budgeLevel != null  and item.budgeLevel != ''">#{item.budgeLevel},</if>
+                <if test="item.unitTrade != null  and item.unitTrade != ''">#{item.unitTrade},</if>
+                <if test="item.goverFunction != null  and item.goverFunction != ''">#{item.goverFunction},</if>
+                <if test="item.affilUnitId != null  and item.affilUnitId != ''">#{item.affilUnitId},</if>
+                <if test="item.affilUnitCode != null  and item.affilUnitCode != ''">#{item.affilUnitCode},</if>
+                <if test="item.affilUnitName != null  and item.affilUnitName != ''">#{item.affilUnitName},</if>
+                <if test="item.parentDeptId != null  and item.parentDeptId != ''">#{item.parentDeptId},</if>
+                <if test="item.parentDeptCode != null  and item.parentDeptCode != ''">#{item.parentDeptCode},</if>
+                <if test="item.parentDeptName != null  and item.parentDeptName != ''">#{item.parentDeptName},</if>
+
+                <if test="item.deptLeadId != null  and item.deptLeadId != ''">#{item.deptLeadId},</if>
+                <if test="item.deptLeadCode != null  and item.deptLeadCode != ''">#{item.deptLeadCode},</if>
+                <if test="item.deptLeadName != null  and item.deptLeadName != ''">#{item.deptLeadName},</if>
+                <if test="item.fgLeadId != null  and item.fgLeadId != ''">#{item.fgLeadId},</if>
+                <if test="item.fgLeadCode != null  and item.fgLeadCode != ''">#{item.fgLeadCode},</if>
+                <if test="item.fgLeadName != null  and item.fgLeadName != ''">#{item.fgLeadName},</if>
+                <if test="item.financialCode != null  and item.financialCode != ''">#{financialCode},</if>
+                <if test="item.financialName != null  and item.financialName != ''">#{financialName},</if>
+                <if test="item.financialId != null  and item.financialId != ''">#{financialId},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <update id="updateDept" parameterType="SysDept">
+        update sys_dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+            <if test="deptCode != null  and deptCode != ''">dept_code = #{deptCode},</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code = #{parentCode},</if>
+            <if test="ancestors != null  and ancestors != ''">ancestors = #{ancestors},</if>
+            <if test="deptName != null  and deptName != ''">dept_name = #{deptName},</if>
+            <if test="fullName != null  and fullName != ''">full_name = #{fullName},</if>
+            <if test="deptType != null  and deptType != ''">dept_type = #{deptType},</if>
+            <if test="unitType != null  and unitType != ''">unit_type = #{unitType},</if>
+            <if test="orderNum != null ">order_num = #{orderNum},</if>
+            <if test="leader != null  and leader != ''">leader = #{leader},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="fax != null  and fax != ''">fax = #{fax},</if>
+            <if test="description != null  and description != ''">description = #{description},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate,
+            <if test="legalPerson != null  and legalPerson != ''">legal_person = #{legalPerson},</if>
+            <if test="businessName != null  and businessName != ''">business_name = #{businessName},</if>
+            <if test="financeLeader != null  and financeLeader != ''">finance_leader = #{financeLeader},</if>
+            <if test="zoningCode != null  and zoningCode != ''">zoning_code = #{zoningCode},</if>
+            <if test="creditCode != null  and creditCode != ''">credit_code = #{creditCode},</if>
+            <if test="unitAdress != null  and unitAdress != ''">unit_adress = #{unitAdress},</if>
+            <if test="unitQuality != null  and unitQuality != ''">unit_quality = #{unitQuality},</if>
+            <if test="gradeName != null  and gradeName != ''">grade_name = #{gradeName},</if>
+            <if test="isYsunit != null  and isYsunit != ''">is_ysunit = #{isYsunit},</if>
+            <if test="budgeLevel != null  and budgeLevel != ''">budge_level = #{budgeLevel},</if>
+            <if test="unitTrade != null  and unitTrade != ''">unit_trade = #{unitTrade},</if>
+            <if test="goverFunction != null  and goverFunction != ''">gover_function = #{goverFunction},</if>
+            <if test="affilUnitId != null  and affilUnitId != ''">affil_unit_id = #{affilUnitId},</if>
+            <if test="affilUnitCode != null  and affilUnitCode != ''">affil_unit_code = #{affilUnitCode},</if>
+            <if test="affilUnitName != null  and affilUnitName != ''">affil_unit_name = #{affilUnitName},</if>
+            <if test="parentDeptId != null  and parentDeptId != ''">parent_dept_id = #{parentDeptId},</if>
+            <if test="parentDeptCode != null  and parentDeptCode != ''">parent_dept_code = #{parentDeptCode},</if>
+            <if test="parentDeptName != null  and parentDeptName != ''">parent_dept_name = #{parentDeptName},</if>
+
+            <if test="deptLeadId != null  and deptLeadId != ''">dept_lead_id = #{deptLeadId},</if>
+            <if test="deptLeadCode != null  and deptLeadCode != ''">dept_lead_code = #{deptLeadCode},</if>
+            <if test="deptLeadName != null  and deptLeadName != ''">dept_lead_name = #{deptLeadName},</if>
+            <if test="fgLeadId != null  and fgLeadId != ''">fg_lead_id = #{fgLeadId},</if>
+            <if test="fgLeadCode != null  and fgLeadCode != ''">fg_lead_code = #{fgLeadCode},</if>
+            <if test="fgLeadName != null  and fgLeadName != ''">fg_lead_name = #{fgLeadName},</if>
+            <if test="financialCode != null  and financialCode != ''">financial_code = #{financialCode},</if>
+            <if test="financialName != null  and financialName != ''">financial_name = #{financialName},</if>
+            <if test="financialId != null  and financialId != ''">financial_Id = #{financialId},</if>
+        </trim>
+        where dept_id = #{deptId}
+    </update>
+
+    <update id="updateDeptChildren" parameterType="java.util.List">
+        update sys_dept set ancestors =
+        <foreach collection="depts" item="item" index="index"
+                 separator=" " open="case dept_id" close="end">
+            when #{item.deptId} then #{item.ancestors}
+        </foreach>
+        where dept_id in
+        <foreach collection="depts" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item.deptId}
+        </foreach>
+    </update>
+
+    <update id="updateDeptStatus" parameterType="com.cxnet.project.system.dept.domain.SysDept">
+        update sys_dept
+        <set>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate
+        </set>
+        where dept_id in (#{ancestors})
+    </update>
+
+    <delete id="deleteDeptById" parameterType="string">
+        update sys_dept
+        set del_flag = '2'
+        where dept_id = #{deptId}
+    </delete>
+
+    <delete id="deleteDeptByCode">
+        update sys_dept set del_flag = '2'
+        <where>
+            <if test="deptCode!=null and deptCode!=''">
+                dept_code = #{deptCode}
+            </if>
+            <if test="affilUnitCode!=null and affilUnitCode!=''">
+                and affil_unit_code = #{affilUnitCode}
+            </if>
+        </where>
+    </delete>
+
+    <select id="changeDept" parameterType="string" resultMap="SysDeptResult">
+        select c.dept_id, c.dept_code, c.dept_name
+        from sys_dept c
+        where c.dept_code in (select b.dept_code
+                              from sys_post b
+                              where b.post_id in
+                                    (select a.post_id
+                                     from sys_user_post a
+                                     where a.user_id =
+                                           (select t.user_id from SYS_USER t where t.user_name = #{userName})))
+    </select>
+
+
+    <select id="getDeptsByUserId" parameterType="string" resultMap="SysDeptResultVO">
+        select distinct sd.dept_id, sd.parent_id, sd.dept_code, sd.parent_code, sd.dept_name, sd.full_name
+        from SYS_POST sp
+                 join SYS_USER_POST sup on sp.post_id = sup.post_id
+                 join SYS_DEPT sd on sp.dept_id = sd.dept_id
+        where sup.user_id = #{userId}
+          and sd.dept_type = '1'
+          and sd.del_flag = '0'
+          and sd.STATUS = '0'
+        order by sd.dept_code, sd.dept_id
+    </select>
+
+    <select id="getThisDept" parameterType="string" resultMap="SysDeptResultVO">
+        select *
+        from (
+                 select distinct sd.dept_id,
+                                 sd.parent_id,
+                                 sd.dept_code,
+                                 sd.parent_code,
+                                 sd.dept_name,
+                                 sd.full_name,
+                                 sd.dept_type,
+                                 sd.del_flag,
+                                 sd.status
+                 from SYS_DEPT sd
+                     start
+                 with sd.dept_id = #{unitId} and sd.dept_type = '0' and sd.status = '0' and sd.del_flag = '0'
+                 connect by sd.parent_id = prior sd.dept_id
+             )
+        where dept_type = '1'
+          and status = '0'
+          and del_flag = '0'
+        order by dept_code, dept_id
+    </select>
+
+    <select id="depDeptListSelect" parameterType="string" resultType="com.cxnet.common.utils.tree.Zone">
+        SELECT c.dept_id id, c.dept_code code, c.dept_name name, c.parent_code pid
+        FROM SYS_DEPT c
+        where c.parent_code = #{deptCode}
+          and c.dept_type = 1
+          and c.del_flag = '0'
+          and c.status = '0'
+        order by dept_code
+    </select>
+
+    <select id="depListSelectByUserId" parameterType="string" resultMap="SysDeptResult">
+        select sd.dept_id, sd.dept_code, sd.dept_name
+        from sys_dept sd
+        where sd.dept_code in (select b.dept_code
+                               from sys_post b
+                                        inner join sys_user_post a
+                                                   on b.post_id = a.post_id
+                                                       and a.user_id = #{userId}
+        )
+          and sd.del_flag = '0'
+          and sd.parent_id = #{unitId}
+          and sd.status = '0'
+        order by dept_code
+    </select>
+
+    <select id="changeDeptTree" parameterType="string" resultType="com.cxnet.common.utils.tree.Zone">
+        select distinct d.dept_id id, d.dept_code code, d.dept_name name, nvl(d.parent_id, 0) pid
+        from (
+                 select c.dept_id, c.dept_code, c.dept_name, c.parent_code, c.dept_type, c.parent_id
+                 from SYS_DEPT c
+                     start
+                 with c.dept_id in (
+                     select b.dept_id from sys_post b
+                     inner join sys_user_post a
+                     on b.post_id = a.post_id and a.user_id = #{userId}
+                     )
+                 connect by prior parent_id = dept_id
+             ) d
+        where d.dept_type = 0
+    </select>
+
+    <select id="changeDeptTreeNew" parameterType="string" resultType="com.cxnet.common.utils.tree.Zone">
+        SELECT c.dept_id           id,
+               c.dept_code         code,
+               c.dept_name         name,
+               nvl(c.parent_id, 0) pid
+        FROM SYS_DEPT c
+        WHERE c.DEPT_CODE IN (SELECT b.AFFIL_UNIT_CODE
+                              FROM sys_post b
+                                       INNER JOIN sys_user_post a ON b.post_id = a.post_id AND a.user_id = #{userId})
+          AND c.dept_type = 0
+    </select>
+
+    <select id="selectDeptName" parameterType="string" resultMap="SysDeptResult">
+        select *
+        from sys_dept
+        where dept_code = #{deptCode}
+          and del_flag = '0'
+    </select>
+
+
+    <select id="checkDeptCodeUniqueByDeptCode" resultType="integer">
+        select count(1)
+        from (
+                 SELECT DEPT_CODE
+                 FROM SYS_DEPT
+                 where DEPT_ID != #{deptId}
+                   and del_flag = '0'
+                   and parent_id = #{parentId}
+                 union all
+                 select POST_CODE
+                 from SYS_POST
+                 where POST_ID != #{deptId}
+             )
+        where dept_code = #{deptCode}
+
+    </select>
+
+
+    <select id="checkUnitCodeUnique" resultType="integer">
+        select count(1) from SYS_DEPT
+        <where>
+            del_flag = '0'
+            <if test="deptId !=null and deptCode!='-1'">
+                and dept_id != #{deptId}
+            </if>
+            <if test="deptCode !=null and deptCode!=''">
+                and dept_code = #{deptCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="checkDeptCodeOfUnitUnique" resultType="integer">
+        select count(1) from SYS_DEPT
+        <where>
+            del_flag = '0'
+            <if test="deptId !=null and deptCode!='-1'">
+                and dept_id != #{deptId}
+            </if>
+            <if test="deptCode !=null and deptCode!=''">
+                and dept_code = #{deptCode}
+            </if>
+            <if test="affilUnitCode !=null and affilUnitCode!=''">
+                and affil_unit_code = #{affilUnitCode}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectOneDept" resultMap="SysDeptResult">
+        select * from SYS_DEPT
+        <where>
+            <if test="deptCode != null and deptCode != ''">and dept_code = #{deptCode}</if>
+            <if test="parentCode != null and parentCode != ''">and parent_code = #{parentCode}</if>
+            <if test="affilUnitCode != null and affilUnitCode != ''">and affil_unit_code = #{affilUnitCode}</if>
+            and del_flag = '0'
+        </where>
+    </select>
+    <select id="selectUnit" resultType="java.lang.String" parameterType="string">
+        select DEPT_ID
+        from SYS_DEPT
+        where (dept_id = #{unitId} or PARENT_ID = #{unitId})
+          and dept_type = '0'
+    </select>
+    <select id="selectUnitId" resultType="java.lang.String">
+        select DEPT_ID
+        from SYS_DEPT
+        where DEPT_CODE = #{code}
+          and del_flag = '0'
+    </select>
+    <select id="hasExistUnitCode" resultType="java.lang.Integer">
+        select count(*)
+        from sys_dept t
+        where t.dept_code = #{unitCode}
+    </select>
+
+    <select id="selectSendData" resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        where length(d.parent_code)=3 and d.dept_type='0' and d.del_flag='0'
+    </select>
+
+    <select id="getDeptListByUnitId" resultType="com.cxnet.common.utils.tree.Zone">
+
+    </select>
+
+    <select id="getDeptsAndSubsetsByUserId" resultType="com.cxnet.project.system.dept.domain.SysDeptVO">
+        select sd.dept_id, sd.parent_id, sd.dept_code, sd.parent_code, sd.dept_name, sd.full_name
+        from (
+                 select sd.dept_id,
+                        sd.parent_id,
+                        sd.dept_code,
+                        sd.parent_code,
+                        sd.dept_name,
+                        sd.full_name,
+                        sd.STATUS,
+                        sd.del_flag,
+                        sd.dept_type
+                 from sys_dept sd
+                     start
+                 with sd.dept_id
+                     =(
+                     select dept_id from sys_user where user_id = #{userId}
+                     )
+                 connect by prior sd.dept_id = sd.PARENT_ID
+             ) sd
+        where sd.dept_type = '1'
+          and sd.del_flag = '0'
+          and sd.STATUS = '0'
+        order by sd.dept_code, sd.dept_id
+    </select>
+
+    <select id="getThisUnitAndSubsets" resultType="com.cxnet.project.system.dept.domain.SysDeptVO">
+        select *
+        from (
+                 select distinct sd.dept_id,
+                                 sd.parent_id,
+                                 sd.dept_code,
+                                 sd.parent_code,
+                                 sd.dept_name,
+                                 sd.full_name,
+                                 sd.dept_type,
+                                 sd.del_flag,
+                                 sd.status
+                 from SYS_DEPT sd
+                     start
+                 with sd.dept_id = #{unitId} and sd.dept_type = '0' and sd.status = '0' and sd.del_flag = '0'
+                 connect by sd.parent_id = prior sd.dept_id
+             )
+        where dept_type = '0'
+          and status = '0'
+          and del_flag = '0'
+        order by dept_code, dept_id
+    </select>
+
+    <select id="selectDeptListBySysDept" parameterType="com.cxnet.project.system.dept.domain.SysDept"
+            resultMap="SysDeptResult">
+        <include refid="selectDeptVo"/>
+        where d.del_flag = '0'
+        <if test="deptType != null and deptType == 0">
+            AND d.dept_type = #{deptType}
+        </if>
+        <if test="parentId != null and parentId != 0">
+            AND d.parent_id = #{parentId}
+        </if>
+        <if test="deptCode != null and deptCode != ''">
+            AND d.dept_code = #{deptCode}
+        </if>
+        <if test="deptName != null and deptName != ''">
+            AND d.dept_name like concat(concat('%', #{deptName}), '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND d.status = #{status}
+        </if>
+        <if test="unitType != null and unitType != ''">
+            AND d.unit_type = #{unitType}
+        </if>
+        order by d.dept_code, d.order_num
+    </select>
+
+    <select id="getNoThisUnit" parameterType="string" resultMap="SysDeptResultVO">
+        select *
+        from sys_dept sd
+        where sd.dept_id != #{unitId}
+          and sd.dept_type = '0'
+          and sd.status = '0'
+          and sd.del_flag = '0'
+        order by sd.dept_code, sd.dept_id
+    </select>
+
+    <select id="getUnitTree" resultType="com.cxnet.common.utils.tree.Zone">
+        SELECT c.dept_id id, c.dept_code code, c.dept_name name, c.parent_code pCode, c.parent_id pid
+        FROM SYS_DEPT c
+        where c.dept_type = 0
+          and c.del_flag = '0'
+          and c.status = '0'
+        order by dept_code
+    </select>
+
+    <select id="getReimUnit" resultMap="SysDeptResult">
+        select DEPT_ID, DEPT_NAME, DEPT_CODE, AGENCY_CODE, IS_REIM
+        from SYS_DEPT
+        where IS_REIM = '1'
+          and DEL_FLAG = '0'
+    </select>
+
+    <update id="updateReimById" parameterType="com.cxnet.project.system.dept.domain.SysDept">
+        update SYS_DEPT
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="agencyCode != null and agencyCode != ''">
+                AGENCY_CODE = #{agencyCode},
+            </if>
+            <if test="isReim != null and isReim != ''">
+                is_Reim = #{isReim},
+            </if>
+        </trim>
+        <where>
+            <if test="deptId != null and deptId != ''">
+                and DEPT_ID = #{deptId}
+            </if>
+        </where>
+    </update>
+
+</mapper>

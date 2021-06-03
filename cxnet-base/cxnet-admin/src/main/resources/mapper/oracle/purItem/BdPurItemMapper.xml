@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.purItem.mapper.BdPurItemMapper">
+
+    <!-- 采购品目 结果集 -->
+    <resultMap type="com.cxnet.baseData.purItem.domain.BdPurItem" id="PurItemResult">
+        <result property="itemId" column="item_id"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="itemName" column="item_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="purYear" column="pur_year"/>
+        <result property="purType" column="pur_type"/>
+        <result property="isPrecious" column="is_precious"/>
+        <result property="itemType" column="item_type"/>
+        <result property="measurement" column="measurement"/>
+        <result property="purForm" column="pur_form"/>
+        <result property="isLowest" column="is_lowest"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="description" column="description"/>
+        <result property="parentName" column="parent_name"/>
+        <result property="limitStandard" column="limit_standard"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="unitId" column="unit_id"/>
+    </resultMap>
+
+    <!-- 查询采购品目 通用sql -->
+    <sql id="selectPurItemVo">
+        select t0.item_id,
+               t0.item_code,
+               t0.item_name,
+               t0.parent_id,
+               t0.parent_code,
+               t0.pur_year,
+               t0.pur_type,
+               t0.is_precious,
+               t0.item_type,
+               t0.measurement,
+               t0.pur_form,
+               t0.is_lowest,
+               t0.status,
+               t0.del_flag,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.description,
+               t0.limit_standard,
+               t0.unit_id,
+               d1.dept_code   UNIT_CODE,
+               d1.dept_name   UNIT_NAME,
+               p.item_name as parent_name
+        from bd_pur_item t0
+                 left join bd_pur_item p on p.item_id = t0.parent_id
+                 left join SYS_DEPT d1
+                           on t0.unit_id = d1.dept_id
+    </sql>
+
+    <!-- 查询采购品目下拉树列表 -->
+    <select id="treeselectList" resultType="java.util.HashMap">
+        select item_id as "id", parent_id as "pid", item_name as "label"
+        from bd_pur_item
+    </select>
+
+    <!-- 查询采购品目 集合 -->
+    <select id="selectPurItemList" parameterType="com.cxnet.baseData.purItem.domain.BdPurItem"
+            resultMap="PurItemResult">
+        <include refid="selectPurItemVo"/>
+        <where>
+            <if test="itemCode != null  and itemCode != ''">and t0.item_code = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''">and t0.item_name like concat(concat('%', #{itemName}),
+                '%')
+            </if>
+            <if test="parentId != null ">and t0.parent_id = #{parentId}</if>
+            <if test="parentCode != null  and parentCode != ''">and t0.parent_code = #{parentCode}</if>
+            <if test="purYear != null ">and t0.pur_year = #{purYear}</if>
+            <if test="limitStandard != null ">and t0.limit_standard = #{limitStandard}</if>
+            <if test="purType != null  and purType != ''">and t0.pur_type = #{purType}</if>
+            <if test="isPrecious != null  and isPrecious != ''">and t0.is_precious = #{isPrecious}</if>
+            <if test="itemType != null  and itemType != ''">and t0.item_type = #{itemType}</if>
+            <if test="measurement != null  and measurement != ''">and t0.measurement = #{measurement}</if>
+            <if test="purForm != null  and purForm != ''">and t0.pur_form = #{purForm}</if>
+            <if test="isLowest != null  and isLowest != ''">and t0.is_lowest = #{isLowest}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="description != null  and description != ''">and t0.description = #{description}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+        </where>
+        order by item_code
+    </select>
+
+    <!-- 查询采购品目 ById -->
+    <select id="selectPurItemById" parameterType="String" resultMap="PurItemResult">
+        select distinct(t0.item_id) as item_id,
+                       t0.item_code,
+                       t0.item_name,
+                       t0.parent_id,
+                       t0.parent_code,
+                       t0.pur_year,
+                       t0.pur_type,
+                       t0.is_precious,
+                       t0.item_type,
+                       t0.measurement,
+                       t0.pur_form,
+                       t0.is_lowest,
+                       t0.status,
+                       t0.del_flag,
+                       t0.create_by,
+                       t0.create_time,
+                       t0.update_by,
+                       t0.update_time,
+                       t0.description,
+                       t0.limit_standard,
+                       p.item_name  as parent_name
+        from bd_pur_item t0
+                 left join bd_pur_item p on p.item_code = t0.parent_code
+        where t0.item_id = #{itemId}
+    </select>
+
+    <!-- 查询采购品目集合tree  -->
+    <select id="selectPurItemListTree" resultType="com.cxnet.common.utils.tree.Zone">
+        select item_id id,item_code code,item_name name,nvl(parent_id,'0') pid,parent_code pcode from bd_pur_item
+        <where>
+            <if test="purYear != null ">and pur_year = #{purYear}</if>
+            <if test="unitCode != null  and unitCode != ''">and unit_code = #{unitCode}</if>
+            <if test="unitId != null  and unitId != ''">and unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+        order by item_code
+    </select>
+
+    <!--校验编码是否存在-->
+    <select id="checkItemCode" resultType="java.lang.Integer">
+        select count(1)
+        from bd_pur_item
+        where item_code = #{item_code}
+          and del_flag = '0'
+    </select>
+
+    <!--根据code查询-->
+    <select id="selectItemByCode" resultMap="PurItemResult">
+        <include refid="selectPurItemVo"/>
+        where t0.item_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="hasChildByItemCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from bd_pur_item
+        where del_flag = '0'
+          and parent_id = #{itemId}
+    </select>
+    <!--根据ids查询-->
+    <select id="selectPurItemByIds" resultMap="PurItemResult">
+        <include refid="selectPurItemVo"/>
+        where t0.item_code in
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </select>
+
+    <!--查询所有上级集合-->
+    <select id="selectBdItemUpList" resultMap="PurItemResult">
+        <include refid="selectPurItemVo"/>
+        start with t0.item_code = #{itemCode} and t0.pur_year = #{purYear} and t0.unit_id = '*'
+        connect by prior t0.parent_id = t0.item_id
+        order by t0.item_code
+    </select>
+
+    <!-- 插入采购品目 -->
+    <insert id="insertPurItem" parameterType="com.cxnet.baseData.purItem.domain.BdPurItem">
+        <selectKey keyProperty="itemId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into bd_pur_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null ">item_id,</if>
+            <if test="itemCode != null  and itemCode != ''">item_code,</if>
+            <if test="itemName != null  and itemName != ''">item_name,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code,</if>
+            <if test="purYear != null ">pur_year,</if>
+            <if test="purType != null  and purType != ''">pur_type,</if>
+            <if test="isPrecious != null  and isPrecious != ''">is_precious,</if>
+            <if test="itemType != null  and itemType != ''">item_type,</if>
+            <if test="measurement != null  and measurement != ''">measurement,</if>
+            <if test="purForm != null  and purForm != ''">pur_form,</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="description != null  and description != ''">description,</if>
+            <if test="limitStandard != null ">limit_standard,</if>
+            <if test="unitCode != null and unitCode != ''">unit_code,</if>
+            <if test="unitName != null and unitName != ''">unit_name,</if>
+            <if test="unitId != null and unitId != ''">unit_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null ">#{itemId},</if>
+            <if test="itemCode != null  and itemCode != ''">#{itemCode},</if>
+            <if test="itemName != null  and itemName != ''">#{itemName},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
+            <if test="purYear != null ">#{purYear},</if>
+            <if test="purType != null  and purType != ''">#{purType},</if>
+            <if test="isPrecious != null  and isPrecious != ''">#{isPrecious},</if>
+            <if test="itemType != null  and itemType != ''">#{itemType},</if>
+            <if test="measurement != null  and measurement != ''">#{measurement},</if>
+            <if test="purForm != null  and purForm != ''">#{purForm},</if>
+            <if test="isLowest != null  and isLowest != ''">#{isLowest},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="description != null  and description != ''">#{description},</if>
+            <if test="limitStandard != null ">#{limitStandard},</if>
+            <if test="unitCode != null and unitCode != ''">#{unitCode},</if>
+            <if test="unitName != null and unitName != ''">#{unitName},</if>
+            <if test="unitId != null and unitId != ''">#{unitId},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改采购品目 -->
+    <update id="updatePurItem" parameterType="com.cxnet.baseData.purItem.domain.BdPurItem">
+        update bd_pur_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemCode != null  and itemCode != ''">item_code = #{itemCode},</if>
+            <if test="itemName != null  and itemName != ''">item_name = #{itemName},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code = #{parentCode},</if>
+            <if test="purYear != null ">pur_year = #{purYear},</if>
+            <if test="limitStandard != null ">limit_standard = #{limitStandard},</if>
+            <if test="purType != null  and purType != ''">pur_type = #{purType},</if>
+            <if test="isPrecious != null  and isPrecious != ''">is_precious = #{isPrecious},</if>
+            <if test="itemType != null  and itemType != ''">item_type = #{itemType},</if>
+            <if test="measurement != null  and measurement != ''">measurement = #{measurement},</if>
+            <if test="purForm != null  and purForm != ''">pur_form = #{purForm},</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest = #{isLowest},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="description != null  and description != ''">description = #{description},</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code = #{unitCode},</if>
+            <if test="unitName != null  and unitName != ''">unit_name = #{unitName},</if>
+            <if test="unitId != null  and unitId != ''">unit_id = #{unitId},</if>
+        </trim>
+        where item_id = #{itemId}
+    </update>
+
+    <!-- 删除采购品目 ById -->
+    <delete id="deletePurItemById" parameterType="java.lang.String">
+        update bd_pur_item
+        set del_flag = '2'
+        where item_id = #{itemId}
+    </delete>
+
+    <!-- 批量删除采购品目 ByIds -->
+    <delete id="deletePurItemByIds" parameterType="String">
+        update bd_pur_item set del_flag = '2' where item_id in
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+
+    <!-- 批量删除采购品目 ByIdList -->
+    <delete id="deletePurItemByIdList" parameterType="list">
+        delete bd_pur_item where item_id in
+        <foreach item="itemId" collection="list" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入采购品目 -->
+    <insert id="insertBatchPurItem" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into bd_pur_item
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                item_id,
+                <if test="item.itemCode != null  and item.itemCode != ''">item_code,</if>
+                <if test="item.itemName != null  and item.itemName != ''">item_name,</if>
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code,</if>
+                <if test="item.purYear != null ">pur_year,</if>
+                <if test="item.purType != null  and item.purType != ''">pur_type,</if>
+                <if test="item.isPrecious != null  and item.isPrecious != ''">is_precious,</if>
+                <if test="item.itemType != null  and item.itemType != ''">item_type,</if>
+                <if test="item.measurement != null  and item.measurement != ''">measurement,</if>
+                <if test="item.purForm != null  and item.purForm != ''">pur_form,</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.description != null  and item.description != ''">description,</if>
+                <if test="item.unitCode != null and item.unitCode != ''">unit_code,</if>
+                <if test="item.unitName != null and item.unitName != ''">unit_name,</if>
+                <if test="item.unitId != null and item.unitId != ''">unit_id,</if>
+                <if test="item.limitStandard != null and item.limitStandard != ''">limit_standard,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.itemCode != null  and item.itemCode != ''">#{item.itemCode},</if>
+                <if test="item.itemName != null  and item.itemName != ''">#{item.itemName},</if>
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">#{item.parentCode},</if>
+                <if test="item.purYear != null ">#{item.purYear},</if>
+                <if test="item.purType != null  and item.purType != ''">#{item.purType},</if>
+                <if test="item.isPrecious != null  and item.isPrecious != ''">#{item.isPrecious},</if>
+                <if test="item.itemType != null  and item.itemType != ''">#{item.itemType},</if>
+                <if test="item.measurement != null  and item.measurement != ''">#{item.measurement},</if>
+                <if test="item.purForm != null  and item.purForm != ''">#{item.purForm},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">#{item.isLowest},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.description != null  and item.description != ''">#{item.description},</if>
+                <if test="item.unitCode != null and item.unitCode != ''">#{item.unitCode},</if>
+                <if test="item.unitName != null and item.unitName != ''">#{item.unitName},</if>
+                <if test="item.unitId != null and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.limitStandard != null and item.limitStandard != ''">#{item.limitStandard},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改采购品目 -->
+    <update id="updateBatchPurItem" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_pur_item
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.itemCode != null  and item.itemCode != ''">item_code = #{item.itemCode},</if>
+                <if test="item.itemName != null  and item.itemName != ''">item_name = #{item.itemName},</if>
+                <if test="item.parentId != null ">parent_id = #{item.parentId},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code = #{item.parentCode},</if>
+                <if test="item.purYear != null ">pur_year = #{item.purYear},</if>
+                <if test="item.purType != null  and item.purType != ''">pur_type = #{item.purType},</if>
+                <if test="item.isPrecious != null  and item.isPrecious != ''">is_precious = #{item.isPrecious},</if>
+                <if test="item.itemType != null  and item.itemType != ''">item_type = #{item.itemType},</if>
+                <if test="item.measurement != null  and item.measurement != ''">measurement = #{item.measurement},</if>
+                <if test="item.purForm != null  and item.purForm != ''">pur_form = #{item.purForm},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest = #{item.isLowest},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+                <if test="item.description != null  and item.description != ''">description = #{item.description},</if>
+                <if test="item.unitCode != null and item.unitCode != ''">unit_code = #{item.unitCode},</if>
+                <if test="item.unitName != null and item.unitName != ''">unit_name = #{item.unitName},</if>
+                <if test="item.unitId != null and item.unitId != ''">unit_id = #{item.unitId},</if>
+            </trim>
+            <where>
+                item_id = #{item.itemId}
+            </where>
+        </foreach>
+    </update>
+
+    <delete id="deletePurItemByYear">
+        delete bd_pur_item
+        where pur_year = #{year}
+        <if test="unitId != null and unitId != ''">
+            and unit_id =#{unitId}
+        </if>
+    </delete>
+
+    <select id="selectLatestYear" resultType="Integer">
+        select max(pur_year)
+        from bd_pur_item
+    </select>
+
+    <insert id="carryForwardData" parameterType="Integer">
+        INSERT INTO BD_PUR_ITEM (
+            SELECT ITEM_ID || 'Q',
+                   ITEM_CODE,
+                   ITEM_NAME,
+                   PARENT_ID || 'Q',
+                   PARENT_CODE,
+                   #{newYear},
+                   PUR_TYPE,
+                   IS_PRECIOUS,
+                   ITEM_TYPE,
+                   MEASUREMENT,
+                   PUR_FORM,
+                   IS_LOWEST,
+                   STATUS,
+                   DEL_FLAG,
+                   CREATE_BY,
+                   CREATE_TIME,
+                   UPDATE_BY,
+                   UPDATE_TIME,
+                   DESCRIPTION,
+                   LIMIT_STANDARD,
+                   UNIT_CODE,
+                   UNIT_NAME,
+                   UNIT_ID
+            FROM BD_PUR_ITEM
+            WHERE PUR_YEAR = #{oldYear}
+              AND UNIT_ID = '*'
+        )
+    </insert>
+
+</mapper>

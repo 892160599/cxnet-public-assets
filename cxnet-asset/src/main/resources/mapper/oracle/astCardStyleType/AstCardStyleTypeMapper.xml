@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.astcardstyletype.mapper.AstCardStyleTypeMapper">
+
+    <resultMap type="com.cxnet.asset.astcardstyletype.domain.AstCardStyleType" id="AstCardStyleTypeMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="cardStyleId" column="CARD_STYLE_ID" jdbcType="VARCHAR"/>
+        <result property="assetCode" column="ASSET_CODE" jdbcType="VARCHAR"/>
+        <result property="assetName" column="ASSET_NAME" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstCardStyleTypeVo">
+        select t0.ID,
+               t0.CARD_STYLE_ID,
+               t0.ASSET_CODE,
+               t0.ASSET_NAME,
+               t0.FISCAL,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.CREATE_BY,
+               t0.CREATE_TIME,
+               t0.CREATE_NAME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5
+        from AST_CARD_STYLE_TYPE t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstCardStyleTypeMap">
+        <include refid="AstCardStyleTypeVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="cardStyleId != null and cardStyleId != ''">and t0.CARD_STYLE_ID = #{cardStyleId}</if>
+            <if test="assetCode != null and assetCode != ''">and t0.ASSET_CODE = #{assetCode}</if>
+            <if test="assetName != null and assetName != ''">and t0.ASSET_NAME = #{assetName}</if>
+            <if test="fiscal != null and fiscal != ''">and t0.FISCAL = #{fiscal}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+        </where>
+    </select>
+</mapper>

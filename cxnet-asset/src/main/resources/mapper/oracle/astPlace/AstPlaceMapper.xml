@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.companyBaseDate.place.mapper.AstPlaceMapper">
+
+    <!-- 查询支出功能分类tree -->
+    <select id="selectAstPlaceTree" resultType="com.cxnet.common.utils.tree.Zone">
+        SELECT ID,UNIT_ID,PLACE_CODE code,PLACE_NAME name,PARENT_CODE pcode from AST_PLACE
+        <where>
+            <if test="unitId != null  and unitId != ''">and unit_id = #{unitId}</if>
+        </where>
+        <where>
+            <if test="delFlag != null  and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+        ORDER BY PLACE_CODE
+    </select>
+</mapper>

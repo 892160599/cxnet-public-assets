@@ -1,0 +1,68 @@
+import request from '@/utils/request'
+
+// ${functionName}通用地址
+let url = '/${moduleName}/${businessName}';
+
+// 查询${functionName}集合
+export function list${ClassName}(data) {
+    return request({
+        url: url,
+        method: 'get',
+        params: data
+    })
+}
+
+// 查询${functionName}明细
+export function get${ClassName}(id) {
+    return request({
+        url: url + '/' + id,
+        method: 'get'
+    })
+}
+
+// 新增${functionName}
+export function add${ClassName}(data) {
+    return request({
+        url: url,
+        method: 'post',
+        data: data
+    })
+}
+
+// 修改${functionName}
+export function upd${ClassName}(data) {
+    return request({
+        url: url,
+        method: 'put',
+        data: data
+    })
+}
+
+// 删除${functionName}
+export function del${ClassName}(data) {
+    return request({
+        url: url,
+        method: 'delete',
+        params: data
+    })
+}
+
+// 导出${functionName}
+export function exp${ClassName}(data) {
+    return request({
+        url: url + '/export',
+        method: 'put',
+        data: data
+    })
+}
+
+#if($TreeName!='')
+// 查询${functionName}下拉树结构
+export function treeselect() {
+    return request({
+        url: url + '/treeselect',
+        method: 'get'
+    })
+}
+#end
+

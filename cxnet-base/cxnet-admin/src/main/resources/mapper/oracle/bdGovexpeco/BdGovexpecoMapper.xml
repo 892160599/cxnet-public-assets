@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.baseData.govexpeco.bdGovexpeco.mapper.BdGovexpecoMapper">
+
+    <!-- 政府预算经济分类 结果集 -->
+    <resultMap type="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovexpeco" id="BdGovexpecoResult">
+        <result property="govId" column="gov_id"/>
+        <result property="year" column="year"/>
+        <result property="govCode" column="gov_code"/>
+        <result property="govName" column="gov_name"/>
+        <result property="isLowest" column="is_lowest"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="purpose" column="purpose"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="unitId" column="unit_id"/>
+    </resultMap>
+
+    <!-- 查询政府预算经济分类 通用sql -->
+    <sql id="selectBdGovexpecoVo">
+        select t0.gov_id,
+               t0.year,
+               t0.gov_code,
+               t0.gov_name,
+               t0.is_lowest,
+               t0.del_flag,
+               t0.parent_code,
+               t0.parent_id,
+               t0.status,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.purpose,
+               t0.unit_id,
+               t1.dept_code as unit_code,
+               t1.dept_name as unit_name
+        from bd_govexpeco t0
+                 left join sys_dept t1
+                           on t0.unit_id = t1.dept_id
+
+    </sql>
+
+
+    <!-- 查询政府预算经济分类 集合 -->
+    <select id="selectBdGovexpecoList" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovexpeco"
+            resultMap="BdGovexpecoResult">
+        <include refid="selectBdGovexpecoVo"/>
+        <where>
+            <if test="govId != null ">and t0.gov_id = #{govId}</if>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="govCode != null  and govCode != ''">and t0.gov_code = #{govCode}</if>
+            <if test="govName != null  and govName != ''">and t0.gov_name like concat(concat('%', #{govName}), '%')</if>
+            <if test="isLowest != null  and isLowest != ''">and t0.is_lowest = #{isLowest}</if>
+            <if test="parentCode != null  and parentCode != ''">and t0.parent_code = #{parentCode}</if>
+            <if test="parentId != null ">and t0.parent_id = #{parentId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="purpose != null  and purpose != ''">and t0.purpose = #{purpose}</if>
+        </where>
+        order by t0.gov_code
+    </select>
+
+    <!-- 查询政府预算经济分类 ById -->
+    <select id="selectBdGovexpecoById" parameterType="String" resultMap="BdGovexpecoResult">
+        <include refid="selectBdGovexpecoVo"/>
+        where gov_id = #{govId}
+    </select>
+
+    <!--查询政府预算经济分类Tree-->
+    <select id="selectBdGovexpecoListTree" resultType="com.cxnet.common.utils.tree.Zone">
+        select t0.gov_id id,t0.gov_code code,t0.gov_name name,nvl(t0.parent_id,'0') pid,t0.parent_code pcode
+        from bd_govexpeco t0
+        <where>
+            <if test="year != null ">and t0.year = #{year}</if>
+            <if test="unitCode != null  and unitCode != ''">and t0.unit_code = #{unitCode}</if>
+            <if test="unitName != null  and unitName != ''">and t0.unit_name = #{unitName}</if>
+            <if test="unitId != null  and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="delFlag != null  and delFlag != ''">and t0.del_flag = #{delFlag}</if>
+        </where>
+        order by t0.gov_code
+    </select>
+
+    <!--是否存在下级节点-->
+    <select id="existChildren" resultType="java.lang.Integer">
+        select count(1)
+        from bd_govexpeco t0
+        where t0.unit_id = #{unitId}
+          and t0.year = #{year}
+          and t0.PARENT_CODE = #{govCode}
+          and t0.del_flag = '0'
+    </select>
+
+    <select id="checkCode" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovexpeco"
+            resultType="java.lang.Integer">
+        select count(1) from bd_govexpeco
+        where year = #{year} and unit_id = #{unitId} and gov_code = #{govCode} and del_flag = '0'
+        <if test="govId != null ">and gov_id != #{govId}</if>
+    </select>
+
+    <select id="selectBdGovexpecoByCodes" resultMap="BdGovexpecoResult">
+        <include refid="selectBdGovexpecoVo"/>
+        where t0.del_flag = '0' and t0.year = #{year} and unit_id = #{unitId} and t0.gov_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 插入政府预算经济分类 -->
+    <insert id="insertBdGovexpeco" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovexpeco">
+        <selectKey keyProperty="govId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into bd_govexpeco
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="govId != null ">gov_id,</if>
+            <if test="year != null ">year,</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code,</if>
+            <if test="unitName != null  and unitName != ''">unit_name,</if>
+            <if test="unitId != null  and unitId != ''">unit_id,</if>
+            <if test="govCode != null  and govCode != ''">gov_code,</if>
+            <if test="govName != null  and govName != ''">gov_name,</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="purpose != null  and purpose != ''">purpose,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="govId != null ">#{govId},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="unitCode != null  and unitCode != ''">#{unitCode},</if>
+            <if test="unitName != null  and unitName != ''">#{unitName},</if>
+            <if test="unitId != null  and unitId != ''">#{unitId},</if>
+            <if test="govCode != null  and govCode != ''">#{govCode},</if>
+            <if test="govName != null  and govName != ''">#{govName},</if>
+            <if test="isLowest != null  and isLowest != ''">#{isLowest},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="purpose != null  and purpose != ''">#{purpose},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改政府预算经济分类 -->
+    <update id="updateBdGovexpeco" parameterType="com.cxnet.baseData.govexpeco.bdGovexpeco.domain.BdGovexpeco">
+        update bd_govexpeco
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null ">year = #{year},</if>
+            <if test="unitCode != null  and unitCode != ''">unit_code = #{unitCode},</if>
+            <if test="unitName != null  and unitName != ''">unit_name = #{unitName},</if>
+            <if test="unitId != null  and unitId != ''">unit_id = #{unitId},</if>
+            <if test="govCode != null  and govCode != ''">gov_code = #{govCode},</if>
+            <if test="govName != null  and govName != ''">gov_name = #{govName},</if>
+            <if test="isLowest != null  and isLowest != ''">is_lowest = #{isLowest},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="parentCode != null  and parentCode != ''">parent_code = #{parentCode},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="purpose != null  and purpose != ''">purpose = #{purpose},</if>
+        </trim>
+        where gov_id = #{govId}
+    </update>
+
+    <!-- 删除政府预算经济分类 ById -->
+    <delete id="deleteBdGovexpecoById" parameterType="String">
+        update bd_govexpeco
+        set del_flag = '2'
+        where gov_id = #{govId}
+    </delete>
+
+    <!-- 批量删除政府预算经济分类 ByIds -->
+    <delete id="deleteBdGovexpecoByIds" parameterType="String">
+        update bd_govexpeco set del_flag = '2' where gov_id in
+        <foreach item="govId" collection="array" open="(" separator="," close=")">
+            #{govId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入政府预算经济分类 -->
+    <insert id="insertBatchBdGovexpeco" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into bd_govexpeco
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                gov_id,
+                <if test="item.year != null ">year,</if>
+                <if test="item.unitId != null  and item.unitId != ''">unit_id,</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code,</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name,</if>
+                <if test="item.govCode != null  and item.govCode != ''">gov_code,</if>
+                <if test="item.govName != null  and item.govName != ''">gov_name,</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code,</if>
+                <if test="item.parentId != null ">parent_id,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+                <if test="item.purpose != null  and item.purpose != ''">purpose,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.year != null ">#{item.year},</if>
+                <if test="item.unitId != null  and item.unitId != ''">#{item.unitId},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">#{item.unitCode},</if>
+                <if test="item.unitName != null  and item.unitName != ''">#{item.unitName},</if>
+                <if test="item.govCode != null  and item.govCode != ''">#{item.govCode},</if>
+                <if test="item.govName != null  and item.govName != ''">#{item.govName},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">#{item.isLowest},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">#{item.parentCode},</if>
+                <if test="item.parentId != null ">#{item.parentId},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+                <if test="item.purpose != null  and item.purpose != ''">#{item.purpose},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改政府预算经济分类 -->
+    <update id="updateBatchBdGovexpeco" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update bd_govexpeco
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.year != null ">year = #{item.year},</if>
+                <if test="item.unitId != null  and item.unitId != ''">unit_id = #{item.unitId},</if>
+                <if test="item.unitCode != null  and item.unitCode != ''">unit_code = #{item.unitCode},</if>
+                <if test="item.unitName != null  and item.unitName != ''">unit_name = #{item.unitName},</if>
+                <if test="item.govCode != null  and item.govCode != ''">gov_code = #{item.govCode},</if>
+                <if test="item.govName != null  and item.govName != ''">gov_name = #{item.govName},</if>
+                <if test="item.isLowest != null  and item.isLowest != ''">is_lowest = #{item.isLowest},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.parentCode != null  and item.parentCode != ''">parent_code = #{item.parentCode},</if>
+                <if test="item.parentId != null ">parent_id = #{item.parentId},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+                <if test="item.purpose != null  and item.purpose != ''">purpose = #{item.purpose},</if>
+            </trim>
+            <where>
+                gov_id = #{item.govId}
+            </where>
+        </foreach>
+    </update>
+
+    <delete id="deleteBdGovexpecoByYear">
+        delete BD_GOVEXPECO
+        where year = #{year}
+        <if test="unitId != null and unitId != ''">
+            and unit_id =#{unitId}
+        </if>
+    </delete>
+
+    <select id="selectLatestYear" resultType="Integer">
+        select max(year)
+        from BD_GOVEXPECO
+    </select>
+
+    <insert id="carryForwardData" parameterType="Integer">
+        INSERT INTO BD_GOVEXPECO (
+            SELECT GOV_ID || 'W',
+                   #{newYear},
+                   GOV_CODE,
+                   GOV_NAME,
+                   IS_LOWEST,
+                   DEL_FLAG,
+                   PARENT_CODE,
+                   PARENT_ID || 'W',
+                   STATUS,
+                   CREATE_BY,
+                   CREATE_TIME,
+                   UPDATE_BY,
+                   UPDATE_TIME,
+                   PURPOSE,
+                   UNIT_ID,
+                   UNIT_CODE,
+                   UNIT_NAME
+            FROM BD_GOVEXPECO
+            where year = #{oldYear} and unit_id = '*'
+        )
+    </insert>
+
+</mapper>

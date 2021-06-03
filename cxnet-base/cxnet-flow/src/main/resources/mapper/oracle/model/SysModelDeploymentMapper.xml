@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.flow.model.mapper.SysModelDeploymentMapper">
+
+    <!-- 系统模块流程表 结果集 -->
+    <resultMap type="com.cxnet.flow.model.domain.SysModelDeployment" id="SysModelDeploymentResult">
+        <result property="modelId" column="model_id"/>
+        <result property="key" column="key"/>
+        <result property="unitId" column="unit_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="status" column="status"/>
+        <result property="deploymentId" column="deployment_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+
+        <result property="deploymentName" column="deployment_name"/>
+        <result property="modelName" column="model_name"/>
+        <result property="unitName" column="unit_name"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <!-- 查询系统模块流程表 通用sql -->
+    <sql id="selectSysModelDeploymentVo">
+        select t0.model_id,
+               t0.key,
+               t0.unit_id,
+               t0.del_flag,
+               t0.remark,
+               t0.status,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               ard.DEPLOY_TIME_         update_time,
+               t4.deployment_id_        deployment_id,
+               t4.name                  deployment_name,
+               t4.version,
+               nvl(t5.dept_name, '系统级') unit_name,
+               t6.model_name
+        from sys_model_deployment t0
+                 inner join (
+            select t2.name_ name, t2.deployment_id_, t3.*
+            from act_re_procdef t2
+                     inner join (
+                select max(t1.version_) version, t1.key_ key
+                from act_re_procdef t1
+                group by t1.key_) t3
+                                on t2.version_ = t3.version and t2.key_ = t3.key
+        ) t4
+                            on t0.key = t4.key
+                 left join sys_dept t5
+                           on t0.unit_id = t5.dept_id
+                 left join sys_model t6
+                           on t0.model_id = t6.model_id
+                 left join act_re_deployment ard
+                           on t4.deployment_id_ = ard.id_
+    </sql>
+
+
+    <!-- 查询系统模块流程表 集合 -->
+    <select id="selectSysModelDeploymentList" parameterType="com.cxnet.flow.model.domain.SysModelDeployment"
+            resultMap="SysModelDeploymentResult">
+        <include refid="selectSysModelDeploymentVo"/>
+        <where>
+            <if test="modelId != null and modelId != ''">and t0.model_id = #{modelId}</if>
+            <if test="key != null  and key != ''">and t0.key = #{key}</if>
+            <if test="unitId != null and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            <if test="modelId == null or modelId == ''">and LENGTH(t0.model_id) = 4</if>
+            and t0.del_flag = '0'
+        </where>
+        order by t0.model_id
+    </select>
+
+    <!-- 查询系统模块流程表 集合 -->
+    <select id="selectDeploymentListByModelId" parameterType="com.cxnet.flow.model.domain.SysModelDeployment"
+            resultMap="SysModelDeploymentResult">
+        <include refid="selectSysModelDeploymentVo"/>
+        <where>
+            <if test="modelId != null and modelId != ''">and t0.model_id = #{modelId}</if>
+            <if test="key != null  and key != ''">and t0.key = #{key}</if>
+            <if test="unitId != null and unitId != ''">and t0.unit_id = #{unitId}</if>
+            <if test="status != null  and status != ''">and t0.status = #{status}</if>
+            and t0.del_flag = '0'
+        </where>
+        order by t0.model_id
+    </select>
+
+    <!-- 查询系统模块流程表 ById -->
+    <select id="selectSysModelDeploymentById" parameterType="string" resultMap="SysModelDeploymentResult">
+        <include refid="selectSysModelDeploymentVo"/>
+        where t0.model_id = #{modelId}
+        and t0.del_flag = '0'
+    </select>
+    <!-- 查询系统模块流程表 ById -->
+    <select id="selectSysModelDeploymentByIdAndUnitId" parameterType="string" resultMap="SysModelDeploymentResult">
+        <include refid="selectSysModelDeploymentVo"/>
+        where t0.model_id = #{modelId}
+        and t0.unit_id = #{unitId}
+        and t0.del_flag = '0'
+    </select>
+
+    <select id="selectActProcdefByKey" resultType="java.lang.Integer">
+        select 1
+        from ACT_RE_PROCDEF
+        where key_ = #{key}
+    </select>
+
+    <!-- 插入系统模块流程表 -->
+    <insert id="insertSysModelDeployment" parameterType="com.cxnet.flow.model.domain.SysModelDeployment">
+        insert into sys_model_deployment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelId != null ">model_id,</if>
+            <if test="key != null  and key != ''">key,</if>
+            <if test="unitId != null ">unit_id,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="modelId != null ">#{modelId},</if>
+            <if test="key != null  and key != ''">#{key},</if>
+            <if test="unitId != null ">#{unitId},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改系统模块流程表 -->
+    <update id="updateSysModelDeployment" parameterType="com.cxnet.flow.model.domain.SysModelDeployment">
+        update sys_model_deployment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="key != null  and key != ''">key = #{key},</if>
+        </trim>
+        where model_id = #{modelId}
+        and unit_id = #{unitId}
+        and del_flag = '0'
+    </update>
+
+    <!-- 删除系统模块流程表 ById -->
+    <delete id="deleteSysModelDeploymentById" parameterType="string">
+        delete
+        from sys_model_deployment
+        where model_id = #{modelId}
+    </delete>
+
+    <!-- 删除系统模块流程表 ById -->
+    <delete id="deleteSysModelDeploymentByIdAndUnitId" parameterType="string">
+        delete
+        from sys_model_deployment
+        where model_id = #{modelId}
+          and unit_id = #{unitId}
+    </delete>
+
+    <!-- 批量删除系统模块流程表 ByIds -->
+    <delete id="deleteSysModelDeploymentByIds" parameterType="string">
+        delete from sys_model_deployment where model_id in
+        <foreach item="modelId" collection="array" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </delete>
+
+    <!--根据流程key删除-->
+    <update id="deleteSysModelDeploymentByKey" parameterType="string">
+        update sys_model_deployment
+        set del_flag = '2'
+        where key = #{key}
+    </update>
+
+    <!--根据流程key停用-->
+    <update id="stopSysModelDeploymentByKey">
+        update sys_model_deployment
+        set status = '2'
+        where key = #{key}
+    </update>
+
+    <!-- 批量插入系统模块流程表 -->
+    <insert id="insertBatchSysModelDeployment" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_model_deployment
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                model_id,
+                <if test="item.key != null  and item.key != ''">key,</if>
+                <if test="item.unitId != null ">unit_id,</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag,</if>
+                <if test="item.remark != null  and item.remark != ''">remark,</if>
+                <if test="item.status != null  and item.status != ''">status,</if>
+                <if test="item.deploymentId != null  and item.deploymentId != ''">deployment_id,</if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+                <if test="item.createTime != null ">create_time,</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+                <if test="item.updateTime != null ">update_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid(),
+                <if test="item.key != null  and item.key != ''">#{item.key},</if>
+                <if test="item.unitId != null ">#{item.unitId},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">#{item.delFlag},</if>
+                <if test="item.remark != null  and item.remark != ''">#{item.remark},</if>
+                <if test="item.status != null  and item.status != ''">#{item.status},</if>
+                <if test="item.deploymentId != null  and item.deploymentId != ''">#{item.deploymentId},</if>
+                <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+                <if test="item.createTime != null ">#{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+                <if test="item.updateTime != null ">#{item.updateTime},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改系统模块流程表 -->
+    <update id="updateBatchSysModelDeployment" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update sys_model_deployment
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.key != null  and item.key != ''">key = #{item.key},</if>
+                <if test="item.unitId != null ">unit_id = #{item.unitId},</if>
+                <if test="item.delFlag != null  and item.delFlag != ''">del_flag = #{item.delFlag},</if>
+                <if test="item.remark != null  and item.remark != ''">remark = #{item.remark},</if>
+                <if test="item.status != null  and item.status != ''">status = #{item.status},</if>
+                <if test="item.deploymentId != null  and item.deploymentId != ''">deployment_id =
+                    #{item.deploymentId},
+                </if>
+                <if test="item.createBy != null  and item.createBy != ''">create_by = #{item.createBy},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateBy != null  and item.updateBy != ''">update_by = #{item.updateBy},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+            </trim>
+            <where>
+                model_id = #{item.modelId}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

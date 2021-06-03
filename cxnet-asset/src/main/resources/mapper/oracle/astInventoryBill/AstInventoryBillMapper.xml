@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.inventory.mapper.AstInventoryBillMapper">
+
+    <resultMap type="com.cxnet.asset.inventory.domain.AstInventoryBill" id="AstInventoryBillMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="fiscal" column="FISCAL" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="billNo" column="BILL_NO" jdbcType="VARCHAR"/>
+        <result property="checkPlanCode" column="CHECK_PLAN_CODE" jdbcType="VARCHAR"/>
+        <result property="checkPlanName" column="CHECK_PLAN_NAME" jdbcType="VARCHAR"/>
+        <result property="planStartDate" column="PLAN_START_DATE" jdbcType="TIMESTAMP"/>
+        <result property="planEndDate" column="PLAN_END_DATE" jdbcType="TIMESTAMP"/>
+        <result property="planType" column="PLAN_TYPE" jdbcType="VARCHAR"/>
+        <result property="planTakeTotal" column="PLAN_TAKE_TOTAL" jdbcType="VARCHAR"/>
+        <result property="planSurplusTotal" column="PLAN_SURPLUS_TOTAL" jdbcType="VARCHAR"/>
+        <result property="planLossTotal" column="PLAN_LOSS_TOTAL" jdbcType="VARCHAR"/>
+        <result property="acquisitionStartDate" column="ACQUISITION_START_DATE" jdbcType="TIMESTAMP"/>
+        <result property="acquisitionEndDate" column="ACQUISITION_END_DATE" jdbcType="TIMESTAMP"/>
+        <result property="assetsTypeCode" column="ASSETS_TYPE_CODE" jdbcType="VARCHAR"/>
+        <result property="assetsTypeName" column="ASSETS_TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="applyDeptCode" column="APPLY_DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="applyDeptName" column="APPLY_DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="empCode" column="EMP_CODE" jdbcType="VARCHAR"/>
+        <result property="empName" column="EMP_NAME" jdbcType="VARCHAR"/>
+        <result property="placeCode" column="PLACE_CODE" jdbcType="VARCHAR"/>
+        <result property="placeName" column="PLACE_NAME" jdbcType="VARCHAR"/>
+        <result property="applyStatus" column="APPLY_STATUS" jdbcType="VARCHAR"/>
+        <result property="queryRemark" column="QUERY_REMARK" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstInventoryBillVo">
+        select t0.ID,
+               t0.FISCAL,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.BILL_NO,
+               t0.CHECK_PLAN_CODE,
+               t0.CHECK_PLAN_NAME,
+               t0.PLAN_START_DATE,
+               t0.PLAN_END_DATE,
+               t0.PLAN_TYPE,
+               t0.PLAN_TAKE_TOTAL,
+               t0.PLAN_SURPLUS_TOTAL,
+               t0.PLAN_LOSS_TOTAL,
+               t0.ACQUISITION_START_DATE,
+               t0.ACQUISITION_END_DATE,
+               t0.ASSETS_TYPE_CODE,
+               t0.ASSETS_TYPE_NAME,
+               t0.APPLY_DEPT_CODE,
+               t0.APPLY_DEPT_NAME,
+               t0.EMP_CODE,
+               t0.EMP_NAME,
+               t0.PLACE_CODE,
+               t0.PLACE_NAME,
+               t0.APPLY_STATUS,
+               t0.QUERY_REMARK,
+               t0.STATUS,
+               t0.DEL_FLAG,
+               t0.REMARK,
+               t0.CREATE_BY,
+               t0.CREATE_NAME,
+               t0.CREATE_TIME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5
+        from AST_INVENTORY_BILL t0
+    </sql>
+
+    <insert id="insertList" parameterType="com.cxnet.asset.inventory.domain.AstInventoryList">
+        INSERT into AST_INVENTORY_LIST
+        SELECT sys_guid(),ID,extract(year from
+        sysdate),UNIT_ID,UNIT_CODE,UNIT_NAME,'${billNo}','',CLASS_CODE,CLASS_NAME,CATEGORY_CODE,CATEGORY_NAME,SPEC,
+        MEASUREMENT,ACQUISITION_DATE,AST_CODE,ASSET_NAME,DEPARTMENT_CODE,DEPARTMENT_NAME,EMP_CODE,EMP_NAME,'',COST,QTY,COST,QTY,'','','','','',PLACE_NAME,
+        '','','2','2','1','0','',CREATE_BY,CREATE_NAME,CREATE_TIME,UPDATE_BY,UPDATE_TIME,'','','','',''
+        from AST_CARD
+        <where>
+            AST_STATUS='1' and INITIAL_STATE='1'
+            <if test="acquisitionStartDate != null and acquisitionStartDate != ''">and
+                to_char(ACQUISITION_DATE,'yyyy-mm-dd') BETWEEN #{acquisitionStartDate}
+            </if>
+            <if test="acquisitionEndDate != null and acquisitionEndDate != ''">and #{acquisitionEndDate}</if>
+            <if test="assetsTypeCode != null and assetsTypeCode.size > 0">and CATEGORY_CODE IN
+                <trim suffixOverrides=" OR CATEGORY_CODE IN()">
+                    <foreach collection="assetsTypeCode" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR CATEGORY_CODE IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+            <if test="applyDeptCode != null and applyDeptCode.size > 0">and DEPARTMENT_CODE IN
+                <trim suffixOverrides=" OR DEPARTMENT_CODE IN()">
+                    <foreach collection="applyDeptCode" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR DEPARTMENT_CODE IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+            <if test="empCode != null and empCode.size > 0">and EMP_CODE IN
+                <trim suffixOverrides=" OR EMP_CODE IN()">
+                    <foreach collection="empCode" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR EMP_CODE IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+            <if test="placeCode != null and placeCode.size > 0">and PLACE_CODE IN
+                <trim suffixOverrides=" OR PLACE_CODE IN()">
+                    <foreach collection="placeCode" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR PLACE_CODE IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+            <if test="applyStatus != null and applyStatus.size > 0">and USAGE_STATUS IN
+                <trim suffixOverrides=" OR USAGE_STATUS IN()">
+                    <foreach collection="applyStatus" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR USAGE_STATUS IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </insert>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstInventoryBillMap">
+        <include refid="AstInventoryBillVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="fiscal != null and fiscal != ''">and t0.FISCAL = #{fiscal}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="billNo != null and billNo != ''">and t0.BILL_NO = #{billNo}</if>
+            <if test="checkPlanCode != null and checkPlanCode != ''">and t0.CHECK_PLAN_CODE = #{checkPlanCode}</if>
+            <if test="checkPlanName != null and checkPlanName != ''">and t0.CHECK_PLAN_NAME = #{checkPlanName}</if>
+            <if test="planStartDate != null">and t0.PLAN_START_DATE = #{planStartDate}</if>
+            <if test="planEndDate != null">and t0.PLAN_END_DATE = #{planEndDate}</if>
+            <if test="planType != null and planType != ''">and t0.PLAN_TYPE = #{planType}</if>
+            <if test="planTakeTotal != null and planTakeTotal != ''">and t0.PLAN_TAKE_TOTAL = #{planTakeTotal}</if>
+            <if test="planSurplusTotal != null and planSurplusTotal != ''">and t0.PLAN_SURPLUS_TOTAL =
+                #{planSurplusTotal}
+            </if>
+            <if test="planLossTotal != null and planLossTotal != ''">and t0.PLAN_LOSS_TOTAL = #{planLossTotal}</if>
+            <if test="acquisitionStartDate != null">and t0.ACQUISITION_START_DATE = #{acquisitionStartDate}</if>
+            <if test="acquisitionEndDate != null">and t0.ACQUISITION_END_DATE = #{acquisitionEndDate}</if>
+            <if test="assetsTypeCode != null and assetsTypeCode != ''">and t0.ASSETS_TYPE_CODE = #{assetsTypeCode}</if>
+            <if test="assetsTypeName != null and assetsTypeName != ''">and t0.ASSETS_TYPE_NAME = #{assetsTypeName}</if>
+            <if test="applyDept != null and applyDept != ''">and t0.APPLY_DEPT = #{applyDept}</if>
+            <if test="applyName != null and applyName != ''">and t0.APPLY_NAME = #{applyName}</if>
+            <if test="placeLocation != null and placeLocation != ''">and t0.PLACE_LOCATION = #{placeLocation}</if>
+            <if test="applyStatus != null and applyStatus != ''">and t0.APPLY_STATUS = #{applyStatus}</if>
+            <if test="queryRemark != null and queryRemark != ''">and t0.QUERY_REMARK = #{queryRemark}</if>
+            <if test="status != null and status != ''">and t0.STATUS = #{status}</if>
+            <if test="delFlag != null and delFlag != ''">and t0.DEL_FLAG = #{delFlag}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+        </where>
+    </select>
+</mapper>

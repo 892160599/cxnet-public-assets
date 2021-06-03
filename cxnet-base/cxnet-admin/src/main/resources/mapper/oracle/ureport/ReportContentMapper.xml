@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.ureport2.demo.mapper.ReportContentMapper">
+    <resultMap id="BaseResultMap" type="com.cxnet.ureport2.demo.model.ReportContent">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , file_name, content, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from report_content
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from report_content
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.cxnet.ureport2.demo.model.ReportContent">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select sys_guid() as id FROM DUAL
+        </selectKey>
+        insert into report_content (id, file_name, content,
+        create_time, update_time)
+        values (#{id,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+        sysdate, sysdate)
+    </insert>
+    <insert id="insertSelective" parameterType="com.cxnet.ureport2.demo.model.ReportContent">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select sys_guid() as id FROM DUAL
+        </selectKey>
+        insert into report_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="fileName != null">
+                file_name,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            sysdate,
+            sysdate
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cxnet.ureport2.demo.model.ReportContent">
+        update report_content
+        <set>
+            <if test="fileName != null">
+                file_name = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cxnet.ureport2.demo.model.ReportContent">
+        update report_content
+        set file_name   = #{fileName,jdbcType=VARCHAR},
+            content     = #{content,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = sysdate
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByFileName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from report_content
+        where file_name = #{fileName}
+    </select>
+
+    <delete id="deleteByFileName" parameterType="string">
+        delete
+        from report_content
+        where file_name = #{fileName}
+    </delete>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select file_name, update_time
+        from report_content
+    </select>
+
+    <update id="updateContentByFileName" parameterType="map">
+        update report_content
+        set content     = #{content},
+            update_time = sysdate
+        where file_name = #{fileName}
+    </update>
+</mapper>

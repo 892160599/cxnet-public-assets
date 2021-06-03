@@ -1,0 +1,149 @@
+package ${packageName}.${className}.service;
+
+import java.util.List;
+    #if($TreeName!='')
+    import java.util.Map;
+    #end
+    #foreach ($column in $columns)
+        #if($column.javaField == 'createTime' || $column.javaField == 'updateTime')
+        import com.cxnet.common.utils.DateUtils;
+            #break
+        #end
+    #end
+    #foreach ($column in $columns)
+        #if($column.javaField == 'createBy' || $column.javaField == 'updateBy')
+        import com.cxnet.framework.security.SecurityUtils;
+            #break
+        #end
+    #end
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ${packageName}.${className}.domain.${ClassName};
+import ${packageName}.${className}.mapper.${ClassName}Mapper;
+
+/**
+ * ${functionName}Service业务层处理
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+public class ${ClassName}ServiceImpl implements ${ClassName}ServiceI {
+    @Autowired
+    private ${ClassName}Mapper ${className}Mapper;
+
+    /**
+     * 查询${functionName}
+     *
+     * @param ${pkColumn.javaField} ${functionName}ID
+     * @return ${functionName}
+     */
+    @Override
+    public ${ClassName} select${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField}) {
+        return ${className}Mapper.select${ClassName}ById(${pkColumn.javaField});
+    }
+
+    /**
+     * 查询${functionName}集合
+     *
+     * @param ${className} ${functionName}
+     * @return ${functionName}
+     */
+    @Override
+    public List<${ClassName}> select${ClassName}List(${ClassName} ${className}) {
+        return ${className}Mapper.select${ClassName}List(${className});
+    }
+
+    /**
+     * 新增${functionName}
+     *
+     * @param ${className} ${functionName}
+     * @return 结果
+     */
+    @Override
+    public int insert${ClassName}(${ClassName} ${className}) {
+        #foreach ($column in $columns)
+            #if($column.javaField == 'createTime')
+                ${className}.setCreateTime(DateUtils.getNowDate());
+            #end
+            #if($column.javaField == 'createBy')
+                ${className}.setCreateBy(SecurityUtils.getUsername());
+            #end
+        #end
+        return ${className}Mapper.insert${ClassName}(${className});
+    }
+
+    /**
+     * 批量新增${functionName}
+     *
+     * @param ${className}s ${functionName}
+     * @return 结果
+     */
+    @Override
+    public int insertBatch${ClassName}(List<${ClassName}> ${className}s) {
+        return ${className}Mapper.insertBatch${ClassName}(${className}s);
+    }
+
+    /**
+     * 修改${functionName}
+     *
+     * @param ${className} ${functionName}
+     * @return 结果
+     */
+    @Override
+    public int update${ClassName}(${ClassName} ${className}) {
+        #foreach ($column in $columns)
+            #if($column.javaField == 'updateTime')
+                ${className}.setUpdateTime(DateUtils.getNowDate());
+            #end
+            #if($column.javaField == 'updateBy')
+                ${className}.setUpdateBy(SecurityUtils.getUsername());
+            #end
+        #end
+        return ${className}Mapper.update${ClassName}(${className});
+    }
+
+    /**
+     * 批量修改${functionName}
+     *
+     * @param ${className}s ${functionName}
+     * @return 结果
+     */
+    @Override
+    public int updateBatch${ClassName}(List<${ClassName}> ${className}s) {
+        return ${className}Mapper.updateBatch${ClassName}(${className}s);
+    }
+
+    /**
+     * 批量删除${functionName}
+     *
+     * @param ${pkColumn.javaField}s 需要删除的${functionName}ID
+     * @return 结果
+     */
+    @Override
+    public int delete${ClassName}ByIds(${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+        return ${className}Mapper.delete${ClassName}ByIds(${pkColumn.javaField}s);
+    }
+
+    /**
+     * 删除${functionName}信息
+     *
+     * @param ${pkColumn.javaField} ${functionName}ID
+     * @return 结果
+     */
+    @Override
+    public int delete${ClassName}ById(${pkColumn.javaType} ${pkColumn.javaField}) {
+        return ${className}Mapper.delete${ClassName}ById(${pkColumn.javaField});
+    }
+
+    #if($TreeName!='')
+        /**
+         * 获取${functionName}下拉树列表
+         */
+        @Override
+        public List<Map> treeselectList() {
+            return ${className}Mapper.treeselectList();
+        }
+
+    #end
+}

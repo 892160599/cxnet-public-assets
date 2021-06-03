@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.card.mapper.AstBillListMapper">
+
+    <resultMap type="com.cxnet.asset.card.domain.AstBillList" id="AstBillListMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="billId" column="BILL_ID" jdbcType="VARCHAR"/>
+        <result property="astId" column="AST_ID" jdbcType="VARCHAR"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="astCode" column="AST_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryCode" column="CATEGORY_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryName" column="CATEGORY_NAME" jdbcType="VARCHAR"/>
+        <result property="classCode" column="CLASS_CODE" jdbcType="VARCHAR"/>
+        <result property="className" column="CLASS_NAME" jdbcType="VARCHAR"/>
+        <result property="typeCode" column="TYPE_CODE" jdbcType="VARCHAR"/>
+        <result property="typeName" column="TYPE_NAME" jdbcType="VARCHAR"/>
+        <result property="assetName" column="ASSET_NAME" jdbcType="VARCHAR"/>
+        <result property="addCode" column="ADD_CODE" jdbcType="VARCHAR"/>
+        <result property="addDate" column="ADD_DATE" jdbcType="TIMESTAMP"/>
+        <result property="startUsedate" column="START_USEDATE" jdbcType="TIMESTAMP"/>
+        <result property="useLife" column="USE_LIFE" jdbcType="INTEGER"/>
+        <result property="finshUsedate" column="FINSH_USEDATE" jdbcType="TIMESTAMP"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="measurement" column="MEASUREMENT" jdbcType="VARCHAR"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="projectCode" column="PROJECT_CODE" jdbcType="VARCHAR"/>
+        <result property="receiptCode" column="RECEIPT_CODE" jdbcType="VARCHAR"/>
+        <result property="acquisitionDate" column="ACQUISITION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="conId" column="CON_ID" jdbcType="VARCHAR"/>
+        <result property="conCode" column="CON_CODE" jdbcType="VARCHAR"/>
+        <result property="costType" column="COST_TYPE" jdbcType="VARCHAR"/>
+        <result property="finCost" column="FIN_COST" jdbcType="INTEGER"/>
+        <result property="cost" column="COST" jdbcType="INTEGER"/>
+        <result property="nofinCost" column="NOFIN_COST" jdbcType="INTEGER"/>
+        <result property="isVou" column="IS_VOU" jdbcType="VARCHAR"/>
+        <result property="vouDate" column="VOU_DATE" jdbcType="TIMESTAMP"/>
+        <result property="vouNo" column="VOU_NO" jdbcType="VARCHAR"/>
+        <result property="isDep" column="IS_DEP" jdbcType="VARCHAR"/>
+        <result property="depMethod" column="DEP_METHOD" jdbcType="VARCHAR"/>
+        <result property="depedMo" column="DEPED_MO" jdbcType="INTEGER"/>
+        <result property="depTotal" column="DEP_TOTAL" jdbcType="INTEGER"/>
+        <result property="depMoValue" column="DEP_MO_VALUE" jdbcType="INTEGER"/>
+        <result property="netValue" column="NET_VALUE" jdbcType="INTEGER"/>
+        <result property="usageStatus" column="USAGE_STATUS" jdbcType="VARCHAR"/>
+        <result property="departmentId" column="DEPARTMENT_ID" jdbcType="VARCHAR"/>
+        <result property="departmentCode" column="DEPARTMENT_CODE" jdbcType="VARCHAR"/>
+        <result property="departmentName" column="DEPARTMENT_NAME" jdbcType="VARCHAR"/>
+        <result property="empCode" column="EMP_CODE" jdbcType="VARCHAR"/>
+        <result property="empName" column="EMP_NAME" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="VARCHAR"/>
+        <result property="deptCode" column="DEPT_CODE" jdbcType="VARCHAR"/>
+        <result property="deptName" column="DEPT_NAME" jdbcType="VARCHAR"/>
+        <result property="placeCode" column="PLACE_CODE" jdbcType="VARCHAR"/>
+        <result property="placeName" column="PLACE_NAME" jdbcType="VARCHAR"/>
+        <result property="useRemark" column="USE_REMARK" jdbcType="VARCHAR"/>
+        <result property="basicFileId" column="BASIC_FILE_ID" jdbcType="VARCHAR"/>
+        <result property="inventoryFileId" column="INVENTORY_FILE_ID" jdbcType="VARCHAR"/>
+        <result property="brand" column="BRAND" jdbcType="VARCHAR"/>
+        <result property="spec" column="SPEC" jdbcType="VARCHAR"/>
+        <result property="productSn" column="PRODUCT_SN" jdbcType="VARCHAR"/>
+        <result property="mfrs" column="MFRS" jdbcType="VARCHAR"/>
+        <result property="dealer" column="DEALER" jdbcType="VARCHAR"/>
+        <result property="guaranteeDate" column="GUARANTEE_DATE" jdbcType="TIMESTAMP"/>
+        <result property="madein" column="MADEIN" jdbcType="VARCHAR"/>
+        <result property="areaSyqmj" column="AREA_SYQMJ" jdbcType="INTEGER"/>
+        <result property="areaDymj" column="AREA_DYMJ" jdbcType="INTEGER"/>
+        <result property="areaFtmj" column="AREA_FTMJ" jdbcType="INTEGER"/>
+        <result property="landGradation" column="LAND_GRADATION" jdbcType="VARCHAR"/>
+        <result property="rightFormCode" column="RIGHT_FORM_CODE" jdbcType="VARCHAR"/>
+        <result property="rightFormName" column="RIGHT_FORM_NAME" jdbcType="VARCHAR"/>
+        <result property="ownershipCert" column="OWNERSHIP_CERT" jdbcType="VARCHAR"/>
+        <result property="ownershipNature" column="OWNERSHIP_NATURE" jdbcType="VARCHAR"/>
+        <result property="ownershipNumber" column="OWNERSHIP_NUMBER" jdbcType="VARCHAR"/>
+        <result property="ownershipAge" column="OWNERSHIP_AGE" jdbcType="VARCHAR"/>
+        <result property="ownershipHolder" column="OWNERSHIP_HOLDER" jdbcType="VARCHAR"/>
+        <result property="ownershipDate" column="OWNERSHIP_DATE" jdbcType="TIMESTAMP"/>
+        <result property="ownershipType" column="OWNERSHIP_TYPE" jdbcType="VARCHAR"/>
+        <result property="landUse" column="LAND_USE" jdbcType="VARCHAR"/>
+        <result property="location" column="LOCATION" jdbcType="VARCHAR"/>
+        <result property="areaZymj" column="AREA_ZYMJ" jdbcType="INTEGER"/>
+        <result property="areaQtmj" column="AREA_QTMJ" jdbcType="INTEGER"/>
+        <result property="areaCjmj" column="AREA_CJMJ" jdbcType="INTEGER"/>
+        <result property="areaCzmj" column="AREA_CZMJ" jdbcType="INTEGER"/>
+        <result property="areaXzmj" column="AREA_XZMJ" jdbcType="INTEGER"/>
+        <result property="costZymj" column="COST_ZYMJ" jdbcType="INTEGER"/>
+        <result property="costCjmj" column="COST_CJMJ" jdbcType="INTEGER"/>
+        <result property="costCzmj" column="COST_CZMJ" jdbcType="INTEGER"/>
+        <result property="costXzmj" column="COST_XZMJ" jdbcType="INTEGER"/>
+        <result property="costQtmj" column="COST_QTMJ" jdbcType="INTEGER"/>
+        <result property="buildStructure" column="BUILD_STRUCTURE" jdbcType="VARCHAR"/>
+        <result property="houseOwner" column="HOUSE_OWNER" jdbcType="VARCHAR"/>
+        <result property="completionDate" column="COMPLETION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="designPurpose" column="DESIGN_PURPOSE" jdbcType="VARCHAR"/>
+        <result property="structureMeasure" column="STRUCTURE_MEASURE" jdbcType="VARCHAR"/>
+        <result property="areaJzmj" column="AREA_JZMJ" jdbcType="INTEGER"/>
+        <result property="areaQnmj" column="AREA_QNMJ" jdbcType="INTEGER"/>
+        <result property="areaWfmj" column="AREA_WFMJ" jdbcType="INTEGER"/>
+        <result property="purchaseType" column="PURCHASE_TYPE" jdbcType="VARCHAR"/>
+        <result property="equipmentUse" column="EQUIPMENT_USE" jdbcType="VARCHAR"/>
+        <result property="carNo" column="CAR_NO" jdbcType="VARCHAR"/>
+        <result property="carDisplacement" column="CAR_DISPLACEMENT" jdbcType="VARCHAR"/>
+        <result property="carLicense" column="CAR_LICENSE" jdbcType="VARCHAR"/>
+        <result property="carHolder" column="CAR_HOLDER" jdbcType="VARCHAR"/>
+        <result property="carRegdate" column="CAR_REGDATE" jdbcType="TIMESTAMP"/>
+        <result property="carEngineNo" column="CAR_ENGINE_NO" jdbcType="VARCHAR"/>
+        <result property="carIdNo" column="CAR_ID_NO" jdbcType="VARCHAR"/>
+        <result property="carMadein" column="CAR_MADEIN" jdbcType="VARCHAR"/>
+        <result property="carUse" column="CAR_USE" jdbcType="VARCHAR"/>
+        <result property="originPlace" column="ORIGIN_PLACE" jdbcType="VARCHAR"/>
+        <result property="collectionAge" column="COLLECTION_AGE" jdbcType="VARCHAR"/>
+        <result property="culturalGrade" column="CULTURAL_GRADE" jdbcType="VARCHAR"/>
+        <result property="press" column="PRESS" jdbcType="VARCHAR"/>
+        <result property="publishedDate" column="PUBLISHED_DATE" jdbcType="TIMESTAMP"/>
+        <result property="saveLife" column="SAVE_LIFE" jdbcType="VARCHAR"/>
+        <result property="arcNo" column="ARC_NO" jdbcType="VARCHAR"/>
+        <result property="plantingAge" column="PLANTING_AGE" jdbcType="INTEGER"/>
+        <result property="plantingYear" column="PLANTING_YEAR" jdbcType="INTEGER"/>
+        <result property="genericFamily" column="GENERIC_FAMILY" jdbcType="VARCHAR"/>
+        <result property="expiredDate" column="EXPIRED_DATE" jdbcType="VARCHAR"/>
+        <result property="isSealed" column="IS_SEALED" jdbcType="VARCHAR"/>
+        <result property="sealedEmpcode" column="SEALED_EMPCODE" jdbcType="VARCHAR"/>
+        <result property="sealedEmpname" column="SEALED_EMPNAME" jdbcType="VARCHAR"/>
+        <result property="sealedDate" column="SEALED_DATE" jdbcType="VARCHAR"/>
+        <result property="initialState" column="INITIAL_STATE" jdbcType="VARCHAR"/>
+        <result property="oldAstCode" column="OLD_AST_CODE" jdbcType="VARCHAR"/>
+        <result property="acceptanceNo" column="ACCEPTANCE_NO" jdbcType="VARCHAR"/>
+        <result property="rentAgyCode" column="RENT_AGY_CODE" jdbcType="VARCHAR"/>
+        <result property="rentAgyName" column="RENT_AGY_NAME" jdbcType="VARCHAR"/>
+        <result property="lendAgyCode" column="LEND_AGY_CODE" jdbcType="VARCHAR"/>
+        <result property="lendAgyName" column="LEND_AGY_NAME" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="extend6" column="EXTEND6" jdbcType="VARCHAR"/>
+        <result property="extend7" column="EXTEND7" jdbcType="VARCHAR"/>
+        <result property="extend8" column="EXTEND8" jdbcType="VARCHAR"/>
+        <result property="extend9" column="EXTEND9" jdbcType="VARCHAR"/>
+        <result property="extend10" column="EXTEND10" jdbcType="VARCHAR"/>
+        <result property="astStatus" column="AST_STATUS" jdbcType="VARCHAR"/>
+        <result property="adminDepartmentId" column="ADMIN_DEPARTMENT_ID" jdbcType="VARCHAR"/>
+        <result property="adminDepartmentCode" column="ADMIN_DEPARTMENT_CODE" jdbcType="VARCHAR"/>
+        <result property="adminDepartmentName" column="ADMIN_DEPARTMENT_NAME" jdbcType="VARCHAR"/>
+        <result property="cardBill" column="CARD_BILL" jdbcType="VARCHAR"/>
+        <result property="depreciationMo" column="DEPRECIATION_MO" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="CATEGORY_ID" jdbcType="VARCHAR"/>
+        <result property="typeId" column="TYPE_ID" jdbcType="VARCHAR"/>
+        <result property="placeId" column="PLACE_ID" jdbcType="VARCHAR"/>
+        <result property="empId" column="EMP_ID" jdbcType="VARCHAR"/>
+        <result property="billType" column="BILL_TYPE" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstBillListVo">
+        select t0.ID,
+               t0.BILL_ID,
+               t0.AST_ID,
+               t0.UNIT_ID,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.AST_CODE,
+               t0.CATEGORY_CODE,
+               t0.CATEGORY_NAME,
+               t0.CLASS_CODE,
+               t0.CLASS_NAME,
+               t0.TYPE_CODE,
+               t0.TYPE_NAME,
+               t0.ASSET_NAME,
+               t0.ADD_CODE,
+               t0.ADD_DATE,
+               t0.START_USEDATE,
+               t0.USE_LIFE,
+               t0.FINSH_USEDATE,
+               t0.QTY,
+               t0.MEASUREMENT,
+               t0.REMARK,
+               t0.PROJECT_CODE,
+               t0.RECEIPT_CODE,
+               t0.ACQUISITION_DATE,
+               t0.CON_ID,
+               t0.CON_CODE,
+               t0.COST_TYPE,
+               t0.FIN_COST,
+               t0.COST,
+               t0.NOFIN_COST,
+               t0.IS_VOU,
+               t0.VOU_DATE,
+               t0.VOU_NO,
+               t0.IS_DEP,
+               t0.DEP_METHOD,
+               t0.DEPED_MO,
+               t0.DEP_TOTAL,
+               t0.DEP_MO_VALUE,
+               t0.NET_VALUE,
+               t0.USAGE_STATUS,
+               t0.DEPARTMENT_ID,
+               t0.DEPARTMENT_CODE,
+               t0.DEPARTMENT_NAME,
+               t0.EMP_CODE,
+               t0.EMP_NAME,
+               t0.DEPT_ID,
+               t0.DEPT_CODE,
+               t0.DEPT_NAME,
+               t0.PLACE_CODE,
+               t0.PLACE_NAME,
+               t0.USE_REMARK,
+               t0.BASIC_FILE_ID,
+               t0.INVENTORY_FILE_ID,
+               t0.BRAND,
+               t0.SPEC,
+               t0.PRODUCT_SN,
+               t0.MFRS,
+               t0.DEALER,
+               t0.GUARANTEE_DATE,
+               t0.MADEIN,
+               t0.AREA_SYQMJ,
+               t0.AREA_DYMJ,
+               t0.AREA_FTMJ,
+               t0.LAND_GRADATION,
+               t0.RIGHT_FORM_CODE,
+               t0.RIGHT_FORM_NAME,
+               t0.OWNERSHIP_CERT,
+               t0.OWNERSHIP_NATURE,
+               t0.OWNERSHIP_NUMBER,
+               t0.OWNERSHIP_AGE,
+               t0.OWNERSHIP_HOLDER,
+               t0.OWNERSHIP_DATE,
+               t0.OWNERSHIP_TYPE,
+               t0.LAND_USE,
+               t0.LOCATION,
+               t0.AREA_ZYMJ,
+               t0.AREA_QTMJ,
+               t0.AREA_CJMJ,
+               t0.AREA_CZMJ,
+               t0.AREA_XZMJ,
+               t0.COST_ZYMJ,
+               t0.COST_CJMJ,
+               t0.COST_CZMJ,
+               t0.COST_XZMJ,
+               t0.COST_QTMJ,
+               t0.BUILD_STRUCTURE,
+               t0.HOUSE_OWNER,
+               t0.COMPLETION_DATE,
+               t0.DESIGN_PURPOSE,
+               t0.STRUCTURE_MEASURE,
+               t0.AREA_JZMJ,
+               t0.AREA_QNMJ,
+               t0.AREA_WFMJ,
+               t0.PURCHASE_TYPE,
+               t0.EQUIPMENT_USE,
+               t0.CAR_NO,
+               t0.CAR_DISPLACEMENT,
+               t0.CAR_LICENSE,
+               t0.CAR_HOLDER,
+               t0.CAR_REGDATE,
+               t0.CAR_ENGINE_NO,
+               t0.CAR_ID_NO,
+               t0.CAR_MADEIN,
+               t0.CAR_USE,
+               t0.ORIGIN_PLACE,
+               t0.COLLECTION_AGE,
+               t0.CULTURAL_GRADE,
+               t0.PRESS,
+               t0.PUBLISHED_DATE,
+               t0.SAVE_LIFE,
+               t0.ARC_NO,
+               t0.PLANTING_AGE,
+               t0.PLANTING_YEAR,
+               t0.GENERIC_FAMILY,
+               t0.EXPIRED_DATE,
+               t0.IS_SEALED,
+               t0.SEALED_EMPCODE,
+               t0.SEALED_EMPNAME,
+               t0.SEALED_DATE,
+               t0.INITIAL_STATE,
+               t0.OLD_AST_CODE,
+               t0.ACCEPTANCE_NO,
+               t0.RENT_AGY_CODE,
+               t0.RENT_AGY_NAME,
+               t0.LEND_AGY_CODE,
+               t0.LEND_AGY_NAME,
+               t0.CREATE_BY,
+               t0.CREATE_TIME,
+               t0.CREATE_NAME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.EXTEND6,
+               t0.EXTEND7,
+               t0.EXTEND8,
+               t0.EXTEND9,
+               t0.EXTEND10,
+               t0.AST_STATUS,
+               t0.ADMIN_DEPARTMENT_ID,
+               t0.ADMIN_DEPARTMENT_CODE,
+               t0.ADMIN_DEPARTMENT_NAME,
+               t0.CARD_BILL,
+               t0.DEPRECIATION_MO,
+               t0.CATEGORY_ID,
+               t0.TYPE_ID,
+               t0.PLACE_ID,
+               t0.EMP_ID,
+               t0.BILL_TYPE
+        from AST_BILL_LIST t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstBillListMap">
+        <include refid="AstBillListVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="billId != null and billId != ''">and t0.BILL_ID = #{billId}</if>
+            <if test="astId != null and astId != ''">and t0.AST_ID = #{astId}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="astCode != null and astCode != ''">and t0.AST_CODE = #{astCode}</if>
+            <if test="categoryCode != null and categoryCode != ''">and t0.CATEGORY_CODE = #{categoryCode}</if>
+            <if test="categoryName != null and categoryName != ''">and t0.CATEGORY_NAME = #{categoryName}</if>
+            <if test="classCode != null and classCode != ''">and t0.CLASS_CODE = #{classCode}</if>
+            <if test="className != null and className != ''">and t0.CLASS_NAME = #{className}</if>
+            <if test="typeCode != null and typeCode != ''">and t0.TYPE_CODE = #{typeCode}</if>
+            <if test="typeName != null and typeName != ''">and t0.TYPE_NAME = #{typeName}</if>
+            <if test="assetName != null and assetName != ''">and t0.ASSET_NAME = #{assetName}</if>
+            <if test="addCode != null and addCode != ''">and t0.ADD_CODE = #{addCode}</if>
+            <if test="addDate != null">and t0.ADD_DATE = #{addDate}</if>
+            <if test="startUsedate != null">and t0.START_USEDATE = #{startUsedate}</if>
+            <if test="useLife != null">and t0.USE_LIFE = #{useLife}</if>
+            <if test="finshUsedate != null">and t0.FINSH_USEDATE = #{finshUsedate}</if>
+            <if test="qty != null">and t0.QTY = #{qty}</if>
+            <if test="measurement != null and measurement != ''">and t0.MEASUREMENT = #{measurement}</if>
+            <if test="remark != null and remark != ''">and t0.REMARK = #{remark}</if>
+            <if test="projectCode != null and projectCode != ''">and t0.PROJECT_CODE = #{projectCode}</if>
+            <if test="receiptCode != null and receiptCode != ''">and t0.RECEIPT_CODE = #{receiptCode}</if>
+            <if test="acquisitionDate != null">and t0.ACQUISITION_DATE = #{acquisitionDate}</if>
+            <if test="conId != null and conId != ''">and t0.CON_ID = #{conId}</if>
+            <if test="conCode != null and conCode != ''">and t0.CON_CODE = #{conCode}</if>
+            <if test="costType != null and costType != ''">and t0.COST_TYPE = #{costType}</if>
+            <if test="finCost != null">and t0.FIN_COST = #{finCost}</if>
+            <if test="cost != null">and t0.COST = #{cost}</if>
+            <if test="nofinCost != null">and t0.NOFIN_COST = #{nofinCost}</if>
+            <if test="isVou != null and isVou != ''">and t0.IS_VOU = #{isVou}</if>
+            <if test="vouDate != null">and t0.VOU_DATE = #{vouDate}</if>
+            <if test="vouNo != null and vouNo != ''">and t0.VOU_NO = #{vouNo}</if>
+            <if test="isDep != null and isDep != ''">and t0.IS_DEP = #{isDep}</if>
+            <if test="depMethod != null and depMethod != ''">and t0.DEP_METHOD = #{depMethod}</if>
+            <if test="depedMo != null">and t0.DEPED_MO = #{depedMo}</if>
+            <if test="depTotal != null">and t0.DEP_TOTAL = #{depTotal}</if>
+            <if test="depMoValue != null">and t0.DEP_MO_VALUE = #{depMoValue}</if>
+            <if test="netValue != null">and t0.NET_VALUE = #{netValue}</if>
+            <if test="usageStatus != null and usageStatus != ''">and t0.USAGE_STATUS = #{usageStatus}</if>
+            <if test="departmentId != null and departmentId != ''">and t0.DEPARTMENT_ID = #{departmentId}</if>
+            <if test="departmentCode != null and departmentCode != ''">and t0.DEPARTMENT_CODE = #{departmentCode}</if>
+            <if test="departmentName != null and departmentName != ''">and t0.DEPARTMENT_NAME = #{departmentName}</if>
+            <if test="empCode != null and empCode != ''">and t0.EMP_CODE = #{empCode}</if>
+            <if test="empName != null and empName != ''">and t0.EMP_NAME = #{empName}</if>
+            <if test="deptId != null and deptId != ''">and t0.DEPT_ID = #{deptId}</if>
+            <if test="deptCode != null and deptCode != ''">and t0.DEPT_CODE = #{deptCode}</if>
+            <if test="deptName != null and deptName != ''">and t0.DEPT_NAME = #{deptName}</if>
+            <if test="placeCode != null and placeCode != ''">and t0.PLACE_CODE = #{placeCode}</if>
+            <if test="placeName != null and placeName != ''">and t0.PLACE_NAME = #{placeName}</if>
+            <if test="useRemark != null and useRemark != ''">and t0.USE_REMARK = #{useRemark}</if>
+            <if test="basicFileId != null and basicFileId != ''">and t0.BASIC_FILE_ID = #{basicFileId}</if>
+            <if test="inventoryFileId != null and inventoryFileId != ''">and t0.INVENTORY_FILE_ID = #{inventoryFileId}
+            </if>
+            <if test="brand != null and brand != ''">and t0.BRAND = #{brand}</if>
+            <if test="spec != null and spec != ''">and t0.SPEC = #{spec}</if>
+            <if test="productSn != null and productSn != ''">and t0.PRODUCT_SN = #{productSn}</if>
+            <if test="mfrs != null and mfrs != ''">and t0.MFRS = #{mfrs}</if>
+            <if test="dealer != null and dealer != ''">and t0.DEALER = #{dealer}</if>
+            <if test="guaranteeDate != null">and t0.GUARANTEE_DATE = #{guaranteeDate}</if>
+            <if test="madein != null and madein != ''">and t0.MADEIN = #{madein}</if>
+            <if test="areaSyqmj != null">and t0.AREA_SYQMJ = #{areaSyqmj}</if>
+            <if test="areaDymj != null">and t0.AREA_DYMJ = #{areaDymj}</if>
+            <if test="areaFtmj != null">and t0.AREA_FTMJ = #{areaFtmj}</if>
+            <if test="landGradation != null and landGradation != ''">and t0.LAND_GRADATION = #{landGradation}</if>
+            <if test="rightFormCode != null and rightFormCode != ''">and t0.RIGHT_FORM_CODE = #{rightFormCode}</if>
+            <if test="rightFormName != null and rightFormName != ''">and t0.RIGHT_FORM_NAME = #{rightFormName}</if>
+            <if test="ownershipCert != null and ownershipCert != ''">and t0.OWNERSHIP_CERT = #{ownershipCert}</if>
+            <if test="ownershipNature != null and ownershipNature != ''">and t0.OWNERSHIP_NATURE = #{ownershipNature}
+            </if>
+            <if test="ownershipNumber != null and ownershipNumber != ''">and t0.OWNERSHIP_NUMBER = #{ownershipNumber}
+            </if>
+            <if test="ownershipAge != null and ownershipAge != ''">and t0.OWNERSHIP_AGE = #{ownershipAge}</if>
+            <if test="ownershipHolder != null and ownershipHolder != ''">and t0.OWNERSHIP_HOLDER = #{ownershipHolder}
+            </if>
+            <if test="ownershipDate != null">and t0.OWNERSHIP_DATE = #{ownershipDate}</if>
+            <if test="ownershipType != null and ownershipType != ''">and t0.OWNERSHIP_TYPE = #{ownershipType}</if>
+            <if test="landUse != null and landUse != ''">and t0.LAND_USE = #{landUse}</if>
+            <if test="location != null and location != ''">and t0.LOCATION = #{location}</if>
+            <if test="areaZymj != null">and t0.AREA_ZYMJ = #{areaZymj}</if>
+            <if test="areaQtmj != null">and t0.AREA_QTMJ = #{areaQtmj}</if>
+            <if test="areaCjmj != null">and t0.AREA_CJMJ = #{areaCjmj}</if>
+            <if test="areaCzmj != null">and t0.AREA_CZMJ = #{areaCzmj}</if>
+            <if test="areaXzmj != null">and t0.AREA_XZMJ = #{areaXzmj}</if>
+            <if test="costZymj != null">and t0.COST_ZYMJ = #{costZymj}</if>
+            <if test="costCjmj != null">and t0.COST_CJMJ = #{costCjmj}</if>
+            <if test="costCzmj != null">and t0.COST_CZMJ = #{costCzmj}</if>
+            <if test="costXzmj != null">and t0.COST_XZMJ = #{costXzmj}</if>
+            <if test="costQtmj != null">and t0.COST_QTMJ = #{costQtmj}</if>
+            <if test="buildStructure != null and buildStructure != ''">and t0.BUILD_STRUCTURE = #{buildStructure}</if>
+            <if test="houseOwner != null and houseOwner != ''">and t0.HOUSE_OWNER = #{houseOwner}</if>
+            <if test="completionDate != null">and t0.COMPLETION_DATE = #{completionDate}</if>
+            <if test="designPurpose != null and designPurpose != ''">and t0.DESIGN_PURPOSE = #{designPurpose}</if>
+            <if test="structureMeasure != null and structureMeasure != ''">and t0.STRUCTURE_MEASURE =
+                #{structureMeasure}
+            </if>
+            <if test="areaJzmj != null">and t0.AREA_JZMJ = #{areaJzmj}</if>
+            <if test="areaQnmj != null">and t0.AREA_QNMJ = #{areaQnmj}</if>
+            <if test="areaWfmj != null">and t0.AREA_WFMJ = #{areaWfmj}</if>
+            <if test="purchaseType != null and purchaseType != ''">and t0.PURCHASE_TYPE = #{purchaseType}</if>
+            <if test="equipmentUse != null and equipmentUse != ''">and t0.EQUIPMENT_USE = #{equipmentUse}</if>
+            <if test="carNo != null and carNo != ''">and t0.CAR_NO = #{carNo}</if>
+            <if test="carDisplacement != null and carDisplacement != ''">and t0.CAR_DISPLACEMENT = #{carDisplacement}
+            </if>
+            <if test="carLicense != null and carLicense != ''">and t0.CAR_LICENSE = #{carLicense}</if>
+            <if test="carHolder != null and carHolder != ''">and t0.CAR_HOLDER = #{carHolder}</if>
+            <if test="carRegdate != null">and t0.CAR_REGDATE = #{carRegdate}</if>
+            <if test="carEngineNo != null and carEngineNo != ''">and t0.CAR_ENGINE_NO = #{carEngineNo}</if>
+            <if test="carIdNo != null and carIdNo != ''">and t0.CAR_ID_NO = #{carIdNo}</if>
+            <if test="carMadein != null and carMadein != ''">and t0.CAR_MADEIN = #{carMadein}</if>
+            <if test="carUse != null and carUse != ''">and t0.CAR_USE = #{carUse}</if>
+            <if test="originPlace != null and originPlace != ''">and t0.ORIGIN_PLACE = #{originPlace}</if>
+            <if test="collectionAge != null and collectionAge != ''">and t0.COLLECTION_AGE = #{collectionAge}</if>
+            <if test="culturalGrade != null and culturalGrade != ''">and t0.CULTURAL_GRADE = #{culturalGrade}</if>
+            <if test="press != null and press != ''">and t0.PRESS = #{press}</if>
+            <if test="publishedDate != null">and t0.PUBLISHED_DATE = #{publishedDate}</if>
+            <if test="saveLife != null and saveLife != ''">and t0.SAVE_LIFE = #{saveLife}</if>
+            <if test="arcNo != null and arcNo != ''">and t0.ARC_NO = #{arcNo}</if>
+            <if test="plantingAge != null">and t0.PLANTING_AGE = #{plantingAge}</if>
+            <if test="plantingYear != null">and t0.PLANTING_YEAR = #{plantingYear}</if>
+            <if test="genericFamily != null and genericFamily != ''">and t0.GENERIC_FAMILY = #{genericFamily}</if>
+            <if test="expiredDate != null and expiredDate != ''">and t0.EXPIRED_DATE = #{expiredDate}</if>
+            <if test="isSealed != null and isSealed != ''">and t0.IS_SEALED = #{isSealed}</if>
+            <if test="sealedEmpcode != null and sealedEmpcode != ''">and t0.SEALED_EMPCODE = #{sealedEmpcode}</if>
+            <if test="sealedEmpname != null and sealedEmpname != ''">and t0.SEALED_EMPNAME = #{sealedEmpname}</if>
+            <if test="sealedDate != null and sealedDate != ''">and t0.SEALED_DATE = #{sealedDate}</if>
+            <if test="initialState != null and initialState != ''">and t0.INITIAL_STATE = #{initialState}</if>
+            <if test="oldAstCode != null and oldAstCode != ''">and t0.OLD_AST_CODE = #{oldAstCode}</if>
+            <if test="acceptanceNo != null and acceptanceNo != ''">and t0.ACCEPTANCE_NO = #{acceptanceNo}</if>
+            <if test="rentAgyCode != null and rentAgyCode != ''">and t0.RENT_AGY_CODE = #{rentAgyCode}</if>
+            <if test="rentAgyName != null and rentAgyName != ''">and t0.RENT_AGY_NAME = #{rentAgyName}</if>
+            <if test="lendAgyCode != null and lendAgyCode != ''">and t0.LEND_AGY_CODE = #{lendAgyCode}</if>
+            <if test="lendAgyName != null and lendAgyName != ''">and t0.LEND_AGY_NAME = #{lendAgyName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="extend6 != null and extend6 != ''">and t0.EXTEND6 = #{extend6}</if>
+            <if test="extend7 != null and extend7 != ''">and t0.EXTEND7 = #{extend7}</if>
+            <if test="extend8 != null and extend8 != ''">and t0.EXTEND8 = #{extend8}</if>
+            <if test="extend9 != null and extend9 != ''">and t0.EXTEND9 = #{extend9}</if>
+            <if test="extend10 != null and extend10 != ''">and t0.EXTEND10 = #{extend10}</if>
+            <if test="astStatus != null and astStatus != ''">and t0.AST_STATUS = #{astStatus}</if>
+            <if test="adminDepartmentId != null and adminDepartmentId != ''">and t0.ADMIN_DEPARTMENT_ID =
+                #{adminDepartmentId}
+            </if>
+            <if test="adminDepartmentCode != null and adminDepartmentCode != ''">and t0.ADMIN_DEPARTMENT_CODE =
+                #{adminDepartmentCode}
+            </if>
+            <if test="adminDepartmentName != null and adminDepartmentName != ''">and t0.ADMIN_DEPARTMENT_NAME =
+                #{adminDepartmentName}
+            </if>
+            <if test="cardBill != null and cardBill != ''">and t0.CARD_BILL = #{cardBill}</if>
+            <if test="depreciationMo != null and depreciationMo != ''">and t0.DEPRECIATION_MO = #{depreciationMo}</if>
+            <if test="categoryId != null and categoryId != ''">and t0.CATEGORY_ID = #{categoryId}</if>
+            <if test="typeId != null and typeId != ''">and t0.TYPE_ID = #{typeId}</if>
+            <if test="placeId != null and placeId != ''">and t0.PLACE_ID = #{placeId}</if>
+            <if test="empId != null and empId != ''">and t0.EMP_ID = #{empId}</if>
+            <if test="billType != null and billType != ''">and t0.BILL_TYPE = #{billType}</if>
+        </where>
+    </select>
+</mapper>

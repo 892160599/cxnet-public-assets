@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.notice.mapper.SysNoticeMapper">
+
+    <resultMap type="com.cxnet.project.system.notice.domain.SysNotice" id="SysNoticeResult">
+        <result property="noticeId" column="notice_id"/>
+        <result property="noticeTitle" column="notice_title"/>
+        <result property="noticeType" column="notice_type"/>
+        <result property="noticeContent" column="notice_content"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="createByName" column="create_by_name"/>
+        <result property="read" column="IS_READ"/>
+        <result property="createName" column="create_name"/>
+        <result property="unitId" column="UNIT_ID"/>
+        <result property="unitCode" column="UNIT_CODE"/>
+        <result property="unitName" column="UNIT_NAME"/>
+        <result property="deptId" column="DEPT_ID"/>
+        <result property="deptCode" column="DEPT_CODE"/>
+        <result property="deptName" column="DEPT_NAME"/>
+        <result property="noticeScope" column="NOTICE_SCOPE"/>
+    </resultMap>
+
+    <sql id="selectNoticeVo">
+        SELECT t0.notice_id,
+               t0.notice_title,
+               t0.notice_type,
+               t0.notice_content,
+               t0.status,
+               t0.create_by,
+               t0.create_time,
+               t0.update_by,
+               t0.update_time,
+               t0.remark,
+               t0.IS_READ,
+               t0.UNIT_ID,
+               t0.DEPT_ID,
+               t0.DEPT_NAME,
+               t0.DEPT_CODE,
+               t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.NOTICE_SCOPE,
+               t3.NICK_NAME AS CREATE_BY_NAME
+        FROM sys_notice t0
+                 LEFT JOIN SYS_USER t3 ON t3.USER_NAME = t0.CREATE_BY
+
+    </sql>
+
+    <select id="selectNoticeById" parameterType="string" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        where t0.notice_id = #{noticeId}
+    </select>
+
+    <select id="selectNoticeList" parameterType="com.cxnet.project.system.notice.domain.SysNotice"
+            resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        <where>
+            <if test="status != null and status != ''">
+                AND t0.status = #{status}
+            </if>
+            <if test="noticeTitle != null and noticeTitle != ''">
+                AND t0.notice_title like concat(concat('%', #{noticeTitle}), '%')
+            </if>
+            <if test="noticeType==1">
+                AND t0.notice_type in(1,2)
+            </if>
+            <if test="noticeType==3">
+                AND t0.notice_type =3
+            </if>
+            <if test="noticeType==4">
+                AND t0.notice_type =4
+            </if>
+            <if test="noticeScopeList != null and noticeScopeList.size > 0">and t0.NOTICE_SCOPE IN
+                <trim suffixOverrides=" OR t0.NOTICE_SCOPE IN()">
+                    <foreach collection="noticeScopeList" item="item" index="index" open="(" close=")">
+                        <if test="index != 0">
+                            <choose>
+                                <when test="index % 1000 == 999">) OR t0.NOTICE_SCOPE IN (</when>
+                                <otherwise>,</otherwise>
+                            </choose>
+                        </if>
+                        #{item}
+                    </foreach>
+                </trim>
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND t0.create_by like concat(concat('%', #{createBy}), '%')
+            </if>
+        </where>
+        ORDER BY create_time DESC, t0.notice_id
+    </select>
+
+    <insert id="insertNotice" parameterType="com.cxnet.project.system.notice.domain.SysNotice">
+        <selectKey keyProperty="noticeId" resultType="string" order="BEFORE">
+            select sys_guid() as noticeId FROM DUAL
+        </selectKey>
+        insert into sys_notice (
+        <if test="noticeId != null and noticeId != '' ">notice_id,</if>
+        <if test="noticeTitle != null and noticeTitle != '' ">notice_title,</if>
+        <if test="noticeType != null and noticeType != '' ">notice_type,</if>
+        <if test="noticeContent != null and noticeContent != '' ">notice_content,</if>
+        <if test="status != null and status != '' ">status,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="unitId !=null">UNIT_ID,</if>
+        <if test="unitCode !=null">UNIT_CODE,</if>
+        <if test="unitName !=null">UNIT_NAME,</if>
+        <if test="deptId != null  and deptId != ''">dept_id,</if>
+        <if test="deptCode != null  and deptCode != ''">dept_code,</if>
+        <if test="deptName != null  and deptName != ''">dept_name,</if>
+        <if test="noticeScope != null  and noticeScope != ''">notice_scope,</if>
+        IS_READ,
+        create_time
+        ) values (
+        <if test="noticeId != null and noticeId != '' ">#{noticeId,jdbcType=VARCHAR},</if>
+        <if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle,jdbcType=VARCHAR},</if>
+        <if test="noticeType != null and noticeType != ''">#{noticeType,jdbcType=CHAR},</if>
+        <if test="noticeContent != null and noticeContent != ''">#{noticeContent,jdbcType=CLOB},</if>
+        <if test="status != null and status != ''">#{status,jdbcType=CHAR},</if>
+        <if test="remark != null and remark != ''">#{remark,jdbcType=VARCHAR},</if>
+        <if test="createBy != null and createBy != ''">#{createBy,jdbcType=VARCHAR},</if>
+        <if test="unitId !=null">#{unitId},</if>
+        <if test="unitCode !=null">#{unitCode},</if>
+        <if test="unitName !=null">#{unitName},</if>
+        <if test="deptId != null  and deptId != ''">#{deptId},</if>
+        <if test="deptName != null  and deptName != ''">#{deptName},</if>
+        <if test="deptCode != null  and deptCode != ''">#{deptCode},</if>
+        <if test="noticeScope != null  and noticeScope != ''">#{noticeScope},</if>
+        1,
+        sysdate
+        )
+    </insert>
+
+    <update id="updateNotice" parameterType="com.cxnet.project.system.notice.domain.SysNotice">
+        update sys_notice
+        <set>
+            <if test="noticeTitle != null and noticeTitle != ''">notice_title = #{noticeTitle},</if>
+            <if test="noticeType != null and noticeType != ''">notice_type = #{noticeType},</if>
+            <if test="noticeContent != null">notice_content = #{noticeContent},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="read !=null and read !=''">IS_READ =#{read},</if>
+            <if test="unitId !=null">UNIT_ID=#{unitId},</if>
+            <if test="unitCode !=null">UNIT_CODE=#{unitCode},</if>
+            <if test="unitName !=null">UNIT_NAME=#{unitName},</if>
+            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+            <if test="deptCode != null  and deptCode != ''">dept_code = #{deptCode},</if>
+            <if test="deptName != null  and deptName != ''">dept_name = #{deptName},</if>
+            <if test="noticeScope != null  and noticeScope != ''">notice_scope = #{noticeScope},</if>
+            update_time = sysdate
+        </set>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteNoticeById" parameterType="string">
+        delete
+        from sys_notice
+        where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteNoticeByIds" parameterType="string">
+        delete from sys_notice where notice_id in
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+
+</mapper>

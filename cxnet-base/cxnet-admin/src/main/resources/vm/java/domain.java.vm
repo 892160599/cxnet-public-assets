@@ -1,0 +1,47 @@
+package ${packageName}.${className}.domain;
+
+import lombok.Data;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import com.cxnet.common.utils.poi.annotation.Excel;
+import com.cxnet.framework.web.domain.BaseEntity;
+#foreach ($import in $importList)
+import ${import};
+#end
+
+/**
+ * ${functionName}实体 ${tableName}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+#set($Entity="BaseEntity")
+@Data
+@ApiModel("${functionName}")
+public class ${ClassName} extends ${Entity}
+        {
+
+#foreach ($column in $columns)
+    #if(!$table.isSuperColumn($column.javaField))
+    /** $column.columnComment */
+        #if($column.list)
+            #set($parentheseIndex=$column.columnComment.indexOf("（"))
+            #if($parentheseIndex != -1)
+                #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+            #else
+                #set($comment=$column.columnComment)
+            #end
+            #if($parentheseIndex != -1)
+            @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+            #elseif($column.javaType == 'Date')
+            @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd")
+            #else
+            @Excel(name = "${comment}")
+            #end
+        #end
+    @ApiModelProperty("$column.columnComment")
+    private $column.javaType $column.javaField;
+    #end
+#end
+
+}

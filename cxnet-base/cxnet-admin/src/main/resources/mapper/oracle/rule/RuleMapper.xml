@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.rule.mapper.RuleMapper">
+
+    <!-- 编号器 结果集 -->
+    <resultMap type="com.cxnet.project.system.rule.domain.Rule" id="RuleResult">
+        <result property="ruleId" column="rule_id"/>
+        <result property="ruleCode" column="rule_code"/>
+        <result property="ruleName" column="rule_name"/>
+        <result property="rulePrefix" column="rule_prefix"/>
+        <result property="ruleLen" column="rule_len"/>
+        <result property="isJoin" column="is_join"/>
+        <collection property="ruleCols" javaType="java.util.List"
+                    resultMap="com.cxnet.project.system.rule.mapper.RuleColMapper.RuleColResult"></collection>
+    </resultMap>
+
+    <!-- 查询编号器 通用sql -->
+    <sql id="selectRuleVo">
+        select t0.rule_id, t0.rule_code, t0.rule_name, t0.rule_prefix, t0.rule_len, t0.is_join
+        from sys_rule t0
+
+    </sql>
+
+
+    <!-- 查询编号器 集合 -->
+    <select id="selectRuleList" parameterType="com.cxnet.project.system.rule.domain.Rule" resultMap="RuleResult">
+        <include refid="selectRuleVo"/>
+        <where>
+            <if test="ruleCode != null  and ruleCode != ''">and t0.rule_code = #{ruleCode}</if>
+            <if test="ruleName != null  and ruleName != ''">and t0.rule_name like concat(concat('%', #{ruleName}),
+                '%')
+            </if>
+            <if test="rulePrefix != null  and rulePrefix != ''">and t0.rule_prefix = #{rulePrefix}</if>
+            <if test="ruleLen != null ">and t0.rule_len = #{ruleLen}</if>
+            <if test="isJoin != null ">and t0.is_join = #{isJoin}</if>
+        </where>
+    </select>
+
+    <!-- 查询编号器 ById -->
+    <select id="selectRuleById" parameterType="String" resultMap="RuleResult">
+        <include refid="selectRuleVo"/>
+        where rule_id = #{ruleId}
+    </select>
+
+    <!-- 查询编号器 -->
+    <select id="selectRuleByRuleCode" parameterType="String" resultMap="RuleResult">
+        <include refid="selectRuleVo"/>
+        where rule_code = #{ruleCode}
+    </select>
+
+    <!-- 插入编号器 -->
+    <insert id="insertRule" parameterType="com.cxnet.project.system.rule.domain.Rule">
+        <selectKey keyProperty="ruleId" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into sys_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null ">rule_id,</if>
+            <if test="ruleCode != null  and ruleCode != ''">rule_code,</if>
+            <if test="ruleName != null  and ruleName != ''">rule_name,</if>
+            <if test="rulePrefix != null  and rulePrefix != ''">rule_prefix,</if>
+            <if test="ruleLen != null ">rule_len,</if>
+            <if test="isJoin != null ">is_join,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null ">#{ruleId},</if>
+            <if test="ruleCode != null  and ruleCode != ''">#{ruleCode},</if>
+            <if test="ruleName != null  and ruleName != ''">#{ruleName},</if>
+            <if test="rulePrefix != null  and rulePrefix != ''">#{rulePrefix},</if>
+            <if test="ruleLen != null ">#{ruleLen},</if>
+            <if test="isJoin != null ">#{isJoin},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改编号器 -->
+    <update id="updateRule" parameterType="com.cxnet.project.system.rule.domain.Rule">
+        update sys_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <!--<if test="ruleCode != null  and ruleCode != ''">rule_code = #{ruleCode},</if>-->
+            <if test="ruleName != null  and ruleName != ''">rule_name = #{ruleName},</if>
+            <if test="rulePrefix != null  and rulePrefix != ''">rule_prefix = #{rulePrefix},</if>
+            <if test="ruleLen != null ">rule_len = #{ruleLen},</if>
+            <if test="isJoin != null ">is_join = #{isJoin},</if>
+        </trim>
+        where rule_id = #{ruleId}
+    </update>
+
+    <!-- 删除编号器 ById -->
+    <delete id="deleteRuleById" parameterType="String">
+        delete
+        from sys_rule
+        where rule_id = #{ruleId}
+    </delete>
+
+    <!-- 批量删除编号器 ByIds -->
+    <delete id="deleteRuleByIds" parameterType="String">
+        delete from sys_rule where rule_id in
+        <foreach item="ruleId" collection="array" open="(" separator="," close=")">
+            #{ruleId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入编号器 -->
+    <insert id="insertBatchRule" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_rule
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                rule_id,
+                <if test="item.ruleCode != null  and item.ruleCode != ''">rule_code,</if>
+                <if test="item.ruleName != null  and item.ruleName != ''">rule_name,</if>
+                <if test="item.rulePrefix != null  and item.rulePrefix != ''">rule_prefix,</if>
+                <if test="item.ruleLen != null ">rule_len,</if>
+                <if test="item.isJoin != null ">is_join,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.ruleCode != null  and item.ruleCode != ''">#{item.ruleCode},</if>
+                <if test="item.ruleName != null  and item.ruleName != ''">#{item.ruleName},</if>
+                <if test="item.rulePrefix != null  and item.rulePrefix != ''">#{item.rulePrefix},</if>
+                <if test="item.ruleLen != null ">#{item.ruleLen},</if>
+                <if test="item.isJoin != null ">#{item.isJoin},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改编号器 -->
+    <update id="updateBatchRule" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update sys_rule
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.ruleCode != null  and item.ruleCode != ''">rule_code = #{item.ruleCode},</if>
+                <if test="item.ruleName != null  and item.ruleName != ''">rule_name = #{item.ruleName},</if>
+                <if test="item.rulePrefix != null  and item.rulePrefix != ''">rule_prefix = #{item.rulePrefix},</if>
+                <if test="item.ruleLen != null ">rule_len = #{item.ruleLen},</if>
+                <if test="item.isJoin != null ">is_join = #{item.isJoin},</if>
+            </trim>
+            <where>
+                rule_id = #{item.ruleId}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

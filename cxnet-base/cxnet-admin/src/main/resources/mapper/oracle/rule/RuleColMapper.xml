@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.rule.mapper.RuleColMapper">
+
+    <!-- 编号器配置表 结果集 -->
+    <resultMap type="com.cxnet.project.system.rule.domain.RuleCol" id="RuleColResult">
+        <result property="ruleId" column="rule_id"/>
+        <result property="joinOrder" column="join_order"/>
+        <result property="joinCol" column="join_col"/>
+        <result property="cutChar" column="cut_char"/>
+        <result property="id" column="id"/>
+        <result property="colLen" column="col_len"/>
+        <result property="fillPosition" column="fill_position"/>
+        <result property="fillChar" column="fill_char"/>
+        <result property="colFormat" column="col_format"/>
+    </resultMap>
+
+    <!-- 查询编号器配置表 通用sql -->
+    <sql id="selectRuleColVo">
+        select t0.rule_id,
+               t0.join_order,
+               t0.join_col,
+               t0.cut_char,
+               t0.id,
+               t0.col_len,
+               t0.fill_position,
+               t0.fill_char,
+               t0.col_format
+        from sys_rule_col t0
+
+    </sql>
+
+
+    <!-- 查询编号器配置表 集合 -->
+    <select id="selectRuleColList" parameterType="com.cxnet.project.system.rule.domain.RuleCol"
+            resultMap="RuleColResult">
+        <include refid="selectRuleColVo"/>
+        <where>
+            <if test="ruleId != null ">and t0.rule_id = #{ruleId}</if>
+            <if test="joinOrder != null ">and t0.join_order = #{joinOrder}</if>
+            <if test="joinCol != null  and joinCol != ''">and t0.join_col = #{joinCol}</if>
+            <if test="cutChar != null  and cutChar != ''">and t0.cut_char = #{cutChar}</if>
+            <if test="colLen != null ">and t0.col_len = #{colLen}</if>
+            <if test="fillPosition != null ">and t0.fill_position = #{fillPosition}</if>
+            <if test="fillChar != null  and fillChar != ''">and t0.fill_char = #{fillChar}</if>
+            <if test="colFormat != null  and colFormat != ''">and t0.col_format = #{colFormat}</if>
+        </where>
+    </select>
+
+    <!-- 查询编号器配置表 ById -->
+    <select id="selectRuleColById" parameterType="String" resultMap="RuleColResult">
+        <include refid="selectRuleColVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectRuleColByRuleId" parameterType="String" resultMap="RuleColResult">
+        <include refid="selectRuleColVo"/>
+        where rule_id = #{ruleId}
+        order by join_order, t0.rule_id
+    </select>
+
+    <!-- 插入编号器配置表 -->
+    <insert id="insertRuleCol" parameterType="com.cxnet.project.system.rule.domain.RuleCol">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into sys_rule_col
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null ">rule_id,</if>
+            <if test="joinOrder != null ">join_order,</if>
+            <if test="joinCol != null  and joinCol != ''">join_col,</if>
+            <if test="cutChar != null  and cutChar != ''">cut_char,</if>
+            <if test="id != null ">id,</if>
+            <if test="colLen != null ">col_len,</if>
+            <if test="fillPosition != null ">fill_position,</if>
+            <if test="fillChar != null  and fillChar != ''">fill_char,</if>
+            <if test="colFormat != null  and colFormat != ''">col_format,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null ">#{ruleId},</if>
+            <if test="joinOrder != null ">#{joinOrder},</if>
+            <if test="joinCol != null  and joinCol != ''">#{joinCol},</if>
+            <if test="cutChar != null  and cutChar != ''">#{cutChar},</if>
+            <if test="id != null ">#{id},</if>
+            <if test="colLen != null ">#{colLen},</if>
+            <if test="fillPosition != null ">#{fillPosition},</if>
+            <if test="fillChar != null  and fillChar != ''">#{fillChar},</if>
+            <if test="colFormat != null  and colFormat != ''">#{colFormat},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改编号器配置表 -->
+    <update id="updateRuleCol" parameterType="com.cxnet.project.system.rule.domain.RuleCol">
+        update sys_rule_col
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleId != null ">rule_id = #{ruleId},</if>
+            <if test="joinOrder != null ">join_order = #{joinOrder},</if>
+            <if test="joinCol != null  and joinCol != ''">join_col = #{joinCol},</if>
+            <if test="cutChar != null  and cutChar != ''">cut_char = #{cutChar},</if>
+            <if test="colLen != null ">col_len = #{colLen},</if>
+            <if test="fillPosition != null ">fill_position = #{fillPosition},</if>
+            <if test="fillChar != null  and fillChar != ''">fill_char = #{fillChar},</if>
+            <if test="colFormat != null  and colFormat != ''">col_format = #{colFormat},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 删除编号器配置表 ById -->
+    <delete id="deleteRuleColById" parameterType="String">
+        delete
+        from sys_rule_col
+        where id = #{id}
+    </delete>
+
+    <!-- 批量删除编号器配置表 ByIds -->
+    <delete id="deleteRuleColByIds" parameterType="String">
+        delete from sys_rule_col where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteRuleColByRuleIds">
+        delete from sys_rule_col where rule_id in
+        <foreach item="ruleId" collection="array" open="(" separator="," close=")">
+            #{ruleId}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入编号器配置表 -->
+    <insert id="insertBatchRuleCol" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_rule_col
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.ruleId != null ">rule_id,</if>
+                <if test="item.joinOrder != null ">join_order,</if>
+                <if test="item.joinCol != null  and item.joinCol != ''">join_col,</if>
+                <if test="item.cutChar != null  and item.cutChar != ''">cut_char,</if>
+                id,
+                <if test="item.colLen != null ">col_len,</if>
+                <if test="item.fillPosition != null ">fill_position,</if>
+                <if test="item.fillChar != null  and item.fillChar != ''">fill_char,</if>
+                <if test="item.colFormat != null  and item.colFormat != ''">col_format,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                <if test="item.ruleId != null ">#{item.ruleId},</if>
+                <if test="item.joinOrder != null ">#{item.joinOrder},</if>
+                <if test="item.joinCol != null  and item.joinCol != ''">#{item.joinCol},</if>
+                <if test="item.cutChar != null  and item.cutChar != ''">#{item.cutChar},</if>
+                sys_guid() ,
+                <if test="item.colLen != null ">#{item.colLen},</if>
+                <if test="item.fillPosition != null ">#{item.fillPosition},</if>
+                <if test="item.fillChar != null  and item.fillChar != ''">#{item.fillChar},</if>
+                <if test="item.colFormat != null  and item.colFormat != ''">#{item.colFormat},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改编号器配置表 -->
+    <update id="updateBatchRuleCol" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update sys_rule_col
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.ruleId != null ">rule_id = #{item.ruleId},</if>
+                <if test="item.joinOrder != null ">join_order = #{item.joinOrder},</if>
+                <if test="item.joinCol != null  and item.joinCol != ''">join_col = #{item.joinCol},</if>
+                <if test="item.cutChar != null  and item.cutChar != ''">cut_char = #{item.cutChar},</if>
+                <if test="item.colLen != null ">col_len = #{item.colLen},</if>
+                <if test="item.fillPosition != null ">fill_position = #{item.fillPosition},</if>
+                <if test="item.fillChar != null  and item.fillChar != ''">fill_char = #{item.fillChar},</if>
+                <if test="item.colFormat != null  and item.colFormat != ''">col_format = #{item.colFormat},</if>
+            </trim>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>

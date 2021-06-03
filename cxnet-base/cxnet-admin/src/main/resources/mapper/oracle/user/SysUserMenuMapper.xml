@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.user.mapper.SysUserMenuMapper">
+
+    <resultMap type="com.cxnet.project.system.user.domain.SysUserMenu" id="SysUserMenuResult">
+        <result property="userId" column="user_id"/>
+        <result property="menuId" column="menu_id"/>
+    </resultMap>
+
+    <select id="selectMenuIdsByUserId" parameterType="string" resultType="string">
+        SELECT m.menu_id,
+               m.parent_id
+        FROM sys_menu m
+                 LEFT JOIN sys_user_menu rm ON m.menu_id = rm.menu_id
+        WHERE rm.user_id = #{userId}
+          AND m.menu_id NOT IN (SELECT m.parent_id
+                                FROM sys_menu m
+                                         INNER JOIN sys_user_menu rm ON m.menu_id = rm.menu_id AND rm.user_id = #{userId})
+        ORDER BY m.parent_id,
+                 m.order_num
+    </select>
+
+    <delete id="deleteUserMenuByUserId" parameterType="string">
+        delete
+        from sys_user_menu
+        where user_id = #{userId}
+    </delete>
+
+    <select id="countUserMenuById" resultType="string">
+        select count(1)
+        from sys_user_menu
+        where menu_id = #{menuId}
+    </select>
+
+    <delete id="deleteUserMenu" parameterType="string">
+        delete from sys_user_menu where user_id in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <insert id="batchUserMenu" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_user_menu
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.userId != null  and item.userId != ''">user_id,</if>
+                <if test="item.menuId != null  and item.menuId != ''">menu_id,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                <if test="item.userId != null  and item.userId != '' ">
+                    #{item.userId, jdbcType=DECIMAL},
+                </if>
+                <if test="item.menuId != null  and item.menuId != '' ">
+                    #{item.menuId, jdbcType=DECIMAL},
+                </if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+</mapper>

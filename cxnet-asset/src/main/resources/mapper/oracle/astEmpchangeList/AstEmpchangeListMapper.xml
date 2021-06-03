@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.empchange.mapper.AstEmpchangeListMapper">
+
+    <resultMap type="com.cxnet.asset.empchange.domain.AstEmpchangeList" id="AstEmpchangeListMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="billId" column="BILL_ID" jdbcType="VARCHAR"/>
+        <result property="astId" column="AST_ID" jdbcType="VARCHAR"/>
+        <result property="astCode" column="AST_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryCode" column="CATEGORY_CODE" jdbcType="VARCHAR"/>
+        <result property="categoryName" column="CATEGORY_NAME" jdbcType="VARCHAR"/>
+        <result property="assetName" column="ASSET_NAME" jdbcType="VARCHAR"/>
+        <result property="cost" column="COST" jdbcType="INTEGER"/>
+        <result property="qty" column="QTY" jdbcType="INTEGER"/>
+        <result property="placeCode" column="PLACE_CODE" jdbcType="VARCHAR"/>
+        <result property="placeName" column="PLACE_NAME" jdbcType="VARCHAR"/>
+        <result property="acquisitionDate" column="ACQUISITION_DATE" jdbcType="TIMESTAMP"/>
+        <result property="brand" column="BRAND" jdbcType="VARCHAR"/>
+        <result property="spec" column="SPEC" jdbcType="VARCHAR"/>
+        <result property="departmentBeforeId" column="DEPARTMENT_BEFORE_ID" jdbcType="VARCHAR"/>
+        <result property="departmentBeforeCode" column="DEPARTMENT_BEFORE_CODE" jdbcType="VARCHAR"/>
+        <result property="departmentBeforeName" column="DEPARTMENT_BEFORE_NAME" jdbcType="VARCHAR"/>
+        <result property="departmentAfterId" column="DEPARTMENT_AFTER_ID" jdbcType="VARCHAR"/>
+        <result property="departmentAfterCode" column="DEPARTMENT_AFTER_CODE" jdbcType="VARCHAR"/>
+        <result property="departmentAfterName" column="DEPARTMENT_AFTER_NAME" jdbcType="VARCHAR"/>
+        <result property="empBeforeId" column="EMP_BEFORE_ID" jdbcType="VARCHAR"/>
+        <result property="empBeforeCode" column="EMP_BEFORE_CODE" jdbcType="VARCHAR"/>
+        <result property="empBeforeName" column="EMP_BEFORE_NAME" jdbcType="VARCHAR"/>
+        <result property="empAfterId" column="EMP_AFTER_ID" jdbcType="VARCHAR"/>
+        <result property="empAfterCode" column="EMP_AFTER_CODE" jdbcType="VARCHAR"/>
+        <result property="empAfterName" column="EMP_AFTER_NAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstEmpchangeListVo">
+        select t0.ID,
+               t0.BILL_ID,
+               t0.AST_ID,
+               t0.AST_CODE,
+               t0.CATEGORY_CODE,
+               t0.CATEGORY_NAME,
+               t0.ASSET_NAME,
+               t0.COST,
+               t0.QTY,
+               t0.PLACE_CODE,
+               t0.PLACE_NAME,
+               t0.ACQUISITION_DATE,
+               t0.BRAND,
+               t0.SPEC,
+               t0.DEPARTMENT_BEFORE_ID,
+               t0.DEPARTMENT_BEFORE_CODE,
+               t0.DEPARTMENT_BEFORE_NAME,
+               t0.DEPARTMENT_AFTER_ID,
+               t0.DEPARTMENT_AFTER_CODE,
+               t0.DEPARTMENT_AFTER_NAME,
+               t0.EMP_BEFORE_ID,
+               t0.EMP_BEFORE_CODE,
+               t0.EMP_BEFORE_NAME,
+               t0.EMP_AFTER_ID,
+               t0.EMP_AFTER_CODE,
+               t0.EMP_AFTER_NAME
+        from AST_EMPCHANGE_LIST t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstEmpchangeListMap">
+        <include refid="AstEmpchangeListVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="billId != null and billId != ''">and t0.BILL_ID = #{billId}</if>
+            <if test="astId != null and astId != ''">and t0.AST_ID = #{astId}</if>
+            <if test="astCode != null and astCode != ''">and t0.AST_CODE = #{astCode}</if>
+            <if test="categoryCode != null and categoryCode != ''">and t0.CATEGORY_CODE = #{categoryCode}</if>
+            <if test="categoryName != null and categoryName != ''">and t0.CATEGORY_NAME = #{categoryName}</if>
+            <if test="assetName != null and assetName != ''">and t0.ASSET_NAME = #{assetName}</if>
+            <if test="cost != null">and t0.COST = #{cost}</if>
+            <if test="qty != null">and t0.QTY = #{qty}</if>
+            <if test="placeCode != null and placeCode != ''">and t0.PLACE_CODE = #{placeCode}</if>
+            <if test="placeName != null and placeName != ''">and t0.PLACE_NAME = #{placeName}</if>
+            <if test="acquisitionDate != null">and t0.ACQUISITION_DATE = #{acquisitionDate}</if>
+            <if test="brand != null and brand != ''">and t0.BRAND = #{brand}</if>
+            <if test="spec != null and spec != ''">and t0.SPEC = #{spec}</if>
+            <if test="departmentBeforeId != null and departmentBeforeId != ''">and t0.DEPARTMENT_BEFORE_ID =
+                #{departmentBeforeId}
+            </if>
+            <if test="departmentBeforeCode != null and departmentBeforeCode != ''">and t0.DEPARTMENT_BEFORE_CODE =
+                #{departmentBeforeCode}
+            </if>
+            <if test="departmentBeforeName != null and departmentBeforeName != ''">and t0.DEPARTMENT_BEFORE_NAME =
+                #{departmentBeforeName}
+            </if>
+            <if test="departmentAfterId != null and departmentAfterId != ''">and t0.DEPARTMENT_AFTER_ID =
+                #{departmentAfterId}
+            </if>
+            <if test="departmentAfterCode != null and departmentAfterCode != ''">and t0.DEPARTMENT_AFTER_CODE =
+                #{departmentAfterCode}
+            </if>
+            <if test="departmentAfterName != null and departmentAfterName != ''">and t0.DEPARTMENT_AFTER_NAME =
+                #{departmentAfterName}
+            </if>
+            <if test="empBeforeId != null and empBeforeId != ''">and t0.EMP_BEFORE_ID = #{empBeforeId}</if>
+            <if test="empBeforeCode != null and empBeforeCode != ''">and t0.EMP_BEFORE_CODE = #{empBeforeCode}</if>
+            <if test="empBeforeName != null and empBeforeName != ''">and t0.EMP_BEFORE_NAME = #{empBeforeName}</if>
+            <if test="empAfterId != null and empAfterId != ''">and t0.EMP_AFTER_ID = #{empAfterId}</if>
+            <if test="empAfterCode != null and empAfterCode != ''">and t0.EMP_AFTER_CODE = #{empAfterCode}</if>
+            <if test="empAfterName != null and empAfterName != ''">and t0.EMP_AFTER_NAME = #{empAfterName}</if>
+        </where>
+    </select>
+
+    <select id="getThisMoAstchange" resultType="com.cxnet.asset.empchange.domain.AstEmpchangeList">
+        SELECT a.*
+        FROM (SELECT ROW_NUMBER() OVER(PARTITION BY AST_ID ORDER BY verification_date) rn,
+        t0.*
+        FROM (
+        select t1.*,t0.verification_date from AST_ASTCHANGE_BILL t0
+        left join AST_EMPCHANGE_LIST t1
+        on t0.id = t1.BILL_ID
+        where to_char(t0.verification_date,'yyyy-mm') = #{date}
+        <if test="astCardIds != null and astCardIds.size > 0">
+            AND t1.AST_ID IN
+            <trim suffixOverrides=" OR t1.AST_ID IN()">
+                <foreach collection="astCardIds" item="item" index="index" open="(" close=")">
+                    <if test="index != 0">
+                        <choose>
+                            <when test="index % 1000 == 999">) OR t1.AST_ID IN (</when>
+                            <otherwise>,</otherwise>
+                        </choose>
+                    </if>
+                    #{item}
+                </foreach>
+            </trim>
+        </if>
+        ) t0) a where a.rn=1
+    </select>
+</mapper>

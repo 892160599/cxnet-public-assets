@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.astfield.mapper.AstFieldMapper">
+
+    <resultMap type="com.cxnet.asset.astfield.domain.AstField" id="AstFieldMap">
+        <result property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="fieldCode" column="FIELD_CODE" jdbcType="VARCHAR"/>
+        <result property="fieldName" column="FIELD_NAME" jdbcType="VARCHAR"/>
+        <result property="importTitle" column="IMPORT_TITLE" jdbcType="VARCHAR"/>
+        <result property="exportTitle" column="EXPORT_TITLE" jdbcType="VARCHAR"/>
+        <result property="isEnable" column="IS_ENABLE" jdbcType="VARCHAR"/>
+        <result property="isRequired" column="IS_REQUIRED" jdbcType="VARCHAR"/>
+        <result property="isImport" column="IS_IMPORT" jdbcType="VARCHAR"/>
+        <result property="orders" column="ORDERS" jdbcType="DOUBLE"/>
+        <result property="unitId" column="UNIT_ID" jdbcType="VARCHAR"/>
+        <result property="unitCode" column="UNIT_CODE" jdbcType="VARCHAR"/>
+        <result property="unitName" column="UNIT_NAME" jdbcType="VARCHAR"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="createName" column="CREATE_NAME" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="extend1" column="EXTEND1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="EXTEND2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="EXTEND3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="EXTEND4" jdbcType="VARCHAR"/>
+        <result property="extend5" column="EXTEND5" jdbcType="VARCHAR"/>
+        <result property="dateFormat" column="DATE_FORMAT" jdbcType="VARCHAR"/>
+        <result property="cellType" column="CELL_TYPE" jdbcType="VARCHAR"/>
+        <result property="height" column="HEIGHT" jdbcType="VARCHAR"/>
+        <result property="width" column="WIDTH" jdbcType="VARCHAR"/>
+        <result property="defaultValue" column="DEFAULT_VALUE" jdbcType="VARCHAR"/>
+        <result property="requiredInformation" column="REQUIRED_INFORMATION" jdbcType="VARCHAR"/>
+        <result property="dictKey" column="DICT_KEY" jdbcType="VARCHAR"/>
+        <result property="maxLen" column="MAX_LEN" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <!--查询单个-->
+    <sql id="AstFieldVo">
+        select t0.ID,
+               t0.FIELD_CODE,
+               t0.FIELD_NAME,
+               t0.IMPORT_TITLE,
+               t0.EXPORT_TITLE,
+               t0.IS_ENABLE,
+               t0.IS_REQUIRED,
+               t0.IS_IMPORT,
+               t0.ORDERS t0.UNIT_ID, t0.UNIT_CODE,
+               t0.UNIT_NAME,
+               t0.CREATE_BY,
+               t0.CREATE_TIME,
+               t0.CREATE_NAME,
+               t0.UPDATE_BY,
+               t0.UPDATE_TIME,
+               t0.EXTEND1,
+               t0.EXTEND2,
+               t0.EXTEND3,
+               t0.EXTEND4,
+               t0.EXTEND5,
+               t0.DATE_FORMAT,
+               t0.CELL_TYPE,
+               t0.HEIGHT,
+               t0.WIDTH,
+               t0.DEFAULT_VALUE,
+               t0.REQUIRED_INFORMATION,
+               t0.DICT_KEY,
+               t0.MAX_LEN
+        from AST_FIELD t0
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectAll" resultMap="AstFieldMap">
+        <include refid="AstFieldVo"></include>
+        <where>
+            <if test="id != null and id != ''">and t0.ID = #{id}</if>
+            <if test="fieldCode != null and fieldCode != ''">and t0.FIELD_CODE = #{fieldCode}</if>
+            <if test="fieldName != null and fieldName != ''">and t0.FIELD_NAME = #{fieldName}</if>
+            <if test="importTitle != null and importTitle != ''">and t0.IMPORT_TITLE = #{importTitle}</if>
+            <if test="exportTitle != null and exportTitle != ''">and t0.EXPORT_TITLE = #{exportTitle}</if>
+            <if test="isEnable != null and isEnable != ''">and t0.IS_ENABLE = #{isEnable}</if>
+            <if test="isRequired != null and isRequired != ''">and t0.IS_REQUIRED = #{isRequired}</if>
+            <if test="isImport != null and isImport != ''">and t0.IS_IMPORT = #{isImport}</if>
+            <if test="unitId != null and unitId != ''">and t0.UNIT_ID = #{unitId}</if>
+            <if test="unitCode != null and unitCode != ''">and t0.UNIT_CODE = #{unitCode}</if>
+            <if test="unitName != null and unitName != ''">and t0.UNIT_NAME = #{unitName}</if>
+            <if test="createBy != null and createBy != ''">and t0.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null">and t0.CREATE_TIME = #{createTime}</if>
+            <if test="createName != null and createName != ''">and t0.CREATE_NAME = #{createName}</if>
+            <if test="updateBy != null and updateBy != ''">and t0.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null">and t0.UPDATE_TIME = #{updateTime}</if>
+            <if test="extend1 != null and extend1 != ''">and t0.EXTEND1 = #{extend1}</if>
+            <if test="extend2 != null and extend2 != ''">and t0.EXTEND2 = #{extend2}</if>
+            <if test="extend3 != null and extend3 != ''">and t0.EXTEND3 = #{extend3}</if>
+            <if test="extend4 != null and extend4 != ''">and t0.EXTEND4 = #{extend4}</if>
+            <if test="extend5 != null and extend5 != ''">and t0.EXTEND5 = #{extend5}</if>
+            <if test="dateFormat != null and dateFormat != ''">and t0.DATE_FORMAT = #{dateFormat}</if>
+            <if test="cellType != null and cellType != ''">and t0.CELL_TYPE = #{cellType}</if>
+            <if test="height != null ">and t0.HEIGHT = #{height}</if>
+            <if test="width != null ">and t0.WIDTH = #{width}</if>
+            <if test="defaultValue != null and defaultValue != ''">and t0.DEFAULT_VALUE = #{defaultValue}</if>
+            <if test="requiredInformation != null and requiredInformation != ''">and t0.REQUIRED_INFORMATION =
+                #{requiredInformation}
+            </if>
+            <if test="dictKey != null and dictKey != ''">and t0.DICT_KEY = #{dictKey}</if>
+            <if test="maxLen != null and maxLen != ''">and t0.MAX_LEN = #{maxLen}</if>
+        </where>
+    </select>
+</mapper>

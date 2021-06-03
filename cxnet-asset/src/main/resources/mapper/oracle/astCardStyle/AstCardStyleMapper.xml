@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.asset.assetcardstyle.mapper.AstCardStyleMapper">
+
+    <update id="updateBathbyBillType" parameterType="String">
+        update AST_CARD_STYLE
+        set IS_DEFAULT = '2'
+        where DEL_FLAG = '0'
+          and IS_PRESET = '2'
+          and BILL_TYPE = #{billType}
+          and UNIT_ID = #{unitId}
+    </update>
+
+</mapper>

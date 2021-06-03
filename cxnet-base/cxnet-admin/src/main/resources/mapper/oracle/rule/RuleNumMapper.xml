@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxnet.project.system.rule.mapper.RuleNumMapper">
+
+    <!-- 当前编号 结果集 -->
+    <resultMap type="com.cxnet.project.system.rule.domain.RuleNum" id="RuleNumResult">
+        <result property="id" column="id"/>
+        <result property="ruleCode" column="rule_code"/>
+        <result property="mark" column="mark"/>
+        <result property="currentNumber" column="current_number"/>
+    </resultMap>
+
+    <!-- 查询当前编号 通用sql -->
+    <sql id="selectRuleNumVo">
+        select t0.id, t0.rule_code, t0.mark, t0.current_number
+        from sys_rule_num t0
+
+    </sql>
+
+
+    <!-- 查询当前编号 集合 -->
+    <select id="selectRuleNumList" parameterType="com.cxnet.project.system.rule.domain.RuleNum"
+            resultMap="RuleNumResult">
+        <include refid="selectRuleNumVo"/>
+        <where>
+            <if test="ruleCode != null  and ruleCode != ''">and t0.rule_code = #{ruleCode}</if>
+            <if test="mark != null  and mark != ''">and t0.mark = #{mark}</if>
+            <if test="currentNumber != null ">and t0.current_number = #{currentNumber}</if>
+        </where>
+    </select>
+
+    <!-- 查询当前编号 ById -->
+    <select id="selectRuleNumById" parameterType="String" resultMap="RuleNumResult">
+        <include refid="selectRuleNumVo"/>
+        where id = #{id}
+    </select>
+
+    <!-- 根据编码和标记字段查询 -->
+    <select id="findByRuleCodeAndMark" resultMap="RuleNumResult">
+        <include refid="selectRuleNumVo"/>
+        where rule_code = #{ruleCode} and mark = #{mark}
+    </select>
+
+    <!-- 插入当前编号 -->
+    <insert id="insertRuleNum" parameterType="com.cxnet.project.system.rule.domain.RuleNum">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select sys_guid() FROM DUAL
+        </selectKey>
+        insert into sys_rule_num
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="ruleCode != null  and ruleCode != ''">rule_code,</if>
+            <if test="mark != null  and mark != ''">mark,</if>
+            <if test="currentNumber != null ">current_number,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="ruleCode != null  and ruleCode != ''">#{ruleCode},</if>
+            <if test="mark != null  and mark != ''">#{mark},</if>
+            <if test="currentNumber != null ">#{currentNumber},</if>
+        </trim>
+    </insert>
+
+    <!-- 修改当前编号 -->
+    <update id="updateRuleNum" parameterType="com.cxnet.project.system.rule.domain.RuleNum">
+        update sys_rule_num
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleCode != null  and ruleCode != ''">rule_code = #{ruleCode},</if>
+            <if test="mark != null  and mark != ''">mark = #{mark},</if>
+            <if test="currentNumber != null ">current_number = #{currentNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 删除当前编号 ById -->
+    <delete id="deleteRuleNumById" parameterType="String">
+        delete
+        from sys_rule_num
+        where id = #{id}
+    </delete>
+
+    <!-- 批量删除当前编号 ByIds -->
+    <delete id="deleteRuleNumByIds" parameterType="String">
+        delete from sys_rule_num where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 批量插入当前编号 -->
+    <insert id="insertBatchRuleNum" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index">
+            insert into sys_rule_num
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                id,
+                <if test="item.ruleCode != null  and item.ruleCode != ''">rule_code,</if>
+                <if test="item.mark != null  and item.mark != ''">mark,</if>
+                <if test="item.currentNumber != null ">current_number,</if>
+            </trim>
+            <trim prefix="values (" suffix=");" suffixOverrides=",">
+                sys_guid() ,
+                <if test="item.ruleCode != null  and item.ruleCode != ''">#{item.ruleCode},</if>
+                <if test="item.mark != null  and item.mark != ''">#{item.mark},</if>
+                <if test="item.currentNumber != null ">#{item.currentNumber},</if>
+            </trim>
+        </foreach>
+        commit;
+        end;
+    </insert>
+
+    <!-- 批量修改当前编号 -->
+    <update id="updateBatchRuleNum" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update sys_rule_num
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.ruleCode != null  and item.ruleCode != ''">rule_code = #{item.ruleCode},</if>
+                <if test="item.mark != null  and item.mark != ''">mark = #{item.mark},</if>
+                <if test="item.currentNumber != null ">current_number = #{item.currentNumber},</if>
+            </trim>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+</mapper>
